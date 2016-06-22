@@ -1,4 +1,4 @@
-package com.example.pk.metcast;
+package com.example.pk.metcast.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -8,22 +8,23 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.example.pk.metcast.fragments.FragmentOne;
+import com.example.pk.metcast.fragments.FragmentThree;
+import com.example.pk.metcast.fragments.FragmentTwo;
+import com.example.pk.metcast.R;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends FragmentActivity {
 
-    //Идентификаторы трех фрагментов
     public static final int FRAGMENT_ONE = 0;
     public static final int FRAGMENT_TWO = 1;
     public static final int FRAGMENT_THREE = 2;
 
-
-    //Количество фрагментов
     public static final int FRAGMENTS = 3;
 
-    //Список фрагментов для отображения
-    private final List<Fragment> fragments = new ArrayList<Fragment>();
+    private static final List<Fragment> fragments = new ArrayList<Fragment>();
 
     ViewPager viewPager;
     PagerAdapter pagerAdapter;
@@ -33,16 +34,16 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //Создание фрагментов
-        fragments.add(FRAGMENT_ONE, new Fragment1());
-        fragments.add(FRAGMENT_TWO, new Fragment2());
-        fragments.add(FRAGMENT_THREE, new Fragment3());
+        fragments.add(FRAGMENT_ONE, new FragmentOne());
+        fragments.add(FRAGMENT_TWO, new FragmentTwo());
+        fragments.add(FRAGMENT_THREE, new FragmentThree());
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(pagerAdapter);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -60,7 +61,7 @@ public class MainActivity extends FragmentActivity {
         });
     }
 
-    private class MyFragmentPagerAdapter extends FragmentPagerAdapter {
+    private static class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
         public MyFragmentPagerAdapter(FragmentManager fm) {
             super(fm);

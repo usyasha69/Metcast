@@ -1,4 +1,4 @@
-package com.example.pk.metcast;
+package com.example.pk.metcast.fragments;
 
 
 import android.os.Bundle;
@@ -7,17 +7,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.pk.metcast.R;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class Fragment1 extends Fragment {
+public class FragmentOne extends Fragment {
 
+    public static FragmentOne newInstance() {
 
-    public Fragment1() {
-        // Required empty public constructor
+        Bundle args = new Bundle();
+
+        FragmentOne fragment = new FragmentOne();
+        fragment.setArguments(args);
+        return fragment;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
