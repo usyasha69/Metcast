@@ -75,6 +75,7 @@ public class MainActivity extends FragmentActivity {
     protected void onResume() {
         super.onResume();
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, locationListener);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 10, locationListener);
     }
 
     @Override
@@ -88,8 +89,8 @@ public class MainActivity extends FragmentActivity {
         public void onLocationChanged(Location location) {
             if (location != null) {
                 Fragment fragmentOne = getSupportFragmentManager().findFragmentById(R.id.fragmentOne);
-                TextView tvFragment1 = (TextView) fragmentOne.getView().findViewById(R.id.fragmentOneTv);
-                tvFragment1.setText("lat = " + String.valueOf(location.getLatitude()) + " lon = " + String.valueOf(location.getLongitude()));
+                TextView tvFragmentOne = (TextView) fragmentOne.getView().findViewById(R.id.fragmentOneTv);
+                tvFragmentOne.setText("lat = " + String.valueOf(location.getLatitude()) + " lon = " + String.valueOf(location.getLongitude()));
 
                 String query  = "api.openweathermap.org/data/2.5/forecast?";
                 query += ("lat=" + String.valueOf(location.getLatitude()) + "&" + "lan=" + String.valueOf(location.getLongitude()));
