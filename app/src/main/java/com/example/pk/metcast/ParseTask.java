@@ -61,14 +61,32 @@ public class ParseTask extends AsyncTask<Void, Void, String> {
 
         JSONObject dataJsonObject = null;
 
-        String cityId;
+        int cityId;
         String cityName;
-        String cityLonCoord;
-        String cityLatCoord;
+        double cityLonCoord;
+        double cityLatCoord;
         String country;
         String cod;
-        String message;
-        String cnt;
+        double message;
+        int cnt;
+        int listDt;
+        double listMainTemp;
+        double listMainTemp_min;
+        double listMainTemp_max;
+        double listMainPressure;
+        double listMainSea_level;
+        double listMainGrnd_level;
+        int listMainHumidity;
+        double listMainTemp_kf;
+        String listWeatherId;
+        String listWeatherMain;
+        String listWeatherDescription;
+        String listWeatherIcon;
+        int listCloudsAll;
+        double listWindSpeed;
+        double listWindDeg;
+        String listSysPod;
+        String listDt_txt;
 
         try {
             //All object
@@ -77,24 +95,16 @@ public class ParseTask extends AsyncTask<Void, Void, String> {
             //City object
             JSONObject cityJsonObject = dataJsonObject.getJSONObject("city");
 
-            //City id object
-            JSONObject cityIdJsonObject = cityJsonObject.getJSONObject("id");
-            cityId = cityIdJsonObject.getString("id");
+            cityId = cityJsonObject.getInt("id");
 
-            //City name object
-            JSONObject cityNameJsonObject = cityJsonObject.getJSONObject("name");
-            cityName = cityNameJsonObject.getString("name");
+            cityName = cityJsonObject.getString("name");
 
             //City coord object
             JSONObject cityCoordJsonObject = cityJsonObject.getJSONObject("coord");
 
-            //City coord lon object
-            JSONObject cityLonCoordJsonObject = cityCoordJsonObject.getJSONObject("lon");
-            cityLonCoord = cityLonCoordJsonObject.getString("lon");
-
-            //City coord lat object
-            JSONObject cityLatCoordJsonObject = cityCoordJsonObject.getJSONObject("lat");
-            cityLatCoord = cityLatCoordJsonObject.getString("lat");
+            cityLonCoord = cityCoordJsonObject.getDouble("lon");
+            
+            cityLatCoord = cityCoordJsonObject.getDouble("lat");
 
             //Country object
             JSONObject countryJsonObject = dataJsonObject.getJSONObject("country");
@@ -106,14 +116,64 @@ public class ParseTask extends AsyncTask<Void, Void, String> {
 
             //Message object
             JSONObject messageJsonObject = dataJsonObject.getJSONObject("message");
-            message = codJsonObject.getString("message");
+            message = messageJsonObject.getDouble("message");
 
             //Cnt object
             JSONObject cntJsonObject = dataJsonObject.getJSONObject("cnt");
-            cnt = codJsonObject.getString("cnt");
+            cnt = codJsonObject.getInt("cnt");
+
+            //List of objects
+            JSONArray listJsonArray = dataJsonObject.getJSONArray("list");
+
+            for (int i = 0; i < listJsonArray.length(); i++) {
+                //dt Object
+                JSONObject dtJSonObject = listJsonArray.getJSONObject(0);
+                listDt = dtJSonObject.getInt("listDt");
+
+                //mainObjects
+                JSONObject mainJSonObject = listJsonArray.getJSONObject(1);
+
+                listMainTemp = mainJSonObject.getDouble("temp");
+                listMainTemp_min = mainJSonObject.getDouble("temp_min");
+                listMainTemp_max = mainJSonObject.getDouble("temp_max");
+                listMainPressure = mainJSonObject.getDouble("pressure");
+                listMainSea_level = mainJSonObject.getDouble("sea_level");
+                listMainGrnd_level = mainJSonObject.getDouble("grnd_level");
+                listMainHumidity = mainJSonObject.getInt("humidity");
+                listMainTemp_kf = mainJSonObject.getInt("temp_kf");
+
+                //Weather object
+                JSONArray weatherJsonArray = listJsonArray.getJSONArray(2);
+
+                for (int j = 0; j < weatherJsonArray.length(); j++) {
+                    listWeatherId = weatherJsonArray.getString(0);
+                    listWeatherMain = weatherJsonArray.getString(1);
+                    listWeatherDescription = weatherJsonArray.getString(2);
+                    listWeatherIcon = weatherJsonArray.getString(3);
+                }
 
 
-            JSONArray jsonArray = dataJsonObject.getJSONArray("list");
+                //Clouds object
+                JSONObject cloudsJSonObject = listJsonArray.getJSONObject(3);
+
+                listCloudsAll = cloudsJSonObject.getInt("all");
+
+                //Wind object
+                JSONObject windJsonObject = listJsonArray.getJSONObject(4);
+
+                listWindSpeed = windJsonObject.getDouble("speed");
+                listWindDeg = windJsonObject.getDouble("deg");
+
+                //Sys object
+                JSONObject podJsonObject = listJsonArray.getJSONObject(5);
+
+                listSysPod = podJsonObject.getString("pod");
+
+                //Date_text object
+                JSONObject dt_txtJsonObject = listJsonArray.getJSONObject(6);
+
+                listDt_txt = dt_txtJsonObject.getString("dt_txt");
+            }
 
         } catch (Exception ex) {
             ex.printStackTrace();
