@@ -1,17 +1,17 @@
 package com.example.pk.metcast.adapters;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.example.pk.metcast.R;
 import com.example.pk.metcast.fragments.FragmentOne;
 import com.example.pk.metcast.fragments.FragmentThree;
 import com.example.pk.metcast.fragments.FragmentTwo;
-import com.example.pk.metcast.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -34,9 +34,9 @@ public class MainActivity extends FragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragments.add(FRAGMENT_ONE, new FragmentOne());
-        fragments.add(FRAGMENT_TWO, new FragmentTwo());
-        fragments.add(FRAGMENT_THREE, new FragmentThree());
+        fragments.add(FRAGMENT_ONE, FragmentOne.newInstance());
+        fragments.add(FRAGMENT_TWO, FragmentTwo.newInstance());
+        fragments.add(FRAGMENT_THREE, FragmentThree.newInstance());
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
