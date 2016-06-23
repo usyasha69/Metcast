@@ -17,6 +17,8 @@ import com.example.pk.metcast.fragments.FragmentOne;
 import com.example.pk.metcast.fragments.FragmentThree;
 import com.example.pk.metcast.fragments.FragmentTwo;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -88,6 +90,15 @@ public class MainActivity extends FragmentActivity {
                 Fragment fragmentOne = getSupportFragmentManager().findFragmentById(R.id.fragmentOne);
                 TextView tvFragment1 = (TextView) fragmentOne.getView().findViewById(R.id.fragmentOneTv);
                 tvFragment1.setText("lat = " + String.valueOf(location.getLatitude()) + " lon = " + String.valueOf(location.getLongitude()));
+
+                String query  = "api.openweathermap.org/data/2.5/forecast?";
+                query += ("lat=" + String.valueOf(location.getLatitude()) + "&" + "lan=" + String.valueOf(location.getLongitude()));
+
+                try {
+                    URL url = new URL(query);
+                    url.openConnection();
+                } catch (Exception ex) {
+                }
             }
         }
 
