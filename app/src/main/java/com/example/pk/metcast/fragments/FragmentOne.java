@@ -1,6 +1,7 @@
 package com.example.pk.metcast.fragments;
 
 
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;

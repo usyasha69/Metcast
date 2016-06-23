@@ -1,5 +1,8 @@
 package com.example.pk.metcast.adapters;
 
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -7,6 +10,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.widget.TextView;
 
 import com.example.pk.metcast.R;
 import com.example.pk.metcast.fragments.FragmentOne;
@@ -26,8 +30,10 @@ public class MainActivity extends FragmentActivity {
 
     private static final List<Fragment> fragments = new ArrayList<Fragment>();
 
-    ViewPager viewPager;
-    PagerAdapter pagerAdapter;
+    private ViewPager viewPager;
+    private PagerAdapter pagerAdapter;
+
+    public LocationManager locationManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,6 +43,8 @@ public class MainActivity extends FragmentActivity {
         fragments.add(FRAGMENT_ONE, FragmentOne.newInstance());
         fragments.add(FRAGMENT_TWO, FragmentTwo.newInstance());
         fragments.add(FRAGMENT_THREE, FragmentThree.newInstance());
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
@@ -60,6 +68,43 @@ public class MainActivity extends FragmentActivity {
             }
         });
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, locationListener);
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        locationManager.removeUpdates(locationListener);
+    }
+
+    private LocationListener locationListener = new LocationListener() {
+        @Override
+        public void onLocationChanged(Location location) {
+            if (location != null) {
+                Fragment fragmentOne = getSupportFragmentManager().findFragmentById(R.id.fragmentOne);
+                TextView tvFragment1 = (TextView) fragmentOne.getView().findViewById(R.id.fragmentOneTv);
+                tvFragment1.setText("lat = " + String.valueOf(location.getLatitude()) + " lon = " + String.valueOf(location.getLongitude()));
+            }
+        }
+
+        @Override
+        public void onStatusChanged(String s, int i, Bundle bundle) {
+
+        }
+
+        @Override
+        public void onProviderEnabled(String s) {
+        }
+
+        @Override
+        public void onProviderDisabled(String s) {
+
+        }
+    };
 
     private static class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
