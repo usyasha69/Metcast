@@ -3,26 +3,18 @@ package com.example.pk.metcast;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.widget.TextView;
 
-import com.example.pk.metcast.R;
 import com.example.pk.metcast.adapters.MyFragmentPagerAdapter;
 import com.example.pk.metcast.fragments.FragmentOne;
 import com.example.pk.metcast.fragments.FragmentThree;
 import com.example.pk.metcast.fragments.FragmentTwo;
 
-import java.io.BufferedReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,7 +73,9 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
             tvFragmentOne.setText("lat = " + String.valueOf(location.getLatitude()) + " lon = " + String.valueOf(location.getLongitude()));
 
             //GET query
-            new ParseTask(location).execute();
+            String resQuery = "";
+            resQuery += new GetQueryTask(location).doInBackground();
+            new WeatherParsing().parseQuery(resQuery);
         }
     }
 
