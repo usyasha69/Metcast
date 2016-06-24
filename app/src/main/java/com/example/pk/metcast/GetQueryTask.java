@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -24,10 +25,12 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
     }
 
     HttpURLConnection urlConnection = null;
+
     BufferedReader reader = null;
 
     @Override
     protected String doInBackground(Void... voids) {
+
         String resultJSon = "";
 
         String query = "http://api.openweathermap.org/data/2.5/forecast?lat=50.2&lon=36.1&APPID=4c898f591f4e595efcdd5db855f26762";
@@ -37,6 +40,7 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
             URL url = new URL(query);
 
             urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.getResponseCode();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
@@ -51,7 +55,15 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
             }
 
             resultJSon = buffer.toString();
-        } catch (Exception ex) {
+
+        }catch (IOException ex) {
+            try {
+                int responseCode = urlConnection.getResponseCode();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        catch (Exception ex) {
             ex.printStackTrace();
         }
         return resultJSon;
