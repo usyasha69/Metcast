@@ -71,9 +71,9 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-            Fragment fragmentOne = getSupportFragmentManager().findFragmentById(R.id.fragmentOne);
-            TextView tvFragmentOne = (TextView) fragmentOne.getView().findViewById(R.id.fragmentOneTv);
-            tvFragmentOne.setText("lat = " + String.valueOf(location.getLatitude()) + " lon = " + String.valueOf(location.getLongitude()));
+            //Fragment fragmentOne = getSupportFragmentManager().findFragmentById(R.id.fragmentOne);
+            //TextView tvFragmentOne = (TextView) fragmentOne.getView().findViewById(R.id.fragmentOneTv);
+            //tvFragmentOne.setText("lat = " + String.valueOf(location.getLatitude()) + " lon = " + String.valueOf(location.getLongitude()));
 
             //GET query
             new GetQueryTask(location, this).execute();
