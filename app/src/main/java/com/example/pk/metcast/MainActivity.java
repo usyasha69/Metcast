@@ -18,7 +18,7 @@ import com.example.pk.metcast.fragments.FragmentTwo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener {
+public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, GetQuery.RequestResultCallback {
 
     public static final int FRAGMENT_ONE = 0;
     public static final int FRAGMENT_TWO = 1;
@@ -74,7 +74,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
             //GET query
             String resQuery = "";
-            resQuery += new GetQuery(location).getQuery();
+            resQuery += new GetQuery(location, GetQuery.RequestResultCallback);
             //Parsing object
             WeatherParsing weatherParsing = new WeatherParsing();
             weatherParsing.parseQuery(resQuery);
@@ -109,6 +109,18 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
     @Override
     public void onPageScrollStateChanged(int state) {
+
+    }
+
+    //RequestResultCallback methods
+
+    @Override
+    public void onRequestStart() {
+
+    }
+
+    @Override
+    public void onRequestFinish(String result) {
 
     }
 }

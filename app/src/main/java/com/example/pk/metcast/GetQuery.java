@@ -12,21 +12,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetQuery {
+public class GetQuery extends AsyncTask<Void, String, Void> {
 
-    Location location;
+    private Location location;
+    private RequestResultCallback requestResultCallback;
 
-    public GetQuery(Location location) {
+    public GetQuery(Location location, RequestResultCallback requestResultCallback) {
+
         this.location = location;
+        this.requestResultCallback = requestResultCallback;
     }
 
     HttpURLConnection urlConnection = null;
     BufferedReader reader = null;
     String resultJSon = "";
 
-
-    public String getQuery() {
-
+    @Override
+    protected Void doInBackground(Void... voids) {
         String query = "api.openweathermap.org/data/2.5/forecast?";
         query += ("lat=" + String.valueOf(location.getLatitude()) + "&" + "lan=" + String.valueOf(location.getLongitude()));
 
@@ -51,6 +53,24 @@ public class GetQuery {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return resultJSon;
+        return null;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        requestResultCallback.onRequestStart();
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        requestResultCallback.onRequestFinish(resultJSon);
+    }
+
+    public interface RequestResultCallback {
+
+        public void onRequestStart();
+        public void onRequestFinish(String result);
     }
 }
