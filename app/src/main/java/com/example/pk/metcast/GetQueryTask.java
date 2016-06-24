@@ -31,7 +31,7 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
         String resultJSon = "";
 
         String query = "http://api.openweathermap.org/data/2.5/forecast?";
-        query += ("lat=" + String.valueOf(location.getLatitude()) + "&" + "lan=" + String.valueOf(location.getLongitude()) + "&4c898f591f4e595efcdd5db855f26762");
+        query += ("lat=" + String.valueOf(location.getLatitude()) + "&" + "lan=" + String.valueOf(location.getLongitude()) + "&APPID=4c898f591f4e595efcdd5db855f26762");
 
         try {
             URL url = new URL(query);
