@@ -30,7 +30,7 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
     protected String doInBackground(Void... voids) {
         String resultJSon = "";
 
-        String query = "api.openweathermap.org/data/2.5/forecast?";
+        String query = "http://api.openweathermap.org/data/2.5/forecast?";
         query += ("lat=" + String.valueOf(location.getLatitude()) + "&" + "lan=" + String.valueOf(location.getLongitude()));
 
         try {
