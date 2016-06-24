@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.widget.TextView;
 
 import com.example.pk.metcast.adapters.MyFragmentPagerAdapter;
@@ -18,7 +19,9 @@ import com.example.pk.metcast.fragments.FragmentTwo;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, GetQuery.RequestResultCallback {
+public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, GetQueryTask.RequestResultCallback {
+
+    public final String MY_LOG = "myLog";
 
     public static final int FRAGMENT_ONE = 0;
     public static final int FRAGMENT_TWO = 1;
@@ -74,7 +77,8 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
             //GET query
             String resQuery = "";
-            resQuery += new GetQuery(location, GetQuery.RequestResultCallback);
+            resQuery += new GetQueryTask(location, this);
+            Log.d(MY_LOG, resQuery);
             //Parsing object
             WeatherParsing weatherParsing = new WeatherParsing();
             weatherParsing.parseQuery(resQuery);

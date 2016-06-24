@@ -12,12 +12,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetQuery extends AsyncTask<Void, String, Void> {
+public class GetQueryTask extends AsyncTask<Void, String, String> {
 
     private Location location;
     private RequestResultCallback requestResultCallback;
 
-    public GetQuery(Location location, RequestResultCallback requestResultCallback) {
+    public GetQueryTask(Location location, RequestResultCallback requestResultCallback) {
 
         this.location = location;
         this.requestResultCallback = requestResultCallback;
@@ -28,7 +28,7 @@ public class GetQuery extends AsyncTask<Void, String, Void> {
     String resultJSon = "";
 
     @Override
-    protected Void doInBackground(Void... voids) {
+    protected String doInBackground(Void... voids) {
         String query = "api.openweathermap.org/data/2.5/forecast?";
         query += ("lat=" + String.valueOf(location.getLatitude()) + "&" + "lan=" + String.valueOf(location.getLongitude()));
 
@@ -53,7 +53,7 @@ public class GetQuery extends AsyncTask<Void, String, Void> {
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        return null;
+        return resultJSon;
     }
 
     @Override
@@ -63,9 +63,9 @@ public class GetQuery extends AsyncTask<Void, String, Void> {
     }
 
     @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        requestResultCallback.onRequestFinish(resultJSon);
+    protected void onPostExecute(String s) {
+        super.onPostExecute(s);
+        requestResultCallback.onRequestFinish(s);
     }
 
     public interface RequestResultCallback {

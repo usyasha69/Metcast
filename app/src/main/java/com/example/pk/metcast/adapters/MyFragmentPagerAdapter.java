@@ -11,12 +11,10 @@ import java.util.List;
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private List<Fragment> fragmentList;
-    private int listSize;
 
     public MyFragmentPagerAdapter(FragmentManager fm, List<Fragment> fragmentList, int listSize) {
         super(fm);
         this.fragmentList = fragmentList;
-        this.listSize = listSize;
     }
 
     @Override
@@ -26,6 +24,6 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public int getCount() {
-        return listSize;
+        return fragmentList.size();
     }
 }
