@@ -12,11 +12,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetQueryTask extends AsyncTask<Void, Void, String> {
+public class GetQuery {
 
     Location location;
 
-    public GetQueryTask(Location location) {
+    public GetQuery(Location location) {
         this.location = location;
     }
 
@@ -25,8 +25,7 @@ public class GetQueryTask extends AsyncTask<Void, Void, String> {
     String resultJSon = "";
 
 
-    @Override
-    protected String doInBackground(Void... voids) {
+    public String getQuery() {
 
         String query = "api.openweathermap.org/data/2.5/forecast?";
         query += ("lat=" + String.valueOf(location.getLatitude()) + "&" + "lan=" + String.valueOf(location.getLongitude()));

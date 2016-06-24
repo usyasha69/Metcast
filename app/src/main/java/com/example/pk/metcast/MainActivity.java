@@ -74,8 +74,10 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
             //GET query
             String resQuery = "";
-            resQuery += new GetQueryTask(location).doInBackground();
-            new WeatherParsing().parseQuery(resQuery);
+            resQuery += new GetQuery(location).getQuery();
+            //Parsing object
+            WeatherParsing weatherParsing = new WeatherParsing();
+            weatherParsing.parseQuery(resQuery);
         }
     }
 
@@ -86,6 +88,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
     @Override
     public void onProviderEnabled(String s) {
+        locationManager.getLastKnownLocation(s);
     }
 
     @Override

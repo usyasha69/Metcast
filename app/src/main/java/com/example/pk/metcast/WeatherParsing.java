@@ -50,51 +50,51 @@ public class WeatherParsing {
             for (int i = 0; i < listJsonArray.length(); i++) {
                 //dt Object
                 JSONObject dtJSonObject = listJsonArray.getJSONObject(0);
-                listDt = dtJSonObject.getInt("listDt");
+                weatherModel.setListDt(dtJSonObject.getInt("listDt"));
 
                 //mainObjects
                 JSONObject mainJSonObject = listJsonArray.getJSONObject(1);
 
-                listMainTemp = mainJSonObject.getDouble("temp");
-                listMainTemp_min = mainJSonObject.getDouble("temp_min");
-                listMainTemp_max = mainJSonObject.getDouble("temp_max");
-                listMainPressure = mainJSonObject.getDouble("pressure");
-                listMainSea_level = mainJSonObject.getDouble("sea_level");
-                listMainGrnd_level = mainJSonObject.getDouble("grnd_level");
-                listMainHumidity = mainJSonObject.getInt("humidity");
-                listMainTemp_kf = mainJSonObject.getInt("temp_kf");
+                weatherModel.setListMainTemp(mainJSonObject.getDouble("temp"));
+                weatherModel.setListMainTemp_min(mainJSonObject.getDouble("temp_min"));
+                weatherModel.setListMainTemp_max(mainJSonObject.getDouble("temp_max"));
+                weatherModel.setListMainPressure(mainJSonObject.getDouble("pressure"));
+                weatherModel.setListMainSea_level(mainJSonObject.getDouble("sea_level"));
+                weatherModel.setListMainGrnd_level(mainJSonObject.getDouble("grnd_level"));
+                weatherModel.setListMainHumidity(mainJSonObject.getInt("humidity"));
+                weatherModel.setListMainTemp_kf(mainJSonObject.getInt("temp_kf"));
 
                 //Weather object
                 JSONArray weatherJsonArray = listJsonArray.getJSONArray(2);
 
                 for (int j = 0; j < weatherJsonArray.length(); j++) {
-                    listWeatherId = weatherJsonArray.getString(0);
-                    listWeatherMain = weatherJsonArray.getString(1);
-                    listWeatherDescription = weatherJsonArray.getString(2);
-                    listWeatherIcon = weatherJsonArray.getString(3);
+                    weatherModel.setListWeatherId(weatherJsonArray.getString(0));
+                    weatherModel.setListWeatherMain(weatherJsonArray.getString(1));
+                    weatherModel.setListWeatherDescription(weatherJsonArray.getString(2));
+                    weatherModel.setListWeatherIcon(weatherJsonArray.getString(3));
                 }
 
 
                 //Clouds object
                 JSONObject cloudsJSonObject = listJsonArray.getJSONObject(3);
 
-                listCloudsAll = cloudsJSonObject.getInt("all");
+                weatherModel.setListCloudsAll(cloudsJSonObject.getInt("all"));
 
                 //Wind object
                 JSONObject windJsonObject = listJsonArray.getJSONObject(4);
 
-                listWindSpeed = windJsonObject.getDouble("speed");
-                listWindDeg = windJsonObject.getDouble("deg");
+                weatherModel.setListWindSpeed(windJsonObject.getDouble("speed"));
+                weatherModel.setListWindDeg(windJsonObject.getDouble("deg"));
 
                 //Sys object
                 JSONObject podJsonObject = listJsonArray.getJSONObject(5);
 
-                listSysPod = podJsonObject.getString("pod");
+                weatherModel.setListSysPod(podJsonObject.getString("pod"));
 
                 //Date_text object
                 JSONObject dt_txtJsonObject = listJsonArray.getJSONObject(6);
 
-                listDt_txt = dt_txtJsonObject.getString("dt_txt");
+                weatherModel.setListDt_txt(dt_txtJsonObject.getString("dt_txt"));
             }
 
         } catch (Exception ex) {
