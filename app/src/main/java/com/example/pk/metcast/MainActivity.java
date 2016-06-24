@@ -75,13 +75,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
             TextView tvFragmentOne = (TextView) fragmentOne.getView().findViewById(R.id.fragmentOneTv);
             tvFragmentOne.setText("lat = " + String.valueOf(location.getLatitude()) + " lon = " + String.valueOf(location.getLongitude()));
 
-            //GET query
-            String resQuery = "";
-            resQuery += new GetQueryTask(location, this);
-            Log.d(MY_LOG, resQuery);
-            //Parsing object
-            WeatherParsing weatherParsing = new WeatherParsing();
-            weatherParsing.parseQuery(resQuery);
         }
     }
 
@@ -125,6 +118,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
     @Override
     public void onRequestFinish(String result) {
-
+        Log.d(MY_LOG, result);
     }
 }
