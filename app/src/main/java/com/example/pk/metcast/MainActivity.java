@@ -76,7 +76,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
             tvFragmentOne.setText("lat = " + String.valueOf(location.getLatitude()) + " lon = " + String.valueOf(location.getLongitude()));
 
             //GET query
-            new GetQueryTask(location, this);
+            new GetQueryTask(location, this).execute();
             //Parsing object
         }
     }
