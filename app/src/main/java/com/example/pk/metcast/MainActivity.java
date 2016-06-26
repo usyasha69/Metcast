@@ -118,6 +118,62 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
     @Override
     public void onRequestFinish(String result) {
+
         System.out.println(result);
+        WeatherModel weatherModel = new WeatherParsing().parseQuery(result);
+
+
+            int cityId = weatherModel.getCityId();
+            System.out.println("cityId " + cityId);
+            String cityName = weatherModel.getCityName();
+            System.out.println("cityName " + cityName);
+            double cityLonCoord = weatherModel.getCityLonCoord();
+            System.out.println("cityLonCoord " + cityLonCoord);
+            double cityLatCoord = weatherModel.getCityLatCoord();
+            System.out.println("cityLatCoord " + cityLatCoord);
+            String country = weatherModel.getCountry();
+            System.out.println("country " + country);
+            String cod = weatherModel.getCod();
+            System.out.println("cod " + cod);
+            double message = weatherModel.getMessage();
+            System.out.println("message " + message);
+            int cnt = weatherModel.getCnt();
+            System.out.println("cnt " + cnt);
+            int listDt = weatherModel.getListDt();
+            System.out.println("listDt " + listDt);
+            double listMainTemp = weatherModel.getListMainTemp();
+            System.out.println("listMainTemp " + listMainTemp);
+            double listMainTemp_min = weatherModel.getListMainTemp_min();
+            System.out.println("listMainTemp_min " + listMainTemp_min);
+            double listMainTemp_max = weatherModel.getListMainTemp_max();
+            System.out.println("listMainTemp_max " + listMainTemp_max);
+            double listMainPressure = weatherModel.getListMainPressure();
+            System.out.println("listMainPressure " + listMainPressure);
+            double listMainSea_level = weatherModel.getListMainSea_level();
+            System.out.println("listMainSea_level " + listMainSea_level);
+            double listMainGrnd_level = weatherModel.getListMainGrnd_level();
+            System.out.println("listMainGrnd_level " + listMainGrnd_level);
+            int listMainHumidity = weatherModel.getListMainHumidity();
+            System.out.println("listMainHumidity " + listMainHumidity);
+            double listMainTemp_kf = weatherModel.getListMainTemp_kf();
+            System.out.println("listMainTemp_kf " + listMainTemp_kf);
+            int listWeatherId = weatherModel.getListWeatherId();
+            System.out.println("listWeatherId " + listWeatherId);
+            String listWeatherMain = weatherModel.getListWeatherMain();
+            System.out.println("listWeatherMain " + listWeatherMain);
+            String listWeatherDescription = weatherModel.getListWeatherDescription();
+            System.out.println("listWeatherDescription " + listWeatherDescription);
+            String listWeatherIcon = weatherModel.getListWeatherIcon();
+            System.out.println("listWeatherIcon " + listWeatherIcon);
+            int listCloudsAll = weatherModel.getListCloudsAll();
+            System.out.println("listCloudsAll " + listCloudsAll);
+            double listWindSpeed = weatherModel.getListWindSpeed();
+            System.out.println("listWindSpeed " + listWindSpeed);
+            double listWindDeg = weatherModel.getListWindDeg();
+            System.out.println("listWindDeg " + listWindDeg);
+            String listSysPod = weatherModel.getListSysPod();
+            System.out.println("listSysPod " + listSysPod);
+            String listDt_txt = weatherModel.getListDt_txt();
+            System.out.println("listDt_txt " + listDt_txt);
     }
 }

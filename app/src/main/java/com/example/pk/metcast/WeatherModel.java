@@ -19,7 +19,7 @@ public class WeatherModel {
     private double listMainGrnd_level;
     private int listMainHumidity;
     private double listMainTemp_kf;
-    private String listWeatherId;
+    private int listWeatherId;
     private String listWeatherMain;
     private String listWeatherDescription;
     private String listWeatherIcon;
@@ -165,11 +165,11 @@ public class WeatherModel {
         this.listMainTemp_kf = listMainTemp_kf;
     }
 
-    public String getListWeatherId() {
+    public int getListWeatherId() {
         return listWeatherId;
     }
 
-    public void setListWeatherId(String listWeatherId) {
+    public void setListWeatherId(int listWeatherId) {
         this.listWeatherId = listWeatherId;
     }
 

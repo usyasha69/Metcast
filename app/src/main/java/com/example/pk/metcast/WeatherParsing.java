@@ -29,31 +29,26 @@ public class WeatherParsing {
             weatherModel.setCityLatCoord(cityCoordJsonObject.getDouble("lat"));
 
             //Country object
-            JSONObject countryJsonObject = dataJsonObject.getJSONObject("country");
-            weatherModel.setCountry(countryJsonObject.getString("country"));
+            weatherModel.setCountry(cityJsonObject.getString("country"));
 
             //Cod object
-            JSONObject codJsonObject = dataJsonObject.getJSONObject("cod");
-            weatherModel.setCod(codJsonObject.getString("cod"));
+            weatherModel.setCod(dataJsonObject.getString("cod"));
 
             //Message object
-            JSONObject messageJsonObject = dataJsonObject.getJSONObject("message");
-            weatherModel.setMessage(messageJsonObject.getDouble("message"));
+            weatherModel.setMessage(dataJsonObject.getDouble("message"));
 
             //Cnt object
-            JSONObject cntJsonObject = dataJsonObject.getJSONObject("cnt");
-            weatherModel.setCnt(codJsonObject.getInt("cnt"));
+            weatherModel.setCnt(dataJsonObject.getInt("cnt"));
 
             //List of objects
             JSONArray listJsonArray = dataJsonObject.getJSONArray("list");
 
             for (int i = 0; i < listJsonArray.length(); i++) {
                 //dt Object
-                JSONObject dtJSonObject = listJsonArray.getJSONObject(0);
-                weatherModel.setListDt(dtJSonObject.getInt("listDt"));
+                weatherModel.setListDt(listJsonArray.getJSONObject(i).getInt("dt"));
 
                 //mainObjects
-                JSONObject mainJSonObject = listJsonArray.getJSONObject(1);
+                JSONObject mainJSonObject = listJsonArray.getJSONObject(i).getJSONObject("main");
 
                 weatherModel.setListMainTemp(mainJSonObject.getDouble("temp"));
                 weatherModel.setListMainTemp_min(mainJSonObject.getDouble("temp_min"));
@@ -65,36 +60,35 @@ public class WeatherParsing {
                 weatherModel.setListMainTemp_kf(mainJSonObject.getInt("temp_kf"));
 
                 //Weather object
-                JSONArray weatherJsonArray = listJsonArray.getJSONArray(2);
+                JSONArray weatherJsonArray = listJsonArray.getJSONObject(i).getJSONArray("weather");
 
                 for (int j = 0; j < weatherJsonArray.length(); j++) {
-                    weatherModel.setListWeatherId(weatherJsonArray.getString(0));
-                    weatherModel.setListWeatherMain(weatherJsonArray.getString(1));
-                    weatherModel.setListWeatherDescription(weatherJsonArray.getString(2));
-                    weatherModel.setListWeatherIcon(weatherJsonArray.getString(3));
+
+                    weatherModel.setListWeatherId(weatherJsonArray.getJSONObject(j).getInt("id"));
+                    weatherModel.setListWeatherMain(weatherJsonArray.getJSONObject(j).getString("main"));
+                    weatherModel.setListWeatherDescription(weatherJsonArray.getJSONObject(j).getString("description"));
+                    weatherModel.setListWeatherIcon(weatherJsonArray.getJSONObject(j).getString("icon"));
                 }
 
 
                 //Clouds object
-                JSONObject cloudsJSonObject = listJsonArray.getJSONObject(3);
+                JSONObject cloudsJSonObject = listJsonArray.getJSONObject(i).getJSONObject("clouds");
 
                 weatherModel.setListCloudsAll(cloudsJSonObject.getInt("all"));
 
                 //Wind object
-                JSONObject windJsonObject = listJsonArray.getJSONObject(4);
+                JSONObject windJsonObject = listJsonArray.getJSONObject(i).getJSONObject("wind");
 
                 weatherModel.setListWindSpeed(windJsonObject.getDouble("speed"));
                 weatherModel.setListWindDeg(windJsonObject.getDouble("deg"));
 
                 //Sys object
-                JSONObject podJsonObject = listJsonArray.getJSONObject(5);
+                JSONObject podJsonObject = listJsonArray.getJSONObject(i).getJSONObject("sys");
 
                 weatherModel.setListSysPod(podJsonObject.getString("pod"));
 
                 //Date_text object
-                JSONObject dt_txtJsonObject = listJsonArray.getJSONObject(6);
-
-                weatherModel.setListDt_txt(dt_txtJsonObject.getString("dt_txt"));
+                weatherModel.setListDt_txt(listJsonArray.getJSONObject(i).getString("dt_txt"));
             }
 
         } catch (Exception ex) {

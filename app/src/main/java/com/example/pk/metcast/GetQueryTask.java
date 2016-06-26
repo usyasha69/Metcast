@@ -4,9 +4,6 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.util.Log;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -37,10 +34,9 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
         String query = "http://api.openweathermap.org/data/2.5/forecast?";
         query += ("lat=" + String.valueOf(location.getLatitude())
                 + "&"
-                + "lan="
+                + "lon="
                 + String.valueOf(location.getLongitude())
                 + "&APPID=4c898f591f4e595efcdd5db855f26762");
-
         try {
             URL url = new URL(query);
 
