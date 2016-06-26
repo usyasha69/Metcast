@@ -21,8 +21,6 @@ import java.util.List;
 
 public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, GetQueryTask.RequestResultCallback {
 
-    public final String MY_LOG = "myLog";
-
     public static final int FRAGMENT_ONE = 0;
     public static final int FRAGMENT_TWO = 1;
     public static final int FRAGMENT_THREE = 2;
@@ -50,15 +48,13 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(this);
-
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 10, this);
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 10, this);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        //locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 10, this);
     }
 
     @Override
@@ -71,9 +67,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-            //Fragment fragmentOne = getSupportFragmentManager().findFragmentById(R.id.fragmentOne);
-            //TextView tvFragmentOne = (TextView) fragmentOne.getView().findViewById(R.id.fragmentOneTv);
-            //tvFragmentOne.setText("lat = " + String.valueOf(location.getLatitude()) + " lon = " + String.valueOf(location.getLongitude()));
 
             //GET query
             new GetQueryTask(location, this).execute();
@@ -121,6 +114,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
     @Override
     public void onRequestFinish(String result) {
-        Log.d(MY_LOG, result);
+
+        System.out.println(result);
     }
 }

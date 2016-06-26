@@ -2,6 +2,7 @@ package com.example.pk.metcast;
 
 import android.location.Location;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -33,8 +34,12 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
 
         String resultJSon = "";
 
-        String query = "http://api.openweathermap.org/data/2.5/forecast?lat=50.2&lon=36.1&APPID=4c898f591f4e595efcdd5db855f26762";
-        //query += ("lat=" + String.valueOf(location.getLatitude()) + "&" + "lan=" + String.valueOf(location.getLongitude()) + "&APPID=4c898f591f4e595efcdd5db855f26762");
+        String query = "http://api.openweathermap.org/data/2.5/forecast?";
+        query += ("lat=" + String.valueOf(location.getLatitude())
+                + "&"
+                + "lan="
+                + String.valueOf(location.getLongitude())
+                + "&APPID=4c898f591f4e595efcdd5db855f26762");
 
         try {
             URL url = new URL(query);
@@ -57,13 +62,6 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
             resultJSon = buffer.toString();
 
         }catch (IOException ex) {
-            try {
-                int responseCode = urlConnection.getResponseCode();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        catch (Exception ex) {
             ex.printStackTrace();
         }
         return resultJSon;
@@ -83,7 +81,7 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
 
     public interface RequestResultCallback {
 
-        public void onRequestStart();
-        public void onRequestFinish(String result);
+        void onRequestStart();
+        void onRequestFinish(String result);
     }
 }
