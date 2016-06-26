@@ -45,7 +45,6 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
             URL url = new URL(query);
 
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.getResponseCode();
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
