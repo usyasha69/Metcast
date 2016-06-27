@@ -27,7 +27,7 @@ public class WeatherModel {
     private double listWindSpeed;
     private double listWindDeg;
     private String listSysPod;
-    private String listDt_txt;
+    private String listDtTxt;
 
     public double getMessage() {
         return message;
@@ -229,11 +229,11 @@ public class WeatherModel {
         this.listSysPod = listSysPod;
     }
 
-    public String getListDt_txt() {
-        return listDt_txt;
+    public String getListDtTxt() {
+        return listDtTxt;
     }
 
-    public void setListDt_txt(String listDt_txt) {
-        this.listDt_txt = listDt_txt;
+    public void setListDtTxt(String listDtTxt) {
+        this.listDtTxt = listDtTxt;
     }
 }

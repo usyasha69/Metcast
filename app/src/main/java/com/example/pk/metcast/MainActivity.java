@@ -44,7 +44,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments, fragments.size());
+        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments);
 
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(this);
@@ -54,10 +54,11 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     protected void onResume() {
         super.onResume();
         if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);}
+            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 1000, 0, this);
+        }
         if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);}
-
+            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000, 0, this);
+        }
             locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
@@ -74,7 +75,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
             //GET query
             new GetQueryTask(location, this).execute();
-            //Parsing object
         }
     }
 
@@ -173,7 +173,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
             System.out.println("listWindDeg " + listWindDeg);
             String listSysPod = weatherModel.getListSysPod();
             System.out.println("listSysPod " + listSysPod);
-            String listDt_txt = weatherModel.getListDt_txt();
+            String listDt_txt = weatherModel.getListDtTxt();
             System.out.println("listDt_txt " + listDt_txt);
     }
 }

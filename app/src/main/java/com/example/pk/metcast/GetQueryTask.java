@@ -2,7 +2,6 @@ package com.example.pk.metcast;
 
 import android.location.Location;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -45,16 +44,16 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
             urlConnection.connect();
 
             InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder builder = new StringBuilder();
 
             reader = new BufferedReader(new InputStreamReader(inputStream));
 
             String line;
             while ((line = reader.readLine()) != null) {
-                buffer.append(line);
+                builder.append(line);
             }
 
-            resultJSon = buffer.toString();
+            resultJSon = builder.toString();
 
         }catch (IOException ex) {
             ex.printStackTrace();
