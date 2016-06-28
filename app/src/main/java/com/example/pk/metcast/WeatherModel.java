@@ -1,80 +1,68 @@
 package com.example.pk.metcast;
 
+import com.google.gson.annotations.SerializedName;
+
+import java.util.ArrayList;
+
+
 public class WeatherModel {
 
-    private int cityId;
-    private String cityName;
-    private double cityLonCoord;
-    private double cityLatCoord;
-    private String country;
+    private City city;
+
+    @SerializedName("cod")
     private String cod;
+    @SerializedName("message")
     private double message;
+    @SerializedName("cnt")
     private int cnt;
-    private int listDt;
-    private double listMainTemp;
-    private double listMainTemp_min;
-    private double listMainTemp_max;
-    private double listMainPressure;
-    private double listMainSea_level;
-    private double listMainGrnd_level;
-    private int listMainHumidity;
-    private double listMainTemp_kf;
-    private int listWeatherId;
-    private String listWeatherMain;
-    private String listWeatherDescription;
-    private String listWeatherIcon;
-    private int listCloudsAll;
-    private double listWindSpeed;
-    private double listWindDeg;
-    private String listSysPod;
-    private String listDtTxt;
 
-    public double getMessage() {
-        return message;
+    private ArrayList<ListItem> list;
+    private ListItem listItem;
+
+
+//    @SerializedName("list_main_temp")
+//    private double listMainTemp;
+//    @SerializedName("list_main_temp_min")
+//    private double listMainTempMin;
+//    @SerializedName("list_main_temp_max")
+//    private double listMainTempMax;
+//    @SerializedName("list_main_pressure")
+//    private double listMainPressure;
+//    @SerializedName("list_main_sea_level")
+//    private double listMainSeaLevel;
+//    @SerializedName("list_main_grnd_level")
+//    private double listMainGrndLevel;
+//    @SerializedName("list_main_humidity")
+//    private int listMainHumidity;
+//    @SerializedName("list_main_temp_kf")
+//    private double listMainTempKf;
+//    @SerializedName("list_weather_id")
+//    private int listWeatherId;
+//    @SerializedName("list_weather_main")
+//    private String listWeatherMain;
+//    @SerializedName("list_weather_description")
+//    private String listWeatherDescription;
+//    @SerializedName("list_weather_icon")
+//    private String listWeatherIcon;
+//    @SerializedName("list_clouds_all")
+//    private int listCloudsAll;
+//    @SerializedName("list_wind_speed")
+//    private double listWindSpeed;
+//    @SerializedName("list_wind_deg")
+//    private double listWindDeg;
+//    @SerializedName("list_sys_pod")
+//    private String listSysPod;
+//    @SerializedName("list_rain_3h")
+//    private double listRain3h;
+//    @SerializedName("list_dt_txt")
+//    private String listDtTxt;
+
+    public City getCity() {
+        return city;
     }
 
-    public void setMessage(double message) {
-        this.message = message;
-    }
-
-    public int getCityId() {
-        return cityId;
-    }
-
-    public void setCityId(int cityId) {
-        this.cityId = cityId;
-    }
-
-    public String getCityName() {
-        return cityName;
-    }
-
-    public void setCityName(String cityName) {
-        this.cityName = cityName;
-    }
-
-    public double getCityLatCoord() {
-        return cityLatCoord;
-    }
-
-    public void setCityLatCoord(double cityLatCoord) {
-        this.cityLatCoord = cityLatCoord;
-    }
-
-    public double getCityLonCoord() {
-        return cityLonCoord;
-    }
-
-    public void setCityLonCoord(double cityLonCoord) {
-        this.cityLonCoord = cityLonCoord;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
+    public void setCity(City city) {
+        this.city = city;
     }
 
     public String getCod() {
@@ -85,6 +73,14 @@ public class WeatherModel {
         this.cod = cod;
     }
 
+    public double getMessage() {
+        return message;
+    }
+
+    public void setMessage(double message) {
+        this.message = message;
+    }
+
     public int getCnt() {
         return cnt;
     }
@@ -93,147 +89,124 @@ public class WeatherModel {
         this.cnt = cnt;
     }
 
-    public int getListDt() {
-        return listDt;
+    public ListItem getListItem() {
+        return listItem;
     }
 
-    public void setListDt(int listDt) {
-        this.listDt = listDt;
+    public void setListItem(ListItem listItem) {
+        this.listItem = listItem;
     }
 
-    public double getListMainTemp() {
-        return listMainTemp;
+    class City {
+        @SerializedName("id")
+        private int cityId;
+        @SerializedName("name")
+        private String cityName;
+
+        private Coord coord;
+
+        @SerializedName("country")
+        private String cityCountry;
+        @SerializedName("population")
+        private int cityPopulation;
+
+        private Sys sys;
+
+        public int getCityId() {
+            return cityId;
+        }
+
+        public void setCityId(int cityId) {
+            this.cityId = cityId;
+        }
+
+        public String getCityName() {
+            return cityName;
+        }
+
+        public void setCityName(String cityName) {
+            this.cityName = cityName;
+        }
+
+        public String getCityCountry() {
+            return cityCountry;
+        }
+
+        public void setCityCountry(String cityCountry) {
+            this.cityCountry = cityCountry;
+        }
+
+        public int getCityPopulation() {
+            return cityPopulation;
+        }
+
+        public void setCityPopulation(int cityPopulation) {
+            this.cityPopulation = cityPopulation;
+        }
+
+        public Coord getCoord() {
+            return coord;
+        }
+
+        public void setCoord(Coord coord) {
+            this.coord = coord;
+        }
+
+        public Sys getSys() {
+            return sys;
+        }
+
+        public void setSys(Sys sys) {
+            this.sys = sys;
+        }
+
+        class Coord {
+            @SerializedName("lon")
+            private double cityLonCoord;
+            @SerializedName("lat")
+            private double cityLatCoord;
+
+            public double getCityLonCoord() {
+                return cityLonCoord;
+            }
+
+            public void setCityLonCoord(double cityLonCoord) {
+                this.cityLonCoord = cityLonCoord;
+            }
+
+            public double getCityLatCoord() {
+                return cityLatCoord;
+            }
+
+            public void setCityLatCoord(double cityLatCoord) {
+                this.cityLatCoord = cityLatCoord;
+            }
+        }
+
+        class Sys {
+            @SerializedName("sys_population")
+            private int citySysPopulation;
+
+            public int getCitySysPopulation() {
+                return citySysPopulation;
+            }
+
+            public void setCitySysPopulation(int citySysPopulation) {
+                this.citySysPopulation = citySysPopulation;
+            }
+        }
     }
 
-    public void setListMainTemp(double listMainTemp) {
-        this.listMainTemp = listMainTemp;
-    }
+    class ListItem {
+        @SerializedName("dt")
+        private int listDt;
 
-    public double getListMainTemp_min() {
-        return listMainTemp_min;
-    }
+        public int getListDt() {
+            return listDt;
+        }
 
-    public void setListMainTemp_min(double listMainTemp_min) {
-        this.listMainTemp_min = listMainTemp_min;
-    }
-
-    public double getListMainTemp_max() {
-        return listMainTemp_max;
-    }
-
-    public void setListMainTemp_max(double listMainTemp_max) {
-        this.listMainTemp_max = listMainTemp_max;
-    }
-
-    public double getListMainPressure() {
-        return listMainPressure;
-    }
-
-    public void setListMainPressure(double listMainPressure) {
-        this.listMainPressure = listMainPressure;
-    }
-
-    public double getListMainSea_level() {
-        return listMainSea_level;
-    }
-
-    public void setListMainSea_level(double listMainSea_level) {
-        this.listMainSea_level = listMainSea_level;
-    }
-
-    public double getListMainGrnd_level() {
-        return listMainGrnd_level;
-    }
-
-    public void setListMainGrnd_level(double listMainGrnd_level) {
-        this.listMainGrnd_level = listMainGrnd_level;
-    }
-
-    public int getListMainHumidity() {
-        return listMainHumidity;
-    }
-
-    public void setListMainHumidity(int listMainHumidity) {
-        this.listMainHumidity = listMainHumidity;
-    }
-
-    public double getListMainTemp_kf() {
-        return listMainTemp_kf;
-    }
-
-    public void setListMainTemp_kf(double listMainTemp_kf) {
-        this.listMainTemp_kf = listMainTemp_kf;
-    }
-
-    public int getListWeatherId() {
-        return listWeatherId;
-    }
-
-    public void setListWeatherId(int listWeatherId) {
-        this.listWeatherId = listWeatherId;
-    }
-
-    public String getListWeatherMain() {
-        return listWeatherMain;
-    }
-
-    public void setListWeatherMain(String listWeatherMain) {
-        this.listWeatherMain = listWeatherMain;
-    }
-
-    public String getListWeatherDescription() {
-        return listWeatherDescription;
-    }
-
-    public void setListWeatherDescription(String listWeatherDescription) {
-        this.listWeatherDescription = listWeatherDescription;
-    }
-
-    public int getListCloudsAll() {
-        return listCloudsAll;
-    }
-
-    public void setListCloudsAll(int listCloudsAll) {
-        this.listCloudsAll = listCloudsAll;
-    }
-
-    public double getListWindDeg() {
-        return listWindDeg;
-    }
-
-    public void setListWindDeg(double listWindDeg) {
-        this.listWindDeg = listWindDeg;
-    }
-
-    public double getListWindSpeed() {
-        return listWindSpeed;
-    }
-
-    public void setListWindSpeed(double listWindSpeed) {
-        this.listWindSpeed = listWindSpeed;
-    }
-
-    public String getListWeatherIcon() {
-        return listWeatherIcon;
-    }
-
-    public void setListWeatherIcon(String listWeatherIcon) {
-        this.listWeatherIcon = listWeatherIcon;
-    }
-
-    public String getListSysPod() {
-        return listSysPod;
-    }
-
-    public void setListSysPod(String listSysPod) {
-        this.listSysPod = listSysPod;
-    }
-
-    public String getListDtTxt() {
-        return listDtTxt;
-    }
-
-    public void setListDtTxt(String listDtTxt) {
-        this.listDtTxt = listDtTxt;
+        public void setListDt(int listDt) {
+            this.listDt = listDt;
+        }
     }
 }
