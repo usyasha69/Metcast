@@ -17,33 +17,7 @@ public class WeatherModel {
     private int cnt;
 
     private ArrayList<ListItem> list;
-    private ListItem listItem;
 
-
-//    @SerializedName("list_main_temp")
-//    private double listMainTemp;
-//    @SerializedName("list_main_temp_min")
-//    private double listMainTempMin;
-//    @SerializedName("list_main_temp_max")
-//    private double listMainTempMax;
-//    @SerializedName("list_main_pressure")
-//    private double listMainPressure;
-//    @SerializedName("list_main_sea_level")
-//    private double listMainSeaLevel;
-//    @SerializedName("list_main_grnd_level")
-//    private double listMainGrndLevel;
-//    @SerializedName("list_main_humidity")
-//    private int listMainHumidity;
-//    @SerializedName("list_main_temp_kf")
-//    private double listMainTempKf;
-//    @SerializedName("list_weather_id")
-//    private int listWeatherId;
-//    @SerializedName("list_weather_main")
-//    private String listWeatherMain;
-//    @SerializedName("list_weather_description")
-//    private String listWeatherDescription;
-//    @SerializedName("list_weather_icon")
-//    private String listWeatherIcon;
 //    @SerializedName("list_clouds_all")
 //    private int listCloudsAll;
 //    @SerializedName("list_wind_speed")
@@ -89,12 +63,12 @@ public class WeatherModel {
         this.cnt = cnt;
     }
 
-    public ListItem getListItem() {
-        return listItem;
+    public ArrayList<ListItem> getList() {
+        return list;
     }
 
-    public void setListItem(ListItem listItem) {
-        this.listItem = listItem;
+    public void setList(ArrayList<ListItem> list) {
+        this.list = list;
     }
 
     class City {
@@ -199,14 +173,160 @@ public class WeatherModel {
 
     class ListItem {
         @SerializedName("dt")
-        private int listDt;
+        private long listDt;
 
-        public int getListDt() {
+        private Main main;
+
+        private ArrayList<ListItemRoot> list;
+
+        public Main getMain() {
+            return main;
+        }
+
+        public void setMain(Main main) {
+            this.main = main;
+        }
+
+        public long getListDt() {
             return listDt;
         }
 
-        public void setListDt(int listDt) {
+        public void setListDt(long listDt) {
             this.listDt = listDt;
+        }
+
+        public ArrayList<ListItemRoot> getList() {
+            return list;
+        }
+
+        public void setList(ArrayList<ListItemRoot> list) {
+            this.list = list;
+        }
+
+        class Main {
+            @SerializedName("temp")
+            private double listMainTemp;
+            @SerializedName("temp_min")
+            private double listMainTempMin;
+            @SerializedName("temp_max")
+            private double listMainTempMax;
+            @SerializedName("pressure")
+            private double listMainPressure;
+            @SerializedName("sea_level")
+            private double listMainSeaLevel;
+            @SerializedName("grnd_level")
+            private double listMainGrndLevel;
+            @SerializedName("humidity")
+            private int listMainHumidity;
+            @SerializedName("temp_kf")
+            private double listMainTempKf;
+
+            public double getListMainTemp() {
+                return listMainTemp;
+            }
+
+            public void setListMainTemp(double listMainTemp) {
+                this.listMainTemp = listMainTemp;
+            }
+
+            public double getListMainTempMin() {
+                return listMainTempMin;
+            }
+
+            public void setListMainTempMin(double listMainTempMin) {
+                this.listMainTempMin = listMainTempMin;
+            }
+
+            public double getListMainTempMax() {
+                return listMainTempMax;
+            }
+
+            public void setListMainTempMax(double listMainTempMax) {
+                this.listMainTempMax = listMainTempMax;
+            }
+
+            public double getListMainPressure() {
+                return listMainPressure;
+            }
+
+            public void setListMainPressure(double listMainPressure) {
+                this.listMainPressure = listMainPressure;
+            }
+
+            public double getListMainSeaLevel() {
+                return listMainSeaLevel;
+            }
+
+            public void setListMainSeaLevel(double listMainSeaLevel) {
+                this.listMainSeaLevel = listMainSeaLevel;
+            }
+
+            public double getListMainGrndLevel() {
+                return listMainGrndLevel;
+            }
+
+            public void setListMainGrndLevel(double listMainGrndLevel) {
+                this.listMainGrndLevel = listMainGrndLevel;
+            }
+
+            public int getListMainHumidity() {
+                return listMainHumidity;
+            }
+
+            public void setListMainHumidity(int listMainHumidity) {
+                this.listMainHumidity = listMainHumidity;
+            }
+
+            public double getListMainTempKf() {
+                return listMainTempKf;
+            }
+
+            public void setListMainTempKf(double listMainTempKf) {
+                this.listMainTempKf = listMainTempKf;
+            }
+        }
+
+        class ListItemRoot {
+            @SerializedName("id")
+            private int listWeatherId;
+            @SerializedName("main")
+            private String listWeatherMain;
+            @SerializedName("description")
+            private String listWeatherDescription;
+            @SerializedName("icon")
+            private String listWeatherIcon;
+
+            public int getListWeatherId() {
+                return listWeatherId;
+            }
+
+            public void setListWeatherId(int listWeatherId) {
+                this.listWeatherId = listWeatherId;
+            }
+
+            public String getListWeatherMain() {
+                return listWeatherMain;
+            }
+
+            public void setListWeatherMain(String listWeatherMain) {
+                this.listWeatherMain = listWeatherMain;
+            }
+
+            public String getListWeatherDescription() {
+                return listWeatherDescription;
+            }
+
+            public void setListWeatherDescription(String listWeatherDescription) {
+                this.listWeatherDescription = listWeatherDescription;
+            }
+
+            public String getListWeatherIcon() {
+                return listWeatherIcon;
+            }
+
+            public void setListWeatherIcon(String listWeatherIcon) {
+                this.listWeatherIcon = listWeatherIcon;
+            }
         }
     }
 }

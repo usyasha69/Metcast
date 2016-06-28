@@ -121,39 +121,125 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
         WeatherModel weatherModel = new WeatherParsing().parseQuery(result);
 
+        //cityId
         int cityId = weatherModel.getCity().getCityId();
         System.out.println("cityId " + cityId);
 
+        //cityName
         String cityName = weatherModel.getCity().getCityName();
         System.out.println("cityName " + cityName);
 
+        //cityLonCoord
         double cityLonCoord = weatherModel.getCity().getCoord().getCityLonCoord();
         System.out.println("cityLonCoord " + cityLonCoord);
 
+        //cityLatCoord
         double cityLatCoord = weatherModel.getCity().getCoord().getCityLatCoord();
         System.out.println("cityLatCoord " + cityLatCoord);
 
+        //cityCountry
         String cityCountry = weatherModel.getCity().getCityCountry();
         System.out.println("cityCountry " + cityCountry);
 
+        //cityPopulaton
         int cityPopulaton = weatherModel.getCity().getCityPopulation();
         System.out.println("cityPopulation " + cityPopulaton);
 
+        //citySysPopulation
         int citySysPopulation = weatherModel.getCity().getSys().getCitySysPopulation();
         System.out.println("citySysPopulation " + citySysPopulation);
 
+        //cod
         String cod = weatherModel.getCod();
         System.out.println("cod " + cod);
 
+        //message
         double message = weatherModel.getMessage();
         System.out.println("message " + message);
 
+        //cnt
         int cnt = weatherModel.getCnt();
         System.out.println("cnt " + cnt);
 
-        int listDt = weatherModel.getListItem().getListDt();
-        System.out.println("listDt " + listDt);
+        //listDt
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            long listDt = weatherModel.getList().get(i).getListDt();
+            System.out.println("listDt " + listDt);
+        }
+
+        //listMainTemp
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            double listMainTemp = weatherModel.getList().get(i).getMain().getListMainTemp();
+            System.out.println("listMainTemp " + listMainTemp);
+        }
+
+        //listMainTempMin
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            double listMainTempMin = weatherModel.getList().get(i).getMain().getListMainTempMin();
+            System.out.println("listMainTempMin " + listMainTempMin);
+        }
+
+        //listMainTempMax
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            double listMainTempMax = weatherModel.getList().get(i).getMain().getListMainTempMax();
+            System.out.println("listMainTempMax " + listMainTempMax);
+        }
+
+        //listMainPressure
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            double listMainPressure = weatherModel.getList().get(i).getMain().getListMainPressure();
+            System.out.println("listMainPressure " + listMainPressure);
+        }
+
+        //listMainSeaLevel
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            double listMainSeaLevel = weatherModel.getList().get(i).getMain().getListMainSeaLevel();
+            System.out.println("listMainSeaLevel " + listMainSeaLevel);
+        }
+
+        //listMainGrndLevel
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            double listMainGrndLevel = weatherModel.getList().get(i).getMain().getListMainGrndLevel();
+            System.out.println("listMainGrndLevel " + listMainGrndLevel);
+        }
+
+        //listMainHumidity
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            int listMainHumidity = weatherModel.getList().get(i).getMain().getListMainHumidity();
+            System.out.println("listMainHumidity " + listMainHumidity);
+        }
+
+        //listMainTempKf
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            double listMainTempKf = weatherModel.getList().get(i).getMain().getListMainTempKf();
+            System.out.println("listMainTempKf " + listMainTempKf);
+        }
+
+        //listWeatherId
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            for (int j = 0; j < weatherModel.getList().get(i).getList().size(); j++) {
+                int listWeatherId = weatherModel.getList().get(i).getList().get(j).getListWeatherId();
+                System.out.println("listWeatherId " + listWeatherId);
+            }
+        }
 
 
+//        //listWeatherMain
+//        for (int i = 0; i < weatherModel.getList().size(); i++) {
+//            String listWeatherMain = weatherModel.getList().get(i).getList().get(i).getListWeatherMain();
+//            System.out.println("listWeatherMain " + listWeatherMain);
+//        }
+//
+//        //listWeatherDescription
+//        for (int i = 0; i < weatherModel.getList().size(); i++) {
+//            String listWeatherDescription = weatherModel.getList().get(i).getList().get(i).getListWeatherDescription();
+//            System.out.println("listWeatherDescription " + listWeatherDescription);
+//        }
+//
+//        //listWeatherIcon
+//        for (int i = 0; i < weatherModel.getList().size(); i++) {
+//            String listWeatherIcon = weatherModel.getList().get(i).getList().get(i).getListWeatherIcon();
+//            System.out.println("listWeatherIcon " + listWeatherIcon);
+//        }
     }
 }
