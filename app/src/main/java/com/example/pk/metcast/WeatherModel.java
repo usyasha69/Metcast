@@ -18,19 +18,6 @@ public class WeatherModel {
 
     private ArrayList<ListItem> list;
 
-//    @SerializedName("list_clouds_all")
-//    private int listCloudsAll;
-//    @SerializedName("list_wind_speed")
-//    private double listWindSpeed;
-//    @SerializedName("list_wind_deg")
-//    private double listWindDeg;
-//    @SerializedName("list_sys_pod")
-//    private String listSysPod;
-//    @SerializedName("list_rain_3h")
-//    private double listRain3h;
-//    @SerializedName("list_dt_txt")
-//    private String listDtTxt;
-
     public City getCity() {
         return city;
     }
@@ -177,7 +164,18 @@ public class WeatherModel {
 
         private Main main;
 
-        private ArrayList<ListItemRoot> list;
+        private ArrayList<ListItemRoot> weather;
+
+        private Clouds clouds;
+
+        private Wind wind;
+
+        private Rain rain;
+
+        private Sys sys;
+
+        @SerializedName("dt_txt")
+        private String listDtTxt;
 
         public Main getMain() {
             return main;
@@ -195,12 +193,52 @@ public class WeatherModel {
             this.listDt = listDt;
         }
 
-        public ArrayList<ListItemRoot> getList() {
-            return list;
+        public ArrayList<ListItemRoot> getWeather() {
+            return weather;
         }
 
-        public void setList(ArrayList<ListItemRoot> list) {
-            this.list = list;
+        public void setWeather(ArrayList<ListItemRoot> weather) {
+            this.weather = weather;
+        }
+
+        public Clouds getClouds() {
+            return clouds;
+        }
+
+        public void setClouds(Clouds clouds) {
+            this.clouds = clouds;
+        }
+
+        public Wind getWind() {
+            return wind;
+        }
+
+        public void setWind(Wind wind) {
+            this.wind = wind;
+        }
+
+        public Rain getRain() {
+            return rain;
+        }
+
+        public void setRain(Rain rain) {
+            this.rain = rain;
+        }
+
+        public Sys getSys() {
+            return sys;
+        }
+
+        public void setSys(Sys sys) {
+            this.sys = sys;
+        }
+
+        public String getListDtTxt() {
+            return listDtTxt;
+        }
+
+        public void setListDtTxt(String listDtTxt) {
+            this.listDtTxt = listDtTxt;
         }
 
         class Main {
@@ -326,6 +364,68 @@ public class WeatherModel {
 
             public void setListWeatherIcon(String listWeatherIcon) {
                 this.listWeatherIcon = listWeatherIcon;
+            }
+        }
+
+        class Clouds {
+            @SerializedName("all")
+            private int listCloudsAll;
+
+            public int getListCloudsAll() {
+                return listCloudsAll;
+            }
+
+            public void setListCloudsAll(int listCloudsAll) {
+                this.listCloudsAll = listCloudsAll;
+            }
+        }
+
+        class Wind {
+            @SerializedName("speed")
+            private double listWindSpeed;
+            @SerializedName("deg")
+            private double listWindDeg;
+
+            public double getListWindSpeed() {
+                return listWindSpeed;
+            }
+
+            public void setListWindSpeed(double listWindSpeed) {
+                this.listWindSpeed = listWindSpeed;
+            }
+
+            public double getListWindDeg() {
+                return listWindDeg;
+            }
+
+            public void setListWindDeg(double listWindDeg) {
+                this.listWindDeg = listWindDeg;
+            }
+        }
+
+        class Rain {
+            @SerializedName("3h")
+            private double listRain3h;
+
+            public double getListRain3h() {
+                return listRain3h;
+            }
+
+            public void setListRain3h(double listRain3h) {
+                this.listRain3h = listRain3h;
+            }
+        }
+
+        class Sys {
+            @SerializedName("pod")
+            private String listSysPod;
+
+            public String getListSysPod() {
+                return listSysPod;
+            }
+
+            public void setListSysPod(String listSysPod) {
+                this.listSysPod = listSysPod;
             }
         }
     }

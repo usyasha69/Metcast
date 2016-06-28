@@ -217,29 +217,71 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
         //listWeatherId
         for (int i = 0; i < weatherModel.getList().size(); i++) {
-            for (int j = 0; j < weatherModel.getList().get(i).getList().size(); j++) {
-                int listWeatherId = weatherModel.getList().get(i).getList().get(j).getListWeatherId();
+            for (int j = 0; j < weatherModel.getList().get(i).getWeather().size(); j++) {
+                int listWeatherId = weatherModel.getList().get(i).getWeather().get(j).getListWeatherId();
                 System.out.println("listWeatherId " + listWeatherId);
             }
         }
 
 
-//        //listWeatherMain
-//        for (int i = 0; i < weatherModel.getList().size(); i++) {
-//            String listWeatherMain = weatherModel.getList().get(i).getList().get(i).getListWeatherMain();
-//            System.out.println("listWeatherMain " + listWeatherMain);
-//        }
-//
-//        //listWeatherDescription
-//        for (int i = 0; i < weatherModel.getList().size(); i++) {
-//            String listWeatherDescription = weatherModel.getList().get(i).getList().get(i).getListWeatherDescription();
-//            System.out.println("listWeatherDescription " + listWeatherDescription);
-//        }
-//
-//        //listWeatherIcon
-//        for (int i = 0; i < weatherModel.getList().size(); i++) {
-//            String listWeatherIcon = weatherModel.getList().get(i).getList().get(i).getListWeatherIcon();
-//            System.out.println("listWeatherIcon " + listWeatherIcon);
-//        }
+        //listWeatherMain
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            for (int j = 0; j < weatherModel.getList().get(i).getWeather().size(); j++) {
+                String listWeatherMain = weatherModel.getList().get(i).getWeather().get(j).getListWeatherMain();
+                System.out.println("listWeatherMain " + listWeatherMain);
+            }
+        }
+
+        //listWeatherDescription
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            for (int j = 0; j < weatherModel.getList().get(i).getWeather().size(); j++) {
+                String listWeatherDescription = weatherModel.getList().get(i).getWeather().get(j).getListWeatherDescription();
+                System.out.println("listWeatherDescription " + listWeatherDescription);
+            }
+        }
+
+        //listWeatherIcon
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            for (int j = 0; j < weatherModel.getList().get(i).getWeather().size(); j++) {
+                String listWeatherIcon = weatherModel.getList().get(i).getWeather().get(j).getListWeatherIcon();
+                System.out.println("listWeatherIcon " + listWeatherIcon);
+            }
+        }
+
+        //listCloundsAll
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            double listCloundsAll = weatherModel.getList().get(i).getClouds().getListCloudsAll();
+            System.out.println("listCloundsAll " + listCloundsAll);
+        }
+
+        //listWindSpeed
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            double listWindSpeed = weatherModel.getList().get(i).getWind().getListWindSpeed();
+            System.out.println("listWindSpeed " + listWindSpeed);
+        }
+
+        //listWindDeg
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            double listWindDeg = weatherModel.getList().get(i).getWind().getListWindDeg();
+            System.out.println("listWindDeg " + listWindDeg);
+        }
+
+        //listRain3h
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            double listRain3h = weatherModel.getList().get(i).getRain().getListRain3h();
+            System.out.println("listRain3h " + listRain3h);
+        }
+
+        //listSysPod
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            String listSysPod = weatherModel.getList().get(i).getSys().getListSysPod();
+            System.out.println("listSysPod " + listSysPod);
+        }
+
+        //listDtTxt
+        for (int i = 0; i < weatherModel.getList().size(); i++) {
+            String listDtTxt = weatherModel.getList().get(i).getListDtTxt();
+            System.out.println("listDtTxt " + listDtTxt);
+        }
     }
 }
