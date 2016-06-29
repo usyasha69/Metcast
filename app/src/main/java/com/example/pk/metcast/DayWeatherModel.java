@@ -483,7 +483,6 @@ public class DayWeatherModel {
             dateWeather[0] = temp[i];
             dateWeather[1] = weatherMain[i];
             dateWeather[2] = weatherDescription[i];
-            System.out.print(dateWeather[0] + " " + dateWeather[1] + " " + dateWeather[2]);
             listObjects.add(dateWeather);
         }
 
