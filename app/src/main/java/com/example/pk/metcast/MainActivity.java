@@ -35,12 +35,10 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        fragments.add(WEATHER_FRAGMENT, WeatherFragment.newInstance());
-
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager(), fragments);
+        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
 
         viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(this);
