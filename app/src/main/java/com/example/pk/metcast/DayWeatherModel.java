@@ -1,6 +1,9 @@
 package com.example.pk.metcast;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
 public class DayWeatherModel {
 
     private int cityID;
@@ -247,7 +250,7 @@ public class DayWeatherModel {
         this.listDtTxt = listDtTxt;
     }
 
-    public DayWeatherModel makeUpCurrentWeather(String query) {
+    public DayWeatherModel fillInAllFields(String query) {
 
         WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(query);
 
@@ -324,7 +327,7 @@ public class DayWeatherModel {
         for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
             listMainHumidityArray[i] = weatherParsingModel.getList().get(i).getMain().getListMainHumidity();
         }
-        dayWeatherModel.setListMainHumidity(listMainGrndLevelArray);
+        dayWeatherModel.setListMainHumidity(listMainHumidityArray);
 
         //listMainTempKf
         double[] listMainTempKfArray = new double[weatherParsingModel.getList().size()];
@@ -337,16 +340,16 @@ public class DayWeatherModel {
         int[] listWeatherIdArray = new int[weatherParsingModel.getList().size()];
         for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
             for (int j = 0; j < weatherParsingModel.getList().get(i).getWeather().size(); j++) {
-                listWeatherIdArray[j] = weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherId();
+                listWeatherIdArray[i] = weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherId();
             }
         }
         dayWeatherModel.setListWeatherID(listWeatherIdArray);
 
-        //listWeatherID
+        //listWeatherMain
         String[] listWeatherMainArray = new String[weatherParsingModel.getList().size()];
         for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
             for (int j = 0; j < weatherParsingModel.getList().get(i).getWeather().size(); j++) {
-                listWeatherMainArray[j] = weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherMain();
+                listWeatherMainArray[i] = weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherMain();
             }
         }
         dayWeatherModel.setListWeatherMain(listWeatherMainArray);
@@ -355,7 +358,7 @@ public class DayWeatherModel {
         String[] listWeatherDescriptionArray = new String[weatherParsingModel.getList().size()];
         for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
             for (int j = 0; j < weatherParsingModel.getList().get(i).getWeather().size(); j++) {
-                listWeatherDescriptionArray[j] = weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherDescription();
+                listWeatherDescriptionArray[i] = weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherDescription();
             }
         }
         dayWeatherModel.setListWeatherDescription(listWeatherDescriptionArray);
@@ -364,7 +367,7 @@ public class DayWeatherModel {
         String[] listWeatherIconArray = new String[weatherParsingModel.getList().size()];
         for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
             for (int j = 0; j < weatherParsingModel.getList().get(i).getWeather().size(); j++) {
-                listWeatherIconArray[j] = weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherIcon();
+                listWeatherIconArray[i] = weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherIcon();
             }
         }
         dayWeatherModel.setListWeatherIcon(listWeatherIconArray);
@@ -412,5 +415,83 @@ public class DayWeatherModel {
         dayWeatherModel.setListDtTxt(listDtTxtArray);
 
         return  dayWeatherModel;
+    }
+
+    public DayWeatherModel makeUpCurrentWeather(String query) {
+
+        WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(query);
+
+        DayWeatherModel dayWeatherModel = new DayWeatherModel();
+
+        //listMainTemp
+        double[] listMainTempArray = new double[weatherParsingModel.getList().size()];
+        for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
+            listMainTempArray[i] = weatherParsingModel.getList().get(i).getMain().getListMainTemp();
+        }
+        dayWeatherModel.setListMainTemp(listMainTempArray);
+
+        //listWeatherMain
+        String[] listWeatherMainArray = new String[weatherParsingModel.getList().size()];
+        for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
+            for (int j = 0; j < weatherParsingModel.getList().get(i).getWeather().size(); j++) {
+                listWeatherMainArray[i] = weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherMain();
+            }
+        }
+        dayWeatherModel.setListWeatherMain(listWeatherMainArray);
+
+        //listWeatherDescription
+        String[] listWeatherDescriptionArray = new String[weatherParsingModel.getList().size()];
+        for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
+            for (int j = 0; j < weatherParsingModel.getList().get(i).getWeather().size(); j++) {
+                listWeatherDescriptionArray[i] = weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherDescription();
+            }
+        }
+        dayWeatherModel.setListWeatherDescription(listWeatherDescriptionArray);
+
+        //listDtTxt
+        String[] listDtTxtArray = new String[weatherParsingModel.getList().size()];
+        for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
+            listDtTxtArray[i] = weatherParsingModel.getList().get(i).getListDtTxt();
+        }
+        dayWeatherModel.setListDtTxt(listDtTxtArray);
+
+        return dayWeatherModel;
+    }
+
+    public HashMap<String, Object[]> groupingWeatherByDate(DayWeatherModel dayWeatherModel) {
+
+        HashMap<String, Object[]> dayWeatherMap = new HashMap<String, Object[]>();
+
+        //Map keys
+        String[] keys = dayWeatherModel.getListDtTxt();
+
+        //Temperature
+        double[] temp = dayWeatherModel.getListMainTemp();
+
+        //Weather main
+        String[] weatherMain = dayWeatherModel.getListWeatherMain();
+
+        //Weather description
+        String[] weatherDescription = dayWeatherModel.getListWeatherDescription();
+
+        //ArrayList weatherObjects
+        ArrayList<Object[]> listObjects = new ArrayList<Object[]>();
+
+        //FirstDateObject
+        for (int i = 0; i < temp.length; i++) {
+            Object[] dateWeather = new Object[3];
+            dateWeather[0] = temp[i];
+            dateWeather[1] = weatherMain[i];
+            dateWeather[2] = weatherDescription[i];
+            System.out.print(dateWeather[0] + " " + dateWeather[1] + " " + dateWeather[2]);
+            listObjects.add(dateWeather);
+        }
+
+        //Result HashMap
+        for (int i = 0; i < temp.length; i++) {
+            dayWeatherMap.put(keys[i], listObjects.get(i));
+        }
+
+        return dayWeatherMap;
     }
 }
