@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 
 import com.example.pk.metcast.R;
 
-public class FragmentThree extends Fragment {
+public class WeatherFragment extends Fragment {
 
-    public static FragmentThree newInstance() {
+    public static WeatherFragment newInstance() {
 
         Bundle args = new Bundle();
 
-        FragmentThree fragment = new FragmentThree();
+        WeatherFragment fragment = new WeatherFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -24,7 +24,7 @@ public class FragmentThree extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment3, container, false);
+        return inflater.inflate(R.layout.fragment_weatherfragment, container, false);
     }
 
 }

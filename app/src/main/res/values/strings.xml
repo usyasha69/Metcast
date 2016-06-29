@@ -1,7 +1,5 @@
 <resources>
     <string name="app_name">Metcast</string>
 
-    <string name="fragment1Tv">Fragment1</string>
-    <string name="fragment2Tv">Fragment2</string>
-    <string name="fragment3Tv">Fragment3</string>
+    <string name="weatherFragmentTv">WeatherFragment</string>
 </resources>

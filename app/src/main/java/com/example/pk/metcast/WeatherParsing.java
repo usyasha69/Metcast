@@ -4,10 +4,10 @@ import com.google.gson.Gson;
 
 public class WeatherParsing {
 
-    public WeatherModel parseQuery(String query) {
+    public WeatherParsingModel parseQuery(String query) {
 
         final Gson gson = new Gson();
-        WeatherModel weatherModel = gson.fromJson(query, WeatherModel.class);
-        return weatherModel;
+        WeatherParsingModel weatherParsingModel = gson.fromJson(query, WeatherParsingModel.class);
+        return weatherParsingModel;
     }
 }
