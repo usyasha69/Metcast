@@ -2,6 +2,8 @@ package com.example.pk.metcast;
 
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class DayWeatherModel {
@@ -458,39 +460,232 @@ public class DayWeatherModel {
         return dayWeatherModel;
     }
 
-    public HashMap<String, Object[]> groupingWeatherByDate(DayWeatherModel dayWeatherModel) {
+    public HashMap<String, Object[][]> groupingWeatherByDate(DayWeatherModel dayWeatherModel) {
 
-        HashMap<String, Object[]> dayWeatherMap = new HashMap<String, Object[]>();
+        HashMap<String, Object[][]> dayWeatherMap;
 
-        //Map keys
-        String[] keys = dayWeatherModel.getListDtTxt();
-
-        //Temperature
-        double[] temp = dayWeatherModel.getListMainTemp();
-
-        //Weather main
+        String[] dates = dayWeatherModel.getListDtTxt();
+        double[] temperature = dayWeatherModel.getListMainTemp();
         String[] weatherMain = dayWeatherModel.getListWeatherMain();
-
-        //Weather description
         String[] weatherDescription = dayWeatherModel.getListWeatherDescription();
 
-        //ArrayList weatherObjects
-        ArrayList<Object[]> listObjects = new ArrayList<Object[]>();
+        ArrayList<Integer[]> daysMonthsYearsList = dateTextToInteger(dates);
 
-        //FirstDateObject
-        for (int i = 0; i < temp.length; i++) {
-            Object[] dateWeather = new Object[3];
-            dateWeather[0] = temp[i];
-            dateWeather[1] = weatherMain[i];
-            dateWeather[2] = weatherDescription[i];
-            listObjects.add(dateWeather);
-        }
+        String[] daysOfWeek = dateToDayWeek(daysMonthsYearsList, dates.length);
 
-        //Result HashMap
-        for (int i = 0; i < temp.length; i++) {
-            dayWeatherMap.put(keys[i], listObjects.get(i));
-        }
+        dayWeatherMap = formationResultMap(daysOfWeek,dates, temperature, weatherMain, weatherDescription);
 
         return dayWeatherMap;
+    }
+
+    public ArrayList<Integer[]> dateTextToInteger(String[] dates) {
+
+        Integer[] days = new Integer[dates.length];
+        Integer[] months = new Integer[dates.length];
+        Integer[] years = new Integer[dates.length];
+
+        ArrayList<Integer[]> daysMonthsYears = new ArrayList<>();
+
+        for (int i = 0; i < dates.length; i++) {
+            days[i] = Integer.parseInt(dates[i].substring(8, 10));
+            months[i] = Integer.parseInt(dates[i].substring(5, 7));
+            years[i] = Integer.parseInt(dates[i].substring(0, 4));
+        }
+
+        daysMonthsYears.add(days);
+        daysMonthsYears.add(months);
+        daysMonthsYears.add(years);
+
+        return daysMonthsYears;
+    }
+
+    public String[] dateToDayWeek(ArrayList<Integer[]> dates, int size) {
+
+        String[] daysOfWeek = new String[size];
+        Integer[] days = dates.get(0);
+        Integer[] months = dates.get(1);
+        Integer[] years = dates.get(2);
+        Calendar calendar = new GregorianCalendar();
+        int dayOfWeek;
+
+        for (int i = 0; i < daysOfWeek.length; i++) {
+            calendar.set(years[i], months[i] - 1, days[i]);
+            dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+
+            switch (dayOfWeek) {
+                case 1:
+                    daysOfWeek[i] = "Sunday";
+                    break;
+                case 2:
+                    daysOfWeek[i] = "Monday";
+                    break;
+                case 3:
+                    daysOfWeek[i] = "Tuesday";
+                    break;
+                case 4:
+                    daysOfWeek[i] = "Wednesday";
+                    break;
+                case 5:
+                    daysOfWeek[i] = "Thursday";
+                    break;
+                case 6:
+                    daysOfWeek[i] = "Friday";
+                    break;
+                case 7:
+                    daysOfWeek[i] = "Saturday";
+                    break;
+                default: break;
+            }
+        }
+
+        return daysOfWeek;
+    }
+
+    public HashMap<String, Object[][]> formationResultMap(String[] keys,String[] dates, double[] temperature, String[] weatherMain, String[] weatherDescription) {
+
+        ArrayList<Object[][]> finalValues = new ArrayList<>();
+
+        HashMap<String, Object[][]> finalMap = new HashMap<String, Object[][]>();
+
+        ArrayList<String> finalKeys = new ArrayList<>();
+
+        int mondayCount = 0;
+        int tuesdayCount = 0;
+        int wednesdayCount = 0;
+        int thursdayCount = 0;
+        int fridayCount = 0;
+        int saturdayCount = 0;
+        int sundayCount = 0;
+
+        for (String key : keys) {
+            if (key.equals("Monday")) mondayCount++;
+            if (key.equals("Tuesday")) tuesdayCount++;
+            if (key.equals("Wednesday")) wednesdayCount++;
+            if (key.equals("Thursday")) thursdayCount++;
+            if (key.equals("Friday")) fridayCount++;
+            if (key.equals("Saturday")) saturdayCount++;
+            if (key.equals("Sunday")) sundayCount++;
+        }
+
+        if (mondayCount != 0) {
+            Object[][] mondayObjects = new Object[mondayCount][4];
+            int j = 0;
+            for (int i = 0; i < dates.length; i++) {
+                if (keys[i].equals("Monday")) {
+                    mondayObjects[j][0] = dates[i];
+                    mondayObjects[j][1] = temperature[i];
+                    mondayObjects[j][2] = weatherMain[i];
+                    mondayObjects[j][3] = weatherDescription[i];
+                    j++;
+                    }
+            }
+            finalValues.add(mondayObjects);
+            finalKeys.add("Monday");
+        }
+
+        if (tuesdayCount != 0) {
+            Object[][] tuesdayObjects = new Object[tuesdayCount][4];
+            int j = 0;
+            for (int i = 0; i < dates.length; i++) {
+                if (keys[i].equals("Tuesday")) {
+                    tuesdayObjects[j][0] = dates[i];
+                    tuesdayObjects[j][1] = temperature[i];
+                    tuesdayObjects[j][2] = weatherMain[i];
+                    tuesdayObjects[j][3] = weatherDescription[i];
+                    j++;
+                }
+            }
+            finalValues.add(tuesdayObjects);
+            finalKeys.add("Tuesday");
+        }
+
+        if (wednesdayCount != 0) {
+            Object[][] wednesdayObjects = new Object[wednesdayCount][4];
+            int j = 0;
+            for (int i = 0; i < dates.length; i++) {
+                if (keys[i].equals("Wednesday")) {
+                    wednesdayObjects[j][0] = dates[i];
+                    wednesdayObjects[j][1] = temperature[i];
+                    wednesdayObjects[j][2] = weatherMain[i];
+                    wednesdayObjects[j][3] = weatherDescription[i];
+                    j++;
+                }
+            }
+            finalValues.add(wednesdayObjects);
+            finalKeys.add("Wednesday");
+        }
+
+        if (thursdayCount != 0) {
+            Object[][] thursdayObjects = new Object[thursdayCount][4];
+            int j = 0;
+            for (int i = 0; i < dates.length; i++) {
+                if (keys[i].equals("Thursday")) {
+                    thursdayObjects[j][0] = dates[i];
+                    thursdayObjects[j][1] = temperature[i];
+                    thursdayObjects[j][2] = weatherMain[i];
+                    thursdayObjects[j][3] = weatherDescription[i];
+                    j++;
+                }
+            }
+            finalValues.add(thursdayObjects);
+            finalKeys.add("Thursday");
+        }
+
+        if (fridayCount != 0) {
+            Object[][] fridayObjects = new Object[fridayCount][4];
+            int j = 0;
+            for (int i = 0; i < dates.length; i++) {
+                if (keys[i].equals("Friday")) {
+                    fridayObjects[j][0] = dates[i];
+                    fridayObjects[j][1] = temperature[i];
+                    fridayObjects[j][2] = weatherMain[i];
+                    fridayObjects[j][3] = weatherDescription[i];
+                    j++;
+                }
+            }
+            finalValues.add(fridayObjects);
+            finalKeys.add("Friday");
+        }
+
+        if (saturdayCount != 0) {
+            Object[][] saturdayObjects = new Object[saturdayCount][4];
+            int j = 0;
+            for (int i = 0; i < dates.length; i++) {
+                if (keys[i].equals("Saturday")) {
+                    saturdayObjects[j][0] = dates[i];
+                    saturdayObjects[j][1] = temperature[i];
+                    saturdayObjects[j][2] = weatherMain[i];
+                    saturdayObjects[j][3] = weatherDescription[i];
+                    j++;
+                }
+            }
+            finalValues.add(saturdayObjects);
+            finalKeys.add("Saturday");
+
+
+        }
+
+        if (sundayCount != 0) {
+            Object[][] sundayObjects = new Object[sundayCount][4];
+            int j = 0;
+            for (int i = 0; i < dates.length; i++) {
+                if (keys[i].equals("Sunday")) {
+                    sundayObjects[j][0] = dates[i];
+                    sundayObjects[j][1] = temperature[i];
+                    sundayObjects[j][2] = weatherMain[i];
+                    sundayObjects[j][3] = weatherDescription[i];
+                    j++;
+                }
+            }
+            finalValues.add(sundayObjects);
+            finalKeys.add("Sunday");
+        }
+
+
+        for (int i = 0; i < finalValues.size(); i++) {
+            finalMap.put(finalKeys.get(i), finalValues.get(i));
+        }
+
+        return finalMap;
     }
 }

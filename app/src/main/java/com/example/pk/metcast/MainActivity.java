@@ -20,11 +20,6 @@ import java.util.Map;
 
 public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, GetQueryTask.RequestResultCallback {
 
-    public static final int WEATHER_FRAGMENT = 0;
-
-
-    private final List<Fragment> fragments = new ArrayList<Fragment>();
-
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
 
@@ -116,13 +111,25 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         System.out.println(result);
 
         DayWeatherModel dayWeatherModel = new DayWeatherModel().makeUpCurrentWeather(result);
-        HashMap<String, Object[]> resultMap = new DayWeatherModel().groupingWeatherByDate(dayWeatherModel);
+        HashMap<String, Object[][]> resultMap = new DayWeatherModel().groupingWeatherByDate(dayWeatherModel);
 
-        Object[] mapValue;
+        Object[][] mapValue;
 
         for (Map.Entry entry: resultMap.entrySet() ) {
-            mapValue = (Object[]) entry.getValue();
-            System.out.println("key " + entry.getKey() + " value " + String.format("%.2f", ((double) mapValue[0] - 273.15)) + " " + mapValue[1] + " " + mapValue[2]);
+            mapValue = (Object[][]) entry.getValue();
+            System.out.print("key: " + entry.getKey() + " value: ");
+            showArray(mapValue);
+            System.out.println();
+        }
+    }
+
+    public void showArray(Object[][] mapValue) {
+
+        for (Object[] aMapValue : mapValue) {
+            for (int j = 0; j < 4; j++) {
+                System.out.print(aMapValue[j] + " ");
+            }
+            System.out.println();
         }
     }
 }
