@@ -108,28 +108,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     @Override
     public void onRequestFinish(String result) {
 
-        System.out.println(result);
-
         DayWeatherModel dayWeatherModel = new DayWeatherModel().makeUpCurrentWeather(result);
         HashMap<String, Object[][]> resultMap = new DayWeatherModel().groupingWeatherByDate(dayWeatherModel);
-
-        Object[][] mapValue;
-
-        for (Map.Entry entry: resultMap.entrySet() ) {
-            mapValue = (Object[][]) entry.getValue();
-            System.out.print("key: " + entry.getKey() + " value: ");
-            showArray(mapValue);
-            System.out.println();
-        }
-    }
-
-    public void showArray(Object[][] mapValue) {
-
-        for (Object[] aMapValue : mapValue) {
-            for (int j = 0; j < 4; j++) {
-                System.out.print(aMapValue[j] + " ");
-            }
-            System.out.println();
-        }
     }
 }

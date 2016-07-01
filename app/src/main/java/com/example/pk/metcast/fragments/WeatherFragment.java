@@ -9,13 +9,16 @@ import android.view.ViewGroup;
 
 import com.example.pk.metcast.R;
 
+import java.util.HashMap;
+
 public class WeatherFragment extends Fragment {
 
-    public static WeatherFragment newInstance() {
+    public static WeatherFragment newInstance(int position) {
 
         Bundle args = new Bundle();
 
         WeatherFragment fragment = new WeatherFragment();
+
         fragment.setArguments(args);
         return fragment;
     }
