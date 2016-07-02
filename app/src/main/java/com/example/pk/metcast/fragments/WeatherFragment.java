@@ -9,9 +9,8 @@ import android.view.ViewGroup;
 
 import com.example.pk.metcast.R;
 
-import java.util.HashMap;
-
 public class WeatherFragment extends Fragment {
+
 
     public static WeatherFragment newInstance(int position) {
 

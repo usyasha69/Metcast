@@ -1,11 +1,9 @@
 package com.example.pk.metcast.adapters;
 
-import android.location.LocationManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
-import com.example.pk.metcast.MainActivity;
 import com.example.pk.metcast.fragments.WeatherFragment;
 
 
