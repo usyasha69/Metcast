@@ -4,19 +4,14 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.example.pk.metcast.adapters.MyFragmentPagerAdapter;
-import com.example.pk.metcast.fragments.WeatherFragment;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, GetQueryTask.RequestResultCallback {
 
@@ -108,7 +103,24 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     @Override
     public void onRequestFinish(String result) {
 
-        DayWeatherModel dayWeatherModel = new ConversionToMap().makeUpCurrentWeather(result);
-        HashMap<String, Object[][]> resultMap = new ConversionToMap().groupingWeatherByDate(dayWeatherModel);
+        System.out.println(result);
+
+        WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(result);
+        ArrayList<DayWeatherModel>  list = new ConversionToWeather().group(weatherParsingModel);
+
+        for (int i = 0; i < list.size(); i++) {
+            System.out.println(list.get(i).getDay());
+            printArray(list, i);
+        }
+    }
+
+    public void printArray(ArrayList<DayWeatherModel> list, int i) {
+
+        DayWeatherModel dayWeatherModel = list.get(i);
+        for (int j = 0; j < dayWeatherModel.getWeathers().size(); j++) {
+            System.out.println(dayWeatherModel.getWeathers().get(j).getTime() + " "
+                    + dayWeatherModel.getWeathers().get(j).getWeather() + " "
+                    + dayWeatherModel.getWeathers().get(j).getTemperature());
+        }
     }
 }
