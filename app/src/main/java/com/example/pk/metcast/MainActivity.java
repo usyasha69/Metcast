@@ -10,6 +10,7 @@ import android.support.v4.view.ViewPager;
 
 import com.example.pk.metcast.adapters.MyFragmentPagerAdapter;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, GetQueryTask.RequestResultCallback {
@@ -119,7 +120,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         for (int j = 0; j < dayWeatherModel.getWeathers().size(); j++) {
             System.out.println(dayWeatherModel.getWeathers().get(j).getTime() + " "
                     + dayWeatherModel.getWeathers().get(j).getWeather() + " "
-                    + dayWeatherModel.getWeathers().get(j).getTemperature());
+                    + new DecimalFormat("#0.0").format(dayWeatherModel.getWeathers().get(j).getTemperature() - 273.15));
         }
     }
 }
