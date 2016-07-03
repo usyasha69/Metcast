@@ -9,7 +9,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.example.pk.metcast.adapters.MyFragmentPagerAdapter;
-import com.example.pk.metcast.fragments.WeatherFragment;
 
 import java.util.ArrayList;
 
