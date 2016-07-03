@@ -10,8 +10,8 @@
         android:layout_height="wrap_content"
         android:text="@string/weatherFragmentTv"
         android:layout_gravity="center_vertical"
-        android:gravity="center"
         android:textSize="18sp"
-        android:id="@+id/weatherFragment"/>
+        android:id="@+id/weatherFragment"
+        android:gravity="center" />
 
 </FrameLayout>
