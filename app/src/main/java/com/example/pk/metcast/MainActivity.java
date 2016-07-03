@@ -8,9 +8,8 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
-import com.example.pk.metcast.adapters.MyFragmentPagerAdapter;
+import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, GetQueryTask.RequestResultCallback {
@@ -28,9 +27,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
-        pagerAdapter = new MyFragmentPagerAdapter(getSupportFragmentManager());
-
-        viewPager.setAdapter(pagerAdapter);
         viewPager.addOnPageChangeListener(this);
     }
 
@@ -103,24 +99,10 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     @Override
     public void onRequestFinish(String result) {
 
-        System.out.println(result);
-
         WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(result);
         ArrayList<DayWeatherModel>  list = new ConversionToWeather().group(weatherParsingModel);
 
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println(list.get(i).getDay());
-            printArray(list, i);
-        }
-    }
-
-    public void printArray(ArrayList<DayWeatherModel> list, int i) {
-
-        DayWeatherModel dayWeatherModel = list.get(i);
-        for (int j = 0; j < dayWeatherModel.getWeathers().size(); j++) {
-            System.out.println(dayWeatherModel.getWeathers().get(j).getTime() + " "
-                    + dayWeatherModel.getWeathers().get(j).getWeather() + " "
-                    + new DecimalFormat("#0.0").format(dayWeatherModel.getWeathers().get(j).getTemperature() - 273.15));
-        }
+        pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
+        viewPager.setAdapter(pagerAdapter);
     }
 }
