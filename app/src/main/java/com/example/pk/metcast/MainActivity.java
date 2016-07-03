@@ -15,7 +15,6 @@ import java.util.ArrayList;
 public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, GetQueryTask.RequestResultCallback {
 
     private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
 
     public LocationManager locationManager;
 
@@ -102,7 +101,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(result);
         ArrayList<DayWeatherModel>  list = new ConversionToWeather().group(weatherParsingModel);
 
-        pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
+        PagerAdapter pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
         viewPager.setAdapter(pagerAdapter);
     }
 }
