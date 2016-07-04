@@ -1,4 +1,4 @@
-package com.example.pk.metcast;
+package com.example.pk.metcast.models;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -58,7 +58,7 @@ public class WeatherParsingModel {
         this.list = list;
     }
 
-    class City {
+    public class City {
         @SerializedName("id")
         private int cityId;
         @SerializedName("name")
@@ -121,7 +121,7 @@ public class WeatherParsingModel {
             this.sys = sys;
         }
 
-        class Coord {
+        public class Coord {
             @SerializedName("lon")
             private double cityLonCoord;
             @SerializedName("lat")
@@ -144,7 +144,7 @@ public class WeatherParsingModel {
             }
         }
 
-        class Sys {
+        public class Sys {
             @SerializedName("sys_population")
             private int citySysPopulation;
 
@@ -158,7 +158,7 @@ public class WeatherParsingModel {
         }
     }
 
-    class ListItem {
+    public class ListItem {
         @SerializedName("dt")
         private long listDt;
 
@@ -241,7 +241,7 @@ public class WeatherParsingModel {
             this.listDtTxt = listDtTxt;
         }
 
-        class Main {
+        public class Main {
             @SerializedName("temp")
             private double listMainTemp;
             @SerializedName("temp_min")
@@ -324,7 +324,7 @@ public class WeatherParsingModel {
             }
         }
 
-        class ListItemRoot {
+        public class ListItemRoot {
             @SerializedName("id")
             private int listWeatherId;
             @SerializedName("main")
@@ -367,7 +367,7 @@ public class WeatherParsingModel {
             }
         }
 
-        class Clouds {
+        public class Clouds {
             @SerializedName("all")
             private int listCloudsAll;
 
@@ -380,7 +380,7 @@ public class WeatherParsingModel {
             }
         }
 
-        class Wind {
+        public class Wind {
             @SerializedName("speed")
             private double listWindSpeed;
             @SerializedName("deg")
@@ -403,7 +403,7 @@ public class WeatherParsingModel {
             }
         }
 
-        class Rain {
+        public class Rain {
             @SerializedName("3h")
             private double listRain3h;
 
@@ -416,7 +416,7 @@ public class WeatherParsingModel {
             }
         }
 
-        class Sys {
+        public class Sys {
             @SerializedName("pod")
             private String listSysPod;
 

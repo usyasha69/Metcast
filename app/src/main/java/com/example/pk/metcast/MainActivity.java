@@ -9,6 +9,8 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
+import com.example.pk.metcast.models.DayWeatherModel;
+import com.example.pk.metcast.models.WeatherParsingModel;
 
 import java.util.ArrayList;
 
@@ -17,6 +19,8 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     private ViewPager viewPager;
 
     public LocationManager locationManager;
+
+    GetQueryTask getQueryTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +57,11 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         if (location != null) {
 
             //GET query
-            new GetQueryTask(location, this).execute();
+            if (getQueryTask == null) {
+                getQueryTask = new GetQueryTask(location, this);
+                getQueryTask.execute();
+            }
+            getQueryTask.link(this);
         }
     }
 
@@ -97,11 +105,17 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
     @Override
     public void onRequestFinish(String result) {
-
         WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(result);
         ArrayList<DayWeatherModel>  list = new ConversionToWeather().group(weatherParsingModel);
 
         PagerAdapter pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
         viewPager.setAdapter(pagerAdapter);
+    }
+
+    //set to zero AsyncTask link
+    @Override
+    public Object onRetainCustomNonConfigurationInstance() {
+        getQueryTask.unLink();
+        return getQueryTask;
     }
 }

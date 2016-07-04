@@ -14,6 +14,7 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
 
     private Location location;
     private RequestResultCallback requestResultCallback;
+    public MainActivity mainActivity;
 
     public GetQueryTask(Location location, RequestResultCallback requestResultCallback) {
 
@@ -21,9 +22,17 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
         this.requestResultCallback = requestResultCallback;
     }
 
-    HttpURLConnection urlConnection = null;
+    public HttpURLConnection urlConnection = null;
 
-    BufferedReader reader = null;
+    public BufferedReader reader = null;
+
+    void link(MainActivity mainActivity) {
+        this.mainActivity = mainActivity;
+    }
+
+    void unLink() {
+        mainActivity = null;
+    }
 
     @Override
     protected String doInBackground(Void... voids) {

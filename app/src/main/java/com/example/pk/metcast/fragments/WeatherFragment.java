@@ -9,32 +9,34 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.pk.metcast.DayWeatherModel;
+import com.example.pk.metcast.models.DayWeatherModel;
 import com.example.pk.metcast.R;
 
 import java.text.DecimalFormat;
-import java.util.ArrayList;
 
 public class WeatherFragment extends Fragment {
 
     private static final String WEATHER_KEY = "weatherKey";
-    private static String fragmentWeather;
+    private String fragmentWeather;
 
-    public static WeatherFragment newInstance(ArrayList<DayWeatherModel> list, int position) {
+    public static WeatherFragment newInstance(DayWeatherModel dayWeatherModel) {
 
         Bundle args = new Bundle();
 
         WeatherFragment fragment = new WeatherFragment();
 
-        String dayWeather = "";
-        for (int i = 0; i < list.get(position).getWeathers().size(); i++) {
-            dayWeather += list.get(position).getWeathers().get(i).getTime() + " "
-                    + list.get(position).getWeathers().get(i).getWeather() + " "
-                    + new DecimalFormat("#0.0").format(list.get(position).getWeathers().get(i).getTemperature() - 273.15)
-                    + "\n" + "\n";
+        StringBuilder dayWeather = new StringBuilder();
+        for (int i = 0; i < dayWeatherModel.getWeathers().size(); i++) {
+            dayWeather.append(dayWeatherModel.getWeathers().get(i).getTime());
+            dayWeather.append(" ");
+            dayWeather.append(dayWeatherModel.getWeathers().get(i).getWeather());
+            dayWeather.append(" ");
+            dayWeather.append(new DecimalFormat("#0.0").format(dayWeatherModel.getWeathers().get(i).getTemperature() - 273.15));
+            dayWeather.append("\n");
+            dayWeather.append("\n");
         }
 
-        args.putString(WEATHER_KEY, dayWeather);
+        args.putString(WEATHER_KEY, dayWeather.toString());
         fragment.setArguments(args);
         return fragment;
     }

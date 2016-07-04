@@ -2,10 +2,9 @@ package com.example.pk.metcast.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
-import com.example.pk.metcast.DayWeatherModel;
+import com.example.pk.metcast.models.DayWeatherModel;
 import com.example.pk.metcast.fragments.WeatherFragment;
 
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public Fragment getItem(int position) { return WeatherFragment.newInstance(list, position);
+    public Fragment getItem(int position) { return WeatherFragment.newInstance(list.get(position));
     }
 
     @Override

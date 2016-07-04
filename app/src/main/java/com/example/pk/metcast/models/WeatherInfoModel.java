@@ -1,4 +1,4 @@
-package com.example.pk.metcast;
+package com.example.pk.metcast.models;
 
 public class WeatherInfoModel {
 

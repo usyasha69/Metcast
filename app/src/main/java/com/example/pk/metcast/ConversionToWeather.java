@@ -1,5 +1,9 @@
 package com.example.pk.metcast;
 
+import com.example.pk.metcast.models.DayWeatherModel;
+import com.example.pk.metcast.models.WeatherInfoModel;
+import com.example.pk.metcast.models.WeatherParsingModel;
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
