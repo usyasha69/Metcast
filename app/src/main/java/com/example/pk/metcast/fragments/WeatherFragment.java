@@ -3,21 +3,22 @@ package com.example.pk.metcast.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
 
-import com.example.pk.metcast.models.DayWeatherModel;
 import com.example.pk.metcast.R;
+import com.example.pk.metcast.models.DayWeatherModel;
 
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 
-public class WeatherFragment extends Fragment {
+public class WeatherFragment extends ListFragment{
 
     private static final String WEATHER_KEY = "weatherKey";
-    private String fragmentWeather;
+    private ArrayList<String> fragmentWeather;
 
     public static WeatherFragment newInstance(DayWeatherModel dayWeatherModel) {
 
@@ -25,18 +26,20 @@ public class WeatherFragment extends Fragment {
 
         WeatherFragment fragment = new WeatherFragment();
 
-        StringBuilder dayWeather = new StringBuilder();
+        ArrayList<String> dwmWeather = new ArrayList<>();
+
         for (int i = 0; i < dayWeatherModel.getWeathers().size(); i++) {
+            StringBuilder dayWeather = new StringBuilder();
+
             dayWeather.append(dayWeatherModel.getWeathers().get(i).getTime());
             dayWeather.append(" ");
             dayWeather.append(dayWeatherModel.getWeathers().get(i).getWeather());
             dayWeather.append(" ");
             dayWeather.append(new DecimalFormat("#0.0").format(dayWeatherModel.getWeathers().get(i).getTemperature() - 273.15));
-            dayWeather.append("\n");
-            dayWeather.append("\n");
+            dwmWeather.add(dayWeather.toString());
         }
 
-        args.putString(WEATHER_KEY, dayWeather.toString());
+        args.putStringArrayList(WEATHER_KEY, dwmWeather);
         fragment.setArguments(args);
         return fragment;
     }
@@ -45,7 +48,7 @@ public class WeatherFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        fragmentWeather = getArguments().getString(WEATHER_KEY);
+        fragmentWeather = getArguments().getStringArrayList(WEATHER_KEY);
     }
 
     @Override
@@ -53,8 +56,8 @@ public class WeatherFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_weatherfragment, container, false);
-        View tv = v.findViewById(R.id.weatherFragment);
-        ((TextView)tv).setText(fragmentWeather);
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.support_simple_spinner_dropdown_item, fragmentWeather);
+        setListAdapter(adapter);
         return v;
     }
 

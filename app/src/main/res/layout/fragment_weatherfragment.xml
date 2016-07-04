@@ -5,13 +5,10 @@
     tools:context=".fragments.WeatherFragment"
     android:id="@+id/fragmentOne">
 
-    <TextView
+    <ListView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/weatherFragmentTv"
-        android:layout_gravity="center_vertical"
-        android:textSize="18sp"
-        android:id="@+id/weatherFragment"
-        android:gravity="center" />
+        android:id="@+id/android:list">
+    </ListView>
 
 </FrameLayout>
