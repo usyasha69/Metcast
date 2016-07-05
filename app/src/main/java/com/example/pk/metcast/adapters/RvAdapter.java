@@ -16,9 +16,9 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView textView;
-        public ViewHolder(TextView textView) {
-            super(textView);
-            this.textView = textView;
+        public ViewHolder(View v) {
+            super(v);
+            textView = (TextView) v.findViewById(android.R.id.text1);
         }
     }
 
@@ -34,10 +34,9 @@ public class RvAdapter extends RecyclerView.Adapter<RvAdapter.ViewHolder> {
     @Override
     public RvAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
-        View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.two_line_list_item, parent, false);
-        ViewHolder vh = new ViewHolder((TextView) v);
+        View v = LayoutInflater.from(parent.getContext()).inflate(android.R.layout.simple_list_item_1, parent, false);
 
-        return vh;
+        return new ViewHolder(v);
     }
 
     @Override
