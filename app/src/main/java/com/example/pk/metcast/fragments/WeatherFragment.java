@@ -14,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.example.pk.metcast.R;
+import com.example.pk.metcast.adapters.LvAdapter;
 import com.example.pk.metcast.adapters.RvAdapter;
 import com.example.pk.metcast.models.DayWeatherModel;
 
@@ -22,33 +23,40 @@ import java.util.ArrayList;
 
 public class WeatherFragment extends Fragment{
 
+    private static final String DATE_KEY = "dateKey";
     private static final String WEATHER_KEY = "weatherKey";
+    private static final String TEMP_KEY = "tempKey";
+
     private static final String DAY_KEY = "dayKey";
+
+    private ArrayList<String> fragmentDate;
     private ArrayList<String> fragmentWeather;
+    private ArrayList<String> fragmentTemp;
+
     private String fragmentDay;
 
     public static WeatherFragment newInstance(DayWeatherModel dayWeatherModel) {
 
         Bundle args = new Bundle();
 
-        String day = dayWeatherModel.getDay();
-
         WeatherFragment fragment = new WeatherFragment();
 
+        String day = dayWeatherModel.getDay();
+
+        ArrayList<String> dwmDate = new ArrayList<>();
         ArrayList<String> dwmWeather = new ArrayList<>();
+        ArrayList<String> dwmTemp = new ArrayList<>();
 
         for (int i = 0; i < dayWeatherModel.getWeathers().size(); i++) {
-            StringBuilder dayWeather = new StringBuilder();
-
-            dayWeather.append(dayWeatherModel.getWeathers().get(i).getTime());
-            dayWeather.append(" ");
-            dayWeather.append(dayWeatherModel.getWeathers().get(i).getWeather());
-            dayWeather.append(" ");
-            dayWeather.append(new DecimalFormat("#0.0").format(dayWeatherModel.getWeathers().get(i).getTemperature() - 273.15));
-            dwmWeather.add(dayWeather.toString());
+            dwmDate.add(dayWeatherModel.getWeathers().get(i).getTime());
+            dwmWeather.add(dayWeatherModel.getWeathers().get(i).getWeather());
+            dwmTemp.add(String.valueOf(new DecimalFormat("#0.0").format(dayWeatherModel.getWeathers().get(i).getTemperature())));
         }
 
+        args.putStringArrayList(DATE_KEY, dwmDate);
         args.putStringArrayList(WEATHER_KEY, dwmWeather);
+        args.putStringArrayList(TEMP_KEY, dwmTemp);
+
         args.putString(DAY_KEY, day);
         fragment.setArguments(args);
         return fragment;
@@ -58,7 +66,10 @@ public class WeatherFragment extends Fragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        fragmentDate = getArguments().getStringArrayList(DATE_KEY);
         fragmentWeather = getArguments().getStringArrayList(WEATHER_KEY);
+        fragmentTemp = getArguments().getStringArrayList(TEMP_KEY);
+
         fragmentDay = getArguments().getString(DAY_KEY);
     }
 
@@ -70,15 +81,16 @@ public class WeatherFragment extends Fragment{
 
         if (fragmentDay.equals("Tuesday") || fragmentDay.equals("Thursday") || fragmentDay.equals("Saturday")) {
             ListView listView = (ListView) v.findViewById(R.id.fragmentListView);
-            ArrayAdapter<String> adapter = new ArrayAdapter<>(getActivity(), R.layout.support_simple_spinner_dropdown_item, fragmentWeather);
-            listView.setAdapter(adapter);
+            listView.setAdapter(new LvAdapter(getContext(), fragmentDate, fragmentWeather, fragmentTemp));
         } else {
             RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.fragmentRecyclerView);
             recyclerView.setHasFixedSize(true);
+
             LinearLayoutManager llm = new LinearLayoutManager(getContext());
             llm.setOrientation(LinearLayoutManager.VERTICAL);
             recyclerView.setLayoutManager(llm);
-            RvAdapter rvAdapter = new RvAdapter(fragmentWeather);
+
+            RvAdapter rvAdapter = new RvAdapter(fragmentDate, fragmentWeather, fragmentTemp);
             recyclerView.setAdapter(rvAdapter);
         }
 
