@@ -50,7 +50,7 @@ public class WeatherFragment extends Fragment{
         for (int i = 0; i < dayWeatherModel.getWeathers().size(); i++) {
             dwmDate.add(dayWeatherModel.getWeathers().get(i).getTime());
             dwmWeather.add(dayWeatherModel.getWeathers().get(i).getWeather());
-            dwmTemp.add(String.valueOf(new DecimalFormat("#0.0").format(dayWeatherModel.getWeathers().get(i).getTemperature())));
+            dwmTemp.add(String.valueOf(new DecimalFormat("#0.0").format(dayWeatherModel.getWeathers().get(i).getTemperature() - 273.15)));
         }
 
         args.putStringArrayList(DATE_KEY, dwmDate);
