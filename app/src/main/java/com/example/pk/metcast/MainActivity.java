@@ -109,6 +109,8 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         ArrayList<DayWeatherModel>  list = new ConversionToWeather().group(weatherParsingModel);
 
         PagerAdapter pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
+
+        new WorkWithDB().storingDataOnTheDB(this, list);
         viewPager.setAdapter(pagerAdapter);
     }
 
