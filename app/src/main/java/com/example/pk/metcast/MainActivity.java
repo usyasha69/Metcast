@@ -16,11 +16,10 @@ import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, GetQueryTask.RequestResultCallback {
 
-    private ViewPager viewPager;
+    public ViewPager viewPager;
+    public PagerAdapter pagerAdapter;
 
     public LocationManager locationManager;
-
-    GetQueryTask getQueryTask;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,6 +30,13 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.addOnPageChangeListener(this);
+
+        WorkWithDB workWithDB = new WorkWithDB();
+
+        if (!workWithDB.dbEmpty(this)){
+            pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), workWithDB.readDataFromBD(this));
+            viewPager.setAdapter(pagerAdapter);
+        }
     }
 
     @Override
@@ -57,11 +63,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         if (location != null) {
 
             //GET query
-            if (getQueryTask == null) {
-                getQueryTask = new GetQueryTask(location, this);
-                getQueryTask.execute();
-            }
-            getQueryTask.link(this);
+            new GetQueryTask(location, this).execute();
         }
     }
 
@@ -108,16 +110,16 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(result);
         ArrayList<DayWeatherModel>  list = new ConversionToWeather().group(weatherParsingModel);
 
-        PagerAdapter pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
+        WorkWithDB workWithDB = new WorkWithDB();
 
-        new WorkWithDB().storingDataOnTheDB(this, list);
+        pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
+
+        if (workWithDB.dbEmpty(this)) {
+            workWithDB.storingDataOnTheDB(this, list);
+        } else {
+            workWithDB.updateDB(this, list);
+        }
+
         viewPager.setAdapter(pagerAdapter);
-    }
-
-    //set to zero AsyncTask link
-    @Override
-    public Object onRetainCustomNonConfigurationInstance() {
-        getQueryTask.unLink();
-        return getQueryTask;
     }
 }
