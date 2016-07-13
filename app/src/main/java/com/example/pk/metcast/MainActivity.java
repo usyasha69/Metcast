@@ -9,6 +9,7 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 
 import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
 import com.example.pk.metcast.models.DayWeatherModel;
@@ -69,7 +70,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         if (location != null) {
 
             this.location = location;
-            getSupportLoaderManager().initLoader(LOADER_GET_QUERY_ID, null, this);
+            getSupportLoaderManager().initLoader(LOADER_GET_QUERY_ID, null, this).forceLoad();
         }
     }
 
@@ -107,29 +108,36 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     //LoaderCallback methods
     @Override
     public Loader<String> onCreateLoader(int id, Bundle args) {
+        Log.d("mytag", "onCreate");
         Loader<String> mLoader = null;
-        if (id == LOADER_GET_QUERY_ID) {
+        switch (id){
+            case LOADER_GET_QUERY_ID:
             mLoader = new GetQueryTaskLoader(this, location);
+                break;
         }
         return mLoader;
     }
 
     @Override
     public void onLoadFinished(Loader<String> loader, String data) {
-        WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(data);
-        ArrayList<DayWeatherModel> list = new ConversionToWeather().group(weatherParsingModel);
+        switch (loader.getId()) {
+            case LOADER_GET_QUERY_ID:
+                WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(data);
+                ArrayList<DayWeatherModel> list = new ConversionToWeather().group(weatherParsingModel);
 
-        WorkWithDB workWithDB = new WorkWithDB();
+                WorkWithDB workWithDB = new WorkWithDB();
 
-        pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
+                pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
 
-        if (workWithDB.dbEmpty(this)) {
-            workWithDB.storingDataOnTheDB(this, list);
-        } else {
-            workWithDB.updateDB(this, list);
+                if (workWithDB.dbEmpty(this)) {
+                    workWithDB.storingDataOnTheDB(this, list);
+                } else {
+                    workWithDB.updateDB(this, list);
+                }
+
+                viewPager.setAdapter(pagerAdapter);
+                break;
         }
-
-        viewPager.setAdapter(pagerAdapter);
     }
 
     @Override

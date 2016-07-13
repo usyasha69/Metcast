@@ -1,7 +1,6 @@
 package com.example.pk.metcast;
 
 
-import android.content.AsyncTaskLoader;
 import android.content.Context;
 import android.location.Location;
 
@@ -12,7 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetQueryTaskLoader extends AsyncTaskLoader<String> {
+public class GetQueryTaskLoader extends android.support.v4.content.AsyncTaskLoader<String> {
 
     private Location location;
 
