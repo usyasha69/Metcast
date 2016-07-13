@@ -1,7 +1,9 @@
 package com.example.pk.metcast;
 
+
+import android.content.AsyncTaskLoader;
+import android.content.Context;
 import android.location.Location;
-import android.os.AsyncTask;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -10,23 +12,19 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetQueryTask extends AsyncTask<Void, String, String> {
+public class GetQueryTaskLoader extends AsyncTaskLoader<String> {
 
     private Location location;
-    private RequestResultCallback requestResultCallback;
 
-    public GetQueryTask(Location location, RequestResultCallback requestResultCallback) {
-
+    public GetQueryTaskLoader(Context context, Location location) {
+        super(context);
         this.location = location;
-        this.requestResultCallback = requestResultCallback;
     }
 
-    public HttpURLConnection urlConnection = null;
-
-    public BufferedReader reader = null;
-
     @Override
-    protected String doInBackground(Void... voids) {
+    public String loadInBackground() {
+        HttpURLConnection urlConnection;
+        BufferedReader reader;
 
         String resultJSon = "";
 
@@ -59,23 +57,5 @@ public class GetQueryTask extends AsyncTask<Void, String, String> {
             ex.printStackTrace();
         }
         return resultJSon;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        requestResultCallback.onRequestStart();
-    }
-
-    @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-        requestResultCallback.onRequestFinish(s);
-    }
-
-    public interface RequestResultCallback {
-
-        void onRequestStart();
-        void onRequestFinish(String result);
     }
 }

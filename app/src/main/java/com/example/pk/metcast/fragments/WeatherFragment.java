@@ -18,10 +18,11 @@ import com.example.pk.metcast.adapters.LvAdapter;
 import com.example.pk.metcast.adapters.RvAdapter;
 import com.example.pk.metcast.models.DayWeatherModel;
 
+import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class WeatherFragment extends Fragment{
+public class WeatherFragment extends Fragment implements Serializable{
 
     private static final String DATE_KEY = "dateKey";
     private static final String WEATHER_KEY = "weatherKey";
@@ -50,7 +51,8 @@ public class WeatherFragment extends Fragment{
         for (int i = 0; i < dayWeatherModel.getWeathers().size(); i++) {
             dwmDate.add(dayWeatherModel.getWeathers().get(i).getTime());
             dwmWeather.add(dayWeatherModel.getWeathers().get(i).getWeather());
-            dwmTemp.add(String.valueOf(new DecimalFormat("#0.0").format(dayWeatherModel.getWeathers().get(i).getTemperature() - 273.15)));
+            dwmTemp.add(String.valueOf(
+                    new DecimalFormat("#0.0").format(dayWeatherModel.getWeathers().get(i).getTemperature() - 273.15)));
         }
 
         args.putStringArrayList(DATE_KEY, dwmDate);
@@ -65,6 +67,7 @@ public class WeatherFragment extends Fragment{
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRetainInstance(true);
 
         fragmentDate = getArguments().getStringArrayList(DATE_KEY);
         fragmentWeather = getArguments().getStringArrayList(WEATHER_KEY);

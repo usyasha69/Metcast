@@ -30,7 +30,7 @@ public class WorkWithDB {
                 contentValues.put(DBHelper.KEY_DAY_OF_WEEK, list.get(i).getDay());
                 contentValues.put(DBHelper.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
                 contentValues.put(DBHelper.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
-                contentValues.put(DBHelper.KEY_TEMP,
+                contentValues.put(DBHelper.KEY_TEMPERATURE,
                         new DecimalFormat("#0.0").format(list.get(i).getWeathers().get(j).getTemperature() - 273.15));
 
                 sqLiteDatabase.insert(DBHelper.TABLE_METCAST, null, contentValues);
@@ -46,7 +46,7 @@ public class WorkWithDB {
             int dayOfWeekColInd = cursor.getColumnIndex(DBHelper.KEY_DAY_OF_WEEK);
             int dateColInd = cursor.getColumnIndex(DBHelper.KEY_DATE);
             int weatherColInd = cursor.getColumnIndex(DBHelper.KEY_WEATHER);
-            int tempColInd = cursor.getColumnIndex(DBHelper.KEY_TEMP);
+            int tempColInd = cursor.getColumnIndex(DBHelper.KEY_TEMPERATURE);
 
             do {
                 Log.d(MY_TAG, "ID: " + cursor.getString(idColInd)
@@ -84,7 +84,7 @@ public class WorkWithDB {
             if (cursor.moveToFirst()) {
                 int dateColInd = cursor.getColumnIndex(DBHelper.KEY_DATE);
                 int weatherColInd = cursor.getColumnIndex(DBHelper.KEY_WEATHER);
-                int tempColInd = cursor.getColumnIndex(DBHelper.KEY_TEMP);
+                int tempColInd = cursor.getColumnIndex(DBHelper.KEY_TEMPERATURE);
 
                 do {
                     WeatherInfoModel weatherInfoModel = new WeatherInfoModel();
@@ -166,7 +166,7 @@ public class WorkWithDB {
                 contentValues.put(DBHelper.KEY_DAY_OF_WEEK, list.get(i).getDay());
                 contentValues.put(DBHelper.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
                 contentValues.put(DBHelper.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
-                contentValues.put(DBHelper.KEY_TEMP,
+                contentValues.put(DBHelper.KEY_TEMPERATURE,
                         new DecimalFormat("#0.0").format(list.get(i).getWeathers().get(j).getTemperature() - 273.15));
 
                 sqLiteDatabase.insert(DBHelper.TABLE_METCAST, null, contentValues);
@@ -181,7 +181,7 @@ public class WorkWithDB {
             int dayOfWeekColInd = cursor.getColumnIndex(DBHelper.KEY_DAY_OF_WEEK);
             int dateColInd = cursor.getColumnIndex(DBHelper.KEY_DATE);
             int weatherColInd = cursor.getColumnIndex(DBHelper.KEY_WEATHER);
-            int tempColInd = cursor.getColumnIndex(DBHelper.KEY_TEMP);
+            int tempColInd = cursor.getColumnIndex(DBHelper.KEY_TEMPERATURE);
 
             do {
                 Log.d(MY_TAG, "ID: " + cursor.getString(idColInd)

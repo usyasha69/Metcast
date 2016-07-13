@@ -14,7 +14,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String KEY_DAY_OF_WEEK = "dayOfWeek";
     public static final String KEY_DATE = "date";
     public static final String KEY_WEATHER = "weather";
-    public static final String KEY_TEMP = "temperature";
+    public static final String KEY_TEMPERATURE = "temperature";
 
     public DBHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -25,7 +25,7 @@ public class DBHelper extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL("create table " + TABLE_METCAST + " ("
                 + KEY_ID + " integer primary key," + KEY_DAY_OF_WEEK
                 + " text," + KEY_DATE + " text," + KEY_WEATHER + " text,"
-                + KEY_TEMP + " real" + ");");
+                + KEY_TEMPERATURE + " real" + ");");
     }
 
     @Override

@@ -5,6 +5,8 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
@@ -14,12 +16,16 @@ import com.example.pk.metcast.models.WeatherParsingModel;
 
 import java.util.ArrayList;
 
-public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, GetQueryTask.RequestResultCallback {
+public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, LoaderManager.LoaderCallbacks<String> {
 
-    public ViewPager viewPager;
-    public PagerAdapter pagerAdapter;
+    private ViewPager viewPager;
+    private PagerAdapter pagerAdapter;
 
-    public LocationManager locationManager;
+    private LocationManager locationManager;
+
+    private final int LOADER_GET_QUERY_ID = 1;
+
+    private Location location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +39,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
         WorkWithDB workWithDB = new WorkWithDB();
 
-        if (!workWithDB.dbEmpty(this)){
+        if (!workWithDB.dbEmpty(this)) {
             pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), workWithDB.readDataFromBD(this));
             viewPager.setAdapter(pagerAdapter);
         }
@@ -48,7 +54,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000 * 10, 10, this);
         }
-            locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
     @Override
@@ -62,8 +68,8 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     public void onLocationChanged(Location location) {
         if (location != null) {
 
-            //GET query
-            new GetQueryTask(location, this).execute();
+            this.location = location;
+            getSupportLoaderManager().initLoader(LOADER_GET_QUERY_ID, null, this);
         }
     }
 
@@ -98,17 +104,20 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
     }
 
-    //RequestResultCallback methods
-
+    //LoaderCallback methods
     @Override
-    public void onRequestStart() {
-
+    public Loader<String> onCreateLoader(int id, Bundle args) {
+        Loader<String> mLoader = null;
+        if (id == LOADER_GET_QUERY_ID) {
+            mLoader = new GetQueryTaskLoader(this, location);
+        }
+        return mLoader;
     }
 
     @Override
-    public void onRequestFinish(String result) {
-        WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(result);
-        ArrayList<DayWeatherModel>  list = new ConversionToWeather().group(weatherParsingModel);
+    public void onLoadFinished(Loader<String> loader, String data) {
+        WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(data);
+        ArrayList<DayWeatherModel> list = new ConversionToWeather().group(weatherParsingModel);
 
         WorkWithDB workWithDB = new WorkWithDB();
 
@@ -121,5 +130,10 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         }
 
         viewPager.setAdapter(pagerAdapter);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<String> loader) {
+
     }
 }
