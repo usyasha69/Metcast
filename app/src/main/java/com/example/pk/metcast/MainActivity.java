@@ -23,10 +23,12 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     private PagerAdapter pagerAdapter;
 
     private LocationManager locationManager;
+    private Location location;
 
     private final int LOADER_GET_QUERY_ID = 1;
+    private final int LOADER_DATABASE_ID = 2;
 
-    private Location location;
+    ArrayList<DayWeatherModel> list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,12 +110,13 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     //LoaderCallback methods
     @Override
     public Loader<String> onCreateLoader(int id, Bundle args) {
-        Log.d("mytag", "onCreate");
         Loader<String> mLoader = null;
         switch (id){
             case LOADER_GET_QUERY_ID:
-            mLoader = new GetQueryTaskLoader(this, location);
+                mLoader = new GetQueryTaskLoader(this, location);
                 break;
+            case LOADER_DATABASE_ID:
+                mLoader = new DatabaseCursorLoader(this, list);
         }
         return mLoader;
     }
@@ -123,19 +126,14 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         switch (loader.getId()) {
             case LOADER_GET_QUERY_ID:
                 WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(data);
-                ArrayList<DayWeatherModel> list = new ConversionToWeather().group(weatherParsingModel);
-
-                WorkWithDB workWithDB = new WorkWithDB();
+                list = new ConversionToWeather().group(weatherParsingModel);
 
                 pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
-
-                if (workWithDB.dbEmpty(this)) {
-                    workWithDB.storingDataOnTheDB(this, list);
-                } else {
-                    workWithDB.updateDB(this, list);
-                }
-
                 viewPager.setAdapter(pagerAdapter);
+
+                getSupportLoaderManager().initLoader(LOADER_DATABASE_ID, null, this).forceLoad();
+                break;
+            case LOADER_DATABASE_ID:
                 break;
         }
     }
