@@ -5,6 +5,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.util.Log;
 
 import com.example.pk.metcast.models.DayWeatherModel;
@@ -17,36 +18,35 @@ import java.util.LinkedHashSet;
 public class WorkWithDB {
 
     private final String MY_TAG = "myLog";
+    public static final Uri METCAST_URI = Uri.parse("content://com.example.pk.metcast/weather");
 
     //storing data to the database
     public void storingDataOnTheDB(Context context, ArrayList<DayWeatherModel> list) {
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
 
         ContentValues contentValues = new ContentValues();
 
         for (int i = 0; i < list.size(); i++) {
             for (int j = 0; j < list.get(i).getWeathers().size(); j++) {
-                contentValues.put(DBHelper.KEY_DAY_OF_WEEK, list.get(i).getDay());
-                contentValues.put(DBHelper.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
-                contentValues.put(DBHelper.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
-                contentValues.put(DBHelper.KEY_TEMPERATURE,
+                contentValues.put(MetcastProvider.KEY_DAY_OF_WEEK, list.get(i).getDay());
+                contentValues.put(MetcastProvider.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
+                contentValues.put(MetcastProvider.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
+                contentValues.put(MetcastProvider.KEY_TEMPERATURE,
                         new DecimalFormat("#0.0").format(list.get(i).getWeathers().get(j).getTemperature() - 273.15));
 
-                sqLiteDatabase.insert(DBHelper.TABLE_METCAST, null, contentValues);
+                context.getContentResolver().insert(METCAST_URI, contentValues);
             }
         }
 
 
-        Cursor cursor = sqLiteDatabase.query(DBHelper.TABLE_METCAST, null, null, null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null);
 
         if (cursor.moveToFirst()) {
 
-            int idColInd = cursor.getColumnIndex(DBHelper.KEY_ID);
-            int dayOfWeekColInd = cursor.getColumnIndex(DBHelper.KEY_DAY_OF_WEEK);
-            int dateColInd = cursor.getColumnIndex(DBHelper.KEY_DATE);
-            int weatherColInd = cursor.getColumnIndex(DBHelper.KEY_WEATHER);
-            int tempColInd = cursor.getColumnIndex(DBHelper.KEY_TEMPERATURE);
+            int idColInd = cursor.getColumnIndex(MetcastProvider.KEY_ID);
+            int dayOfWeekColInd = cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK);
+            int dateColInd = cursor.getColumnIndex(MetcastProvider.KEY_DATE);
+            int weatherColInd = cursor.getColumnIndex(MetcastProvider.KEY_WEATHER);
+            int tempColInd = cursor.getColumnIndex(MetcastProvider.KEY_TEMPERATURE);
 
             do {
                 Log.d(MY_TAG, "ID: " + cursor.getString(idColInd)
@@ -59,13 +59,10 @@ public class WorkWithDB {
             Log.d(MY_TAG, "0 rows");
         }
         cursor.close();
-        dbHelper.close();
     }
 
     //read data from database
     public ArrayList<DayWeatherModel> readDataFromBD(Context context) {
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
 
         ArrayList<DayWeatherModel> dwimlist  = new ArrayList<>();
 
@@ -74,17 +71,17 @@ public class WorkWithDB {
         Cursor cursor = null;
 
         for (String s : daysOfWeek) {
-            cursor = sqLiteDatabase.query(DBHelper.TABLE_METCAST, null,
-                    DBHelper.KEY_DAY_OF_WEEK + " = ?",new String[] {s}, null, null, null);
+            cursor = context.getContentResolver().query(METCAST_URI, null,
+                    MetcastProvider.KEY_DAY_OF_WEEK + " = ?",new String[] {s}, null, null);
             DayWeatherModel dayWeatherModel = new DayWeatherModel();
             dayWeatherModel.setDay(s);
 
             ArrayList<WeatherInfoModel> wimList = new ArrayList<>();
 
             if (cursor.moveToFirst()) {
-                int dateColInd = cursor.getColumnIndex(DBHelper.KEY_DATE);
-                int weatherColInd = cursor.getColumnIndex(DBHelper.KEY_WEATHER);
-                int tempColInd = cursor.getColumnIndex(DBHelper.KEY_TEMPERATURE);
+                int dateColInd = cursor.getColumnIndex(MetcastProvider.KEY_DATE);
+                int weatherColInd = cursor.getColumnIndex(MetcastProvider.KEY_WEATHER);
+                int tempColInd = cursor.getColumnIndex(MetcastProvider.KEY_TEMPERATURE);
 
                 do {
                     WeatherInfoModel weatherInfoModel = new WeatherInfoModel();
@@ -100,22 +97,19 @@ public class WorkWithDB {
             dwimlist.add(dayWeatherModel);
     }
         cursor.close();
-        dbHelper.close();
 
         return dwimlist;
     }
 
     //subsidiary method
     private LinkedHashSet<String> showDaysOfWeek(Context context) {
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
 
-        Cursor cursor = sqLiteDatabase.query(DBHelper.TABLE_METCAST, null, null, null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
 
         LinkedHashSet<String> set = new LinkedHashSet<>();
 
         if (cursor.moveToFirst()) {
-            int dayOfWeekColInd = cursor.getColumnIndex(DBHelper.KEY_DAY_OF_WEEK);
+            int dayOfWeekColInd = cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK);
 
             do {
                 set.add(cursor.getString(dayOfWeekColInd));
@@ -125,16 +119,13 @@ public class WorkWithDB {
         }
 
         cursor.close();
-        dbHelper.close();
         return set;
     }
 
     //check, database is empty
     public boolean dbEmpty(Context context) {
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
 
-        Cursor cursor = sqLiteDatabase.query(DBHelper.TABLE_METCAST, null, null, null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
 
         int tableSize = 0;
 
@@ -147,41 +138,38 @@ public class WorkWithDB {
         }
 
         cursor.close();
-        dbHelper.close();
 
         return tableSize == 0;
     }
 
     //Update database
     public void updateDB(Context context, ArrayList<DayWeatherModel> list) {
-        DBHelper dbHelper = new DBHelper(context);
-        SQLiteDatabase sqLiteDatabase = dbHelper.getWritableDatabase();
 
-        sqLiteDatabase.delete(DBHelper.TABLE_METCAST, null, null);
+        context.getContentResolver().delete(METCAST_URI, null, null);
 
         ContentValues contentValues = new ContentValues();
 
         for (int i = 0; i < list.size(); i++) {
             for (int j = 0; j < list.get(i).getWeathers().size(); j++) {
-                contentValues.put(DBHelper.KEY_DAY_OF_WEEK, list.get(i).getDay());
-                contentValues.put(DBHelper.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
-                contentValues.put(DBHelper.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
-                contentValues.put(DBHelper.KEY_TEMPERATURE,
+                contentValues.put(MetcastProvider.KEY_DAY_OF_WEEK, list.get(i).getDay());
+                contentValues.put(MetcastProvider.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
+                contentValues.put(MetcastProvider.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
+                contentValues.put(MetcastProvider.KEY_TEMPERATURE,
                         new DecimalFormat("#0.0").format(list.get(i).getWeathers().get(j).getTemperature() - 273.15));
 
-                sqLiteDatabase.insert(DBHelper.TABLE_METCAST, null, contentValues);
+                context.getContentResolver().insert(METCAST_URI, contentValues);
             }
         }
 
-        Cursor cursor = sqLiteDatabase.query(DBHelper.TABLE_METCAST, null, null, null, null, null, null);
+        Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
 
         if (cursor.moveToFirst()) {
 
-            int idColInd = cursor.getColumnIndex(DBHelper.KEY_ID);
-            int dayOfWeekColInd = cursor.getColumnIndex(DBHelper.KEY_DAY_OF_WEEK);
-            int dateColInd = cursor.getColumnIndex(DBHelper.KEY_DATE);
-            int weatherColInd = cursor.getColumnIndex(DBHelper.KEY_WEATHER);
-            int tempColInd = cursor.getColumnIndex(DBHelper.KEY_TEMPERATURE);
+            int idColInd = cursor.getColumnIndex(MetcastProvider.KEY_ID);
+            int dayOfWeekColInd = cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK);
+            int dateColInd = cursor.getColumnIndex(MetcastProvider.KEY_DATE);
+            int weatherColInd = cursor.getColumnIndex(MetcastProvider.KEY_WEATHER);
+            int tempColInd = cursor.getColumnIndex(MetcastProvider.KEY_TEMPERATURE);
 
             do {
                 Log.d(MY_TAG, "ID: " + cursor.getString(idColInd)
@@ -194,6 +182,5 @@ public class WorkWithDB {
             Log.d(MY_TAG, "0 rows");
         }
         cursor.close();
-        dbHelper.close();
     }
 }

@@ -11,7 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class GetQueryTaskLoader extends AsyncTaskLoader<String> {
+public class GetQueryTaskLoader extends AsyncTaskLoader<Object> {
 
     private Location location;
 

@@ -3,13 +3,14 @@ package com.example.pk.metcast;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.util.Log;
 
 import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
 import com.example.pk.metcast.models.DayWeatherModel;
@@ -17,7 +18,7 @@ import com.example.pk.metcast.models.WeatherParsingModel;
 
 import java.util.ArrayList;
 
-public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, LoaderManager.LoaderCallbacks<String> {
+public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, LoaderManager.LoaderCallbacks<Object> {
 
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
@@ -109,37 +110,45 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
     //LoaderCallback methods
     @Override
-    public Loader<String> onCreateLoader(int id, Bundle args) {
-        Loader<String> mLoader = null;
+    public Loader<Object> onCreateLoader(int id, Bundle args) {
+        Loader mLoader = null;
         switch (id){
             case LOADER_GET_QUERY_ID:
                 mLoader = new GetQueryTaskLoader(this, location);
                 break;
-            case LOADER_DATABASE_ID:
-                mLoader = new DatabaseCursorLoader(this, list);
+//            case LOADER_DATABASE_ID:
+//                mLoader = new CursorLoader(this,
+//                        Uri.parse("content://com.example.pk.metcast/weather"),
+//                        null, null, null, null);
         }
         return mLoader;
     }
 
     @Override
-    public void onLoadFinished(Loader<String> loader, String data) {
+    public void onLoadFinished(Loader<Object> loader, Object data) {
         switch (loader.getId()) {
             case LOADER_GET_QUERY_ID:
-                WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(data);
+                WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(String.valueOf(data));
                 list = new ConversionToWeather().group(weatherParsingModel);
 
                 pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
                 viewPager.setAdapter(pagerAdapter);
 
-                getSupportLoaderManager().initLoader(LOADER_DATABASE_ID, null, this).forceLoad();
+//                getSupportLoaderManager().initLoader(LOADER_DATABASE_ID, null, this).forceLoad();
                 break;
             case LOADER_DATABASE_ID:
                 break;
         }
+        WorkWithDB workWithDB = new WorkWithDB();
+
+        if (workWithDB.dbEmpty(this)) {
+            workWithDB.storingDataOnTheDB(this, list);
+        } else {
+            workWithDB.updateDB(this, list);
+        }
     }
 
     @Override
-    public void onLoaderReset(Loader<String> loader) {
-
+    public void onLoaderReset(Loader<Object> loader) {
     }
 }
