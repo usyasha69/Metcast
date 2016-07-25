@@ -1,5 +1,6 @@
 package com.example.pk.metcast;
 
+import android.database.Cursor;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -27,7 +28,10 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     private Location location;
 
     private final int LOADER_GET_QUERY_ID = 1;
-    private final int LOADER_DATABASE_ID = 2;
+    private final int LOADER_READ_FROM_DATABASE_ID = 2;
+    private final int LOADER_INSERT_TO_DATABASE_ID = 3;
+    private final int LOADER_UPDATE_DATABASE_ID = 4;
+
 
     ArrayList<DayWeatherModel> list;
 
@@ -44,8 +48,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         WorkWithDB workWithDB = new WorkWithDB();
 
         if (!workWithDB.dbEmpty(this)) {
-            pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), workWithDB.readDataFromBD(this));
-            viewPager.setAdapter(pagerAdapter);
+            getSupportLoaderManager().initLoader(LOADER_READ_FROM_DATABASE_ID, null, this).forceLoad();
         }
     }
 
@@ -116,10 +119,33 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
             case LOADER_GET_QUERY_ID:
                 mLoader = new GetQueryTaskLoader(this, location);
                 break;
-//            case LOADER_DATABASE_ID:
-//                mLoader = new CursorLoader(this,
-//                        Uri.parse("content://com.example.pk.metcast/weather"),
-//                        null, null, null, null);
+            case LOADER_READ_FROM_DATABASE_ID:
+                mLoader = new CursorLoader(this) {
+                    @Override
+                    public Cursor loadInBackground() {
+                        list  = new WorkWithDB().readDataFromBD(getContext());
+                        return null;
+                    }
+                };
+                break;
+            case LOADER_INSERT_TO_DATABASE_ID:
+                mLoader = new CursorLoader(this) {
+                    @Override
+                    public Cursor loadInBackground() {
+                        new WorkWithDB().storingDataOnTheDB(getContext(), list);
+                        return null;
+                    }
+                };
+                break;
+            case LOADER_UPDATE_DATABASE_ID:
+                mLoader = new CursorLoader(this) {
+                    @Override
+                    public Cursor loadInBackground() {
+                        new WorkWithDB().updateDB(getContext(), list);
+                        return null;
+                    }
+                };
+                break;
         }
         return mLoader;
     }
@@ -134,17 +160,21 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
                 pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
                 viewPager.setAdapter(pagerAdapter);
 
-//                getSupportLoaderManager().initLoader(LOADER_DATABASE_ID, null, this).forceLoad();
-                break;
-            case LOADER_DATABASE_ID:
-                break;
-        }
-        WorkWithDB workWithDB = new WorkWithDB();
+                WorkWithDB workWithDB = new WorkWithDB();
 
-        if (workWithDB.dbEmpty(this)) {
-            workWithDB.storingDataOnTheDB(this, list);
-        } else {
-            workWithDB.updateDB(this, list);
+                if (workWithDB.dbEmpty(this))
+                    getSupportLoaderManager().initLoader(LOADER_INSERT_TO_DATABASE_ID, null, this).forceLoad();
+                else
+                    getSupportLoaderManager().initLoader(LOADER_UPDATE_DATABASE_ID, null, this).forceLoad();
+                break;
+            case LOADER_READ_FROM_DATABASE_ID:
+                pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
+                viewPager.setAdapter(pagerAdapter);
+                break;
+            case LOADER_INSERT_TO_DATABASE_ID:
+                break;
+            case LOADER_UPDATE_DATABASE_ID:
+                break;
         }
     }
 

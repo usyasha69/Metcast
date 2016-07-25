@@ -27,7 +27,7 @@ public class GetQueryTaskLoader extends AsyncTaskLoader<Object> {
 
         String resultJSon = "";
 
-        String query = "http://api.openweathermap.org/data/2.5/forecast?";
+        String query = "http://api.openweathermap.org/data/2.5/forecast?lat=";
         query += ("lat=" + String.valueOf(location.getLatitude())
                 + "&"
                 + "lon="

@@ -7,6 +7,7 @@ public class DayWeatherModel {
     private String day;
     private ArrayList<WeatherInfoModel> weathers;
 
+
     public String getDay() {
         return day;
     }
@@ -22,4 +23,6 @@ public class DayWeatherModel {
     public void setWeathers(ArrayList<WeatherInfoModel> weathers) {
         this.weathers = weathers;
     }
+
+
 }

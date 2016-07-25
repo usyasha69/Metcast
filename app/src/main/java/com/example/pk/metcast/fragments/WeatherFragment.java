@@ -2,6 +2,8 @@ package com.example.pk.metcast.fragments;
 
 
 import android.os.Bundle;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +24,7 @@ import java.io.Serializable;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-public class WeatherFragment extends Fragment implements Serializable{
+public class WeatherFragment extends Fragment {
 
     private static final String DATE_KEY = "dateKey";
     private static final String WEATHER_KEY = "weatherKey";
