@@ -1,12 +1,12 @@
 package com.example.pk.metcast.models;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class DayWeatherModel {
+public class DayWeatherModel implements Serializable {
 
     private String day;
     private ArrayList<WeatherInfoModel> weathers;
-
 
     public String getDay() {
         return day;
@@ -23,6 +23,5 @@ public class DayWeatherModel {
     public void setWeathers(ArrayList<WeatherInfoModel> weathers) {
         this.weathers = weathers;
     }
-
 
 }
