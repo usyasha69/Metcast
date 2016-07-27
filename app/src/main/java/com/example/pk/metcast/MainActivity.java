@@ -13,6 +13,10 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
+import com.example.pk.metcast.loaders.EmptyCheckDBLoader;
+import com.example.pk.metcast.loaders.GetQueryTaskLoader;
+import com.example.pk.metcast.loaders.InsertToDBLoader;
+import com.example.pk.metcast.loaders.UpdateDBLoader;
 import com.example.pk.metcast.models.DayWeatherModel;
 import com.example.pk.metcast.models.WeatherParsingModel;
 
@@ -21,16 +25,16 @@ import java.util.ArrayList;
 public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, LoaderManager.LoaderCallbacks<Object> {
 
     private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
 
     private LocationManager locationManager;
     private Location location;
+    private PagerAdapter pagerAdapter;
 
     private final int LOADER_GET_QUERY_ID = 1;
     private final int LOADER_READ_FROM_DATABASE_ID = 2;
     private final int LOADER_INSERT_TO_DATABASE_ID = 3;
     private final int LOADER_UPDATE_DATABASE_ID = 4;
-
+    private final int LOADER_CHECKED_EMPTY_DB_ID = 5;
 
     ArrayList<DayWeatherModel> list;
 
@@ -44,11 +48,8 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.addOnPageChangeListener(this);
 
-        WorkWithDB workWithDB = new WorkWithDB();
-
-        if (!workWithDB.dbEmpty(this)) {
-            getSupportLoaderManager().initLoader(LOADER_READ_FROM_DATABASE_ID, null, this).forceLoad();
-        }
+        //checked, database empty?
+        getSupportLoaderManager().initLoader(LOADER_CHECKED_EMPTY_DB_ID, null, this).forceLoad();
     }
 
     @Override
@@ -128,22 +129,13 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
                 };
                 break;
             case LOADER_INSERT_TO_DATABASE_ID:
-                mLoader = new CursorLoader(this) {
-                    @Override
-                    public Cursor loadInBackground() {
-                        new WorkWithDB().storingDataOnTheDB(getContext(), list);
-                        return null;
-                    }
-                };
+                mLoader = new InsertToDBLoader(this, list);
                 break;
             case LOADER_UPDATE_DATABASE_ID:
-                mLoader = new CursorLoader(this) {
-                    @Override
-                    public Cursor loadInBackground() {
-                        new WorkWithDB().updateDB(getContext(), list);
-                        return null;
-                    }
-                };
+                mLoader = new UpdateDBLoader(this, list);
+                break;
+            case LOADER_CHECKED_EMPTY_DB_ID:
+                mLoader = new EmptyCheckDBLoader(this);
                 break;
         }
         return mLoader;
@@ -159,12 +151,9 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
                 pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
                 viewPager.setAdapter(pagerAdapter);
 
-                WorkWithDB workWithDB = new WorkWithDB();
-
-                if (workWithDB.dbEmpty(this))
-                    getSupportLoaderManager().initLoader(LOADER_INSERT_TO_DATABASE_ID, null, this).forceLoad();
-                else
-                    getSupportLoaderManager().initLoader(LOADER_UPDATE_DATABASE_ID, null, this).forceLoad();
+                //update database
+                getSupportLoaderManager().initLoader(LOADER_UPDATE_DATABASE_ID, null, this).forceLoad();
+                System.out.println("update");
                 break;
             case LOADER_READ_FROM_DATABASE_ID:
                 pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
@@ -173,6 +162,18 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
             case LOADER_INSERT_TO_DATABASE_ID:
                 break;
             case LOADER_UPDATE_DATABASE_ID:
+                //if database empty, insert
+                if ((int) data == 0) {
+                    getSupportLoaderManager().initLoader(LOADER_INSERT_TO_DATABASE_ID, null, this).forceLoad();
+                    System.out.println("insert" + (int) data);
+                }
+                break;
+            case LOADER_CHECKED_EMPTY_DB_ID:
+                //if database does'nt empty, reading from database
+                if (((boolean) data)) {
+                    getSupportLoaderManager().initLoader(LOADER_READ_FROM_DATABASE_ID, null, this).forceLoad();
+                    System.out.println("read");
+            }
                 break;
         }
     }

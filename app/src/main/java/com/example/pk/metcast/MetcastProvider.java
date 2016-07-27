@@ -1,6 +1,7 @@
 package com.example.pk.metcast;
 
 import android.content.ContentProvider;
+import android.content.ContentResolver;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,6 +10,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 
@@ -41,6 +43,8 @@ public class MetcastProvider extends ContentProvider {
     public static final int URI_METCAST = 1;
     public static final int URI_METCAST_ID = 2;
 
+    ContentResolver contentResolver;
+
     private static final UriMatcher uriMatcher;
     static {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -54,23 +58,24 @@ public class MetcastProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         dbHelper = new DBHelper(getContext());
+        contentResolver = getContext().getContentResolver();
         return true;
     }
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] strings, String s, String[] strings1, String s1) {
+    public Cursor query(@NonNull Uri uri, String[] strings, String s, String[] strings1, String s1) {
         sqLiteDatabase = dbHelper.getWritableDatabase();
         Cursor cursor = sqLiteDatabase.query(TABLE_METCAST, strings, s, strings1, null, null, s1);
 
-        cursor.setNotificationUri(getContext().getContentResolver(), METCAST_CONTENT_URI);
+        cursor.setNotificationUri(contentResolver, METCAST_CONTENT_URI);
 
         return cursor;
     }
 
     @Nullable
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         switch (uriMatcher.match(uri)) {
             case URI_METCAST:
                 return METCAST_CONTENT_TYPE;
@@ -82,30 +87,30 @@ public class MetcastProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues contentValues) {
+    public Uri insert(@NonNull Uri uri, ContentValues contentValues) {
         if (uriMatcher.match(uri) != URI_METCAST)
             throw new IllegalArgumentException("Wrong URI " + uri);
 
         sqLiteDatabase = dbHelper.getWritableDatabase();
         long rowID = sqLiteDatabase.insert(TABLE_METCAST, null, contentValues);
         Uri resultURI = ContentUris.withAppendedId(METCAST_CONTENT_URI, rowID);
-        getContext().getContentResolver().notifyChange(resultURI, null);
+        contentResolver.notifyChange(resultURI, null);
         return resultURI;
     }
 
     @Override
-    public int delete(Uri uri, String s, String[] strings) {
+    public int delete(@NonNull Uri uri, String s, String[] strings) {
         sqLiteDatabase = dbHelper.getWritableDatabase();
         int cnt = sqLiteDatabase.delete(TABLE_METCAST, s, strings);
-        getContext().getContentResolver().notifyChange(uri, null);
+        contentResolver.notifyChange(uri, null);
         return cnt;
     }
 
     @Override
-    public int update(Uri uri, ContentValues contentValues, String s, String[] strings) {
+    public int update(@NonNull Uri uri, ContentValues contentValues, String s, String[] strings) {
         sqLiteDatabase = dbHelper.getWritableDatabase();
         int cnt = sqLiteDatabase.update(TABLE_METCAST, contentValues, s, strings);
-        getContext().getContentResolver().notifyChange(uri, null);
+        contentResolver.notifyChange(uri, null);
         return cnt;
     }
 

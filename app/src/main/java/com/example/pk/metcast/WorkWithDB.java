@@ -20,7 +20,7 @@ public class WorkWithDB {
     public static final Uri METCAST_URI = Uri.parse("content://com.example.pk.metcast/weather");
 
     //storing data to the database
-    public void storingDataOnTheDB(Context context, ArrayList<DayWeatherModel> list) {
+    public void insertToDB(Context context, ArrayList<DayWeatherModel> list) {
 
         ContentValues contentValues = new ContentValues();
 
@@ -36,23 +36,16 @@ public class WorkWithDB {
             }
         }
 
-
         Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null);
 
+        assert cursor != null;
         if (cursor.moveToFirst()) {
-
-            int idColInd = cursor.getColumnIndex(MetcastProvider.KEY_ID);
-            int dayOfWeekColInd = cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK);
-            int dateColInd = cursor.getColumnIndex(MetcastProvider.KEY_DATE);
-            int weatherColInd = cursor.getColumnIndex(MetcastProvider.KEY_WEATHER);
-            int tempColInd = cursor.getColumnIndex(MetcastProvider.KEY_TEMPERATURE);
-
             do {
-                Log.d(MY_TAG, "ID: " + cursor.getString(idColInd)
-                        + " DAY_OF_WEEK: " + cursor.getString(dayOfWeekColInd)
-                        + " DATE: " + cursor.getString(dateColInd)
-                        + " WEATHER: " + cursor.getString(weatherColInd)
-                        + " TEMP: " + cursor.getString(tempColInd));
+                Log.d(MY_TAG, "ID: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_ID))
+                        + " DAY_OF_WEEK: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK))
+                        + " DATE: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DATE))
+                        + " WEATHER: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_WEATHER))
+                        + " TEMP: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_TEMPERATURE)));
             } while (cursor.moveToNext());
         } else {
             Log.d(MY_TAG, "0 rows");
@@ -67,16 +60,15 @@ public class WorkWithDB {
 
         LinkedHashSet<String> daysOfWeek = showDaysOfWeek(context);
 
-        Cursor cursor = null;
-
         for (String s : daysOfWeek) {
-            cursor = context.getContentResolver().query(METCAST_URI, null,
+            Cursor cursor = context.getContentResolver().query(METCAST_URI, null,
                     MetcastProvider.KEY_DAY_OF_WEEK + " = ?",new String[] {s}, null, null);
             DayWeatherModel dayWeatherModel = new DayWeatherModel();
             dayWeatherModel.setDay(s);
 
             ArrayList<WeatherInfoModel> wimList = new ArrayList<>();
 
+            assert cursor != null;
             if (cursor.moveToFirst()) {
                 int dateColInd = cursor.getColumnIndex(MetcastProvider.KEY_DATE);
                 int weatherColInd = cursor.getColumnIndex(MetcastProvider.KEY_WEATHER);
@@ -94,9 +86,8 @@ public class WorkWithDB {
             }
             dayWeatherModel.setWeathers(wimList);
             dwimlist.add(dayWeatherModel);
+            cursor.close();
     }
-        cursor.close();
-
         return dwimlist;
     }
 
@@ -107,6 +98,7 @@ public class WorkWithDB {
 
         LinkedHashSet<String> set = new LinkedHashSet<>();
 
+        assert cursor != null;
         if (cursor.moveToFirst()) {
             int dayOfWeekColInd = cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK);
 
@@ -121,65 +113,48 @@ public class WorkWithDB {
         return set;
     }
 
-    //check, database is empty
-    public boolean dbEmpty(Context context) {
-
-        Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
-
-        int tableSize = 0;
-
-        if (cursor.moveToFirst()) {
-            do {
-                tableSize++;
-            } while (cursor.moveToNext());
-        } else {
-            Log.d(MY_TAG, "0 rows");
-        }
-
-        cursor.close();
-
-        return tableSize == 0;
-    }
-
     //Update database
-    public void updateDB(Context context, ArrayList<DayWeatherModel> list) {
-
-        context.getContentResolver().delete(METCAST_URI, null, null);
+    public int updateDB(Context context, ArrayList<DayWeatherModel> list) {
 
         ContentValues contentValues = new ContentValues();
+        int updateCount = 0;
 
-        for (int i = 0; i < list.size(); i++) {
-            for (int j = 0; j < list.get(i).getWeathers().size(); j++) {
-                contentValues.put(MetcastProvider.KEY_DAY_OF_WEEK, list.get(i).getDay());
-                contentValues.put(MetcastProvider.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
-                contentValues.put(MetcastProvider.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
-                contentValues.put(MetcastProvider.KEY_TEMPERATURE,
-                        new DecimalFormat("#0.0").format(list.get(i).getWeathers().get(j).getTemperature() - 273.15));
-
-                context.getContentResolver().insert(METCAST_URI, contentValues);
+        if (context.getContentResolver().query(METCAST_URI, null, null, null, null, null).moveToFirst()) {
+            for (int i = 0; i < list.size(); i++) {
+                for (int j = 0; j < list.get(i).getWeathers().size(); j++) {
+                    contentValues.put(MetcastProvider.KEY_DAY_OF_WEEK, list.get(i).getDay());
+                    contentValues.put(MetcastProvider.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
+                    contentValues.put(MetcastProvider.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
+                    contentValues.put(MetcastProvider.KEY_TEMPERATURE,
+                            new DecimalFormat("#0.0").format(list.get(i).getWeathers().get(j).getTemperature() - 273.15));
+                    updateCount++;
+                    context.getContentResolver().update(METCAST_URI, contentValues, "_id = ?", new String[]{String.valueOf(updateCount)});
+                }
             }
         }
 
         Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
 
+        assert cursor != null;
         if (cursor.moveToFirst()) {
-
-            int idColInd = cursor.getColumnIndex(MetcastProvider.KEY_ID);
-            int dayOfWeekColInd = cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK);
-            int dateColInd = cursor.getColumnIndex(MetcastProvider.KEY_DATE);
-            int weatherColInd = cursor.getColumnIndex(MetcastProvider.KEY_WEATHER);
-            int tempColInd = cursor.getColumnIndex(MetcastProvider.KEY_TEMPERATURE);
-
             do {
-                Log.d(MY_TAG, "ID: " + cursor.getString(idColInd)
-                        + " DAY_OF_WEEK: " + cursor.getString(dayOfWeekColInd)
-                        + " DATE: " + cursor.getString(dateColInd)
-                        + " WEATHER: " + cursor.getString(weatherColInd)
-                        + " TEMP: " + cursor.getString(tempColInd));
+                Log.d(MY_TAG, "ID: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_ID))
+                        + " DAY_OF_WEEK: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK))
+                        + " DATE: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DATE))
+                        + " WEATHER: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_WEATHER))
+                        + " TEMP: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_TEMPERATURE)));
             } while (cursor.moveToNext());
         } else {
             Log.d(MY_TAG, "0 rows");
         }
         cursor.close();
+        return updateCount;
+    }
+
+    public boolean emptyCheckedDB(Context context) {
+        Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
+        boolean b = cursor.moveToFirst();
+        cursor.close();
+        return b;
     }
 }

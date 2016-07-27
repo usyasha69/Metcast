@@ -52,6 +52,7 @@ public class WeatherFragment extends Fragment {
         fragmentWeather = new ArrayList<>();
         fragmentTemp = new ArrayList<>();
 
+        assert dayWeatherModel != null;
         for (int i = 0; i < dayWeatherModel.getWeathers().size(); i++) {
             fragmentDate.add(dayWeatherModel.getWeathers().get(i).getTime());
             fragmentWeather.add(dayWeatherModel.getWeathers().get(i).getWeather());
