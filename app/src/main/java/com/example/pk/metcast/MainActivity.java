@@ -123,13 +123,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
                 mLoader = new GetQueryTaskLoader(this, location);
                 break;
             case LOADER_READ_FROM_DATABASE_ID:
-                mLoader = new CursorLoader(this) {
-                    @Override
-                    public Cursor loadInBackground() {
-                        list  = new WorkWithDB().readDataFromBD(getContext());
-                        return null;
-                    }
-                };
+                mLoader = new CursorLoader(this, MetcastProvider.METCAST_CONTENT_URI, null, null, null, null);
                 break;
             case LOADER_INSERT_TO_DATABASE_ID:
                 mLoader = new InsertToDBLoader(this, list);
@@ -156,9 +150,10 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
                 //update database
                 getSupportLoaderManager().initLoader(LOADER_UPDATE_DATABASE_ID, null, this).forceLoad();
-                System.out.println("update");
                 break;
             case LOADER_READ_FROM_DATABASE_ID:
+                //read from database
+                list = new WorkWithDB().readDataFromBD((Cursor) data);
                 pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
                 viewPager.setAdapter(pagerAdapter);
                 break;
@@ -168,14 +163,12 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
                 //if database empty, insert
                 if ((int) data == 0) {
                     getSupportLoaderManager().initLoader(LOADER_INSERT_TO_DATABASE_ID, null, this).forceLoad();
-                    System.out.println("insert" + (int) data);
                 }
                 break;
             case LOADER_CHECKED_EMPTY_DB_ID:
                 //if database does'nt empty, reading from database
                 if (((boolean) data)) {
                     getSupportLoaderManager().initLoader(LOADER_READ_FROM_DATABASE_ID, null, this).forceLoad();
-                    System.out.println("read");
             }
                 break;
         }

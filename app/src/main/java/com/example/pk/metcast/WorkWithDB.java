@@ -12,6 +12,7 @@ import com.example.pk.metcast.models.WeatherInfoModel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 
 public class WorkWithDB {
@@ -54,68 +55,56 @@ public class WorkWithDB {
     }
 
     //read data from database
-    public ArrayList<DayWeatherModel> readDataFromBD(Context context) {
+    public ArrayList<DayWeatherModel> readDataFromBD(Cursor cursor) {
+        ArrayList<String> daysOfWeek = new ArrayList<>();
+        ArrayList<WeatherInfoModel> wimList = new ArrayList<>();
 
-        ArrayList<DayWeatherModel> dwimlist  = new ArrayList<>();
-
-        LinkedHashSet<String> daysOfWeek = showDaysOfWeek(context);
-
-        for (String s : daysOfWeek) {
-            Cursor cursor = context.getContentResolver().query(METCAST_URI, null,
-                    MetcastProvider.KEY_DAY_OF_WEEK + " = ?",new String[] {s}, null, null);
-            DayWeatherModel dayWeatherModel = new DayWeatherModel();
-            dayWeatherModel.setDay(s);
-
-            ArrayList<WeatherInfoModel> wimList = new ArrayList<>();
-
-            assert cursor != null;
-            if (cursor.moveToFirst()) {
-                int dateColInd = cursor.getColumnIndex(MetcastProvider.KEY_DATE);
-                int weatherColInd = cursor.getColumnIndex(MetcastProvider.KEY_WEATHER);
-                int tempColInd = cursor.getColumnIndex(MetcastProvider.KEY_TEMPERATURE);
-
-                do {
-                    WeatherInfoModel weatherInfoModel = new WeatherInfoModel();
-                    weatherInfoModel.setTime(cursor.getString(dateColInd));
-                    weatherInfoModel.setWeather(cursor.getString(weatherColInd));
-                    weatherInfoModel.setTemperature(Double.parseDouble(cursor.getString(tempColInd)) + 273.15);
-                    wimList.add(weatherInfoModel);
-                } while (cursor.moveToNext());
-            } else {
-                Log.d(MY_TAG, "0 rows");
-            }
-            dayWeatherModel.setWeathers(wimList);
-            dwimlist.add(dayWeatherModel);
-            cursor.close();
-    }
-        return dwimlist;
-    }
-
-    //subsidiary method
-    private LinkedHashSet<String> showDaysOfWeek(Context context) {
-
-        Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
-
-        LinkedHashSet<String> set = new LinkedHashSet<>();
-
-        assert cursor != null;
+        //read data from cursor
         if (cursor.moveToFirst()) {
-            int dayOfWeekColInd = cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK);
-
             do {
-                set.add(cursor.getString(dayOfWeekColInd));
+                String dayOfWeek = cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK));
+
+                WeatherInfoModel wim = new WeatherInfoModel();
+                wim.setTime(cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DATE)));
+                wim.setWeather(cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_WEATHER)));
+                wim.setTemperature(Double.parseDouble(cursor.getString(cursor.getColumnIndex(
+                        MetcastProvider.KEY_TEMPERATURE
+                ))) + 273.15);
+
+                daysOfWeek.add(dayOfWeek);
+                wimList.add(wim);
             } while (cursor.moveToNext());
         } else {
             Log.d(MY_TAG, "0 rows");
         }
 
-        cursor.close();
-        return set;
+        return finalResult(daysOfWeek, wimList);
+    }
+
+    //subsidiary method
+    private ArrayList<DayWeatherModel> finalResult(ArrayList<String> daysOfWeek, ArrayList<WeatherInfoModel> wimList) {
+        ArrayList<DayWeatherModel> finalList  = new ArrayList<>();
+
+        LinkedHashSet<String> set = new LinkedHashSet<>(daysOfWeek);
+
+        for (String s : set) {
+            DayWeatherModel dayWeatherModel = new DayWeatherModel();
+            dayWeatherModel.setDay(s);
+            ArrayList<WeatherInfoModel> finalWimList = new ArrayList<>();
+            for (int i = 0; i < daysOfWeek.size(); i++) {
+                if (s.equals(daysOfWeek.get(i))) {
+                    finalWimList.add(wimList.get(i));
+                }
+            }
+            dayWeatherModel.setWeathers(finalWimList);
+            finalList.add(dayWeatherModel);
+        }
+
+        return finalList;
     }
 
     //Update database
     public int updateDB(Context context, ArrayList<DayWeatherModel> list) {
-
         ContentValues contentValues = new ContentValues();
         int updateCount = 0;
 
