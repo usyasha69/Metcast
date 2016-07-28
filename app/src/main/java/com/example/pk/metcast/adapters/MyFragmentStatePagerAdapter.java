@@ -24,7 +24,8 @@ public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
     }
 
     @Override
-    public int getCount() { return list.size();
+    public int getCount() {
+        return list.size();
     }
 
     @Override

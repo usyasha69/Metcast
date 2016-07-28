@@ -12,6 +12,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 
+import com.crashlytics.android.Crashlytics;
 import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
 import com.example.pk.metcast.loaders.EmptyCheckDBLoader;
 import com.example.pk.metcast.loaders.GetQueryTaskLoader;
@@ -20,6 +21,7 @@ import com.example.pk.metcast.loaders.UpdateDBLoader;
 import com.example.pk.metcast.models.DayWeatherModel;
 import com.example.pk.metcast.models.WeatherParsingModel;
 
+import io.fabric.sdk.android.Fabric;
 import java.util.ArrayList;
 
 public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, LoaderManager.LoaderCallbacks<Object> {
@@ -41,6 +43,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);

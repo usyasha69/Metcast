@@ -25,6 +25,9 @@
             android:name=".MetcastProvider">
 
         </provider>
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="a64ba5beb5281bc1a0f6c3727c54016bfcc5e51b" />
     </application>
 
 </manifest>
