@@ -147,7 +147,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
                 pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
                 viewPager.setAdapter(pagerAdapter);
-
                 //update database
                 getSupportLoaderManager().initLoader(LOADER_UPDATE_DATABASE_ID, null, this).forceLoad();
                 break;
