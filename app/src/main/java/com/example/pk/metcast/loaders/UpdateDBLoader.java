@@ -3,7 +3,7 @@ package com.example.pk.metcast.loaders;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.example.pk.metcast.WorkWithDB;
+import com.example.pk.metcast.DBWorker;
 import com.example.pk.metcast.models.DayWeatherModel;
 
 import java.util.ArrayList;
@@ -19,6 +19,6 @@ public class UpdateDBLoader extends AsyncTaskLoader<Integer> {
 
     @Override
     public Integer loadInBackground() {
-        return new WorkWithDB().updateDB(getContext(), list);
+        return new DBWorker().updateDB(getContext(), list);
     }
 }

@@ -3,7 +3,7 @@ package com.example.pk.metcast.loaders;
 import android.content.Context;
 import android.support.v4.content.AsyncTaskLoader;
 
-import com.example.pk.metcast.WorkWithDB;
+import com.example.pk.metcast.DBWorker;
 
 
 public class EmptyCheckDBLoader extends AsyncTaskLoader<Boolean> {
@@ -14,6 +14,6 @@ public class EmptyCheckDBLoader extends AsyncTaskLoader<Boolean> {
 
     @Override
     public Boolean loadInBackground() {
-        return new WorkWithDB().emptyCheckedDB(getContext());
+        return new DBWorker().emptyCheckedDB(getContext());
     }
 }

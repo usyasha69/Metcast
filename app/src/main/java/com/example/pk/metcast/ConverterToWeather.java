@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 
-public class ConversionToWeather {
+public class ConverterToWeather {
 
     public ArrayList<DayWeatherModel> group(WeatherParsingModel weatherParsingModel) {
 

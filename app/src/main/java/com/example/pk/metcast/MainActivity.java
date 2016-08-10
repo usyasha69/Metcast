@@ -15,30 +15,37 @@ import android.support.v4.view.ViewPager;
 import com.crashlytics.android.Crashlytics;
 import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
 import com.example.pk.metcast.loaders.EmptyCheckDBLoader;
-import com.example.pk.metcast.loaders.GetQueryTaskLoader;
 import com.example.pk.metcast.loaders.InsertToDBLoader;
 import com.example.pk.metcast.loaders.UpdateDBLoader;
 import com.example.pk.metcast.models.DayWeatherModel;
 import com.example.pk.metcast.models.WeatherParsingModel;
 
 import io.fabric.sdk.android.Fabric;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
 import java.util.ArrayList;
 
-public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, LoaderManager.LoaderCallbacks<Object> {
+public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, LoaderManager.LoaderCallbacks<Object>, Callback<WeatherParsingModel> {
 
     private ViewPager viewPager;
 
     private LocationManager locationManager;
-    private Location location;
     private PagerAdapter pagerAdapter;
 
-    private final int LOADER_GET_QUERY_ID = 1;
-    private final int LOADER_READ_FROM_DATABASE_ID = 2;
-    private final int LOADER_INSERT_TO_DATABASE_ID = 3;
-    private final int LOADER_UPDATE_DATABASE_ID = 4;
-    private final int LOADER_CHECKED_EMPTY_DB_ID = 5;
+    private Location location;
+
+    private final int LOADER_READ_FROM_DATABASE_ID = 1;
+    private final int LOADER_INSERT_TO_DATABASE_ID = 2;
+    private final int LOADER_UPDATE_DATABASE_ID = 3;
+    private final int LOADER_CHECKED_EMPTY_DB_ID = 4;
 
     ArrayList<DayWeatherModel> list;
+
+    public static String weatherQuery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -77,9 +84,8 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     @Override
     public void onLocationChanged(Location location) {
         if (location != null) {
-
             this.location = location;
-            getSupportLoaderManager().initLoader(LOADER_GET_QUERY_ID, null, this).forceLoad();
+            useRetrofit();
         }
     }
 
@@ -119,9 +125,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     public Loader<Object> onCreateLoader(int id, Bundle args) {
         Loader mLoader = null;
         switch (id){
-            case LOADER_GET_QUERY_ID:
-                mLoader = new GetQueryTaskLoader(this, location);
-                break;
             case LOADER_READ_FROM_DATABASE_ID:
                 mLoader = new CursorLoader(this, MetcastProvider.METCAST_CONTENT_URI, null, null, null, null);
                 break;
@@ -141,18 +144,9 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     @Override
     public void onLoadFinished(Loader<Object> loader, Object data) {
         switch (loader.getId()) {
-            case LOADER_GET_QUERY_ID:
-                WeatherParsingModel weatherParsingModel = new WeatherParsing().parseQuery(String.valueOf(data));
-                list = new ConversionToWeather().group(weatherParsingModel);
-
-                pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
-                viewPager.setAdapter(pagerAdapter);
-                //update database
-                getSupportLoaderManager().initLoader(LOADER_UPDATE_DATABASE_ID, null, this).forceLoad();
-                break;
             case LOADER_READ_FROM_DATABASE_ID:
                 //read from database
-                list = new WorkWithDB().readDataFromBD((Cursor) data);
+                list = new DBWorker().readDataFromBD((Cursor) data);
                 pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
                 viewPager.setAdapter(pagerAdapter);
                 break;
@@ -175,5 +169,47 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
     @Override
     public void onLoaderReset(Loader<Object> loader) {
+    }
+
+    //retrofit callback methods
+    @Override
+    public void onResponse(Call<WeatherParsingModel> call, Response<WeatherParsingModel> response) {
+        WeatherParsingModel weatherParsingModel = response.body();
+        list = new ConverterToWeather().group(weatherParsingModel);
+
+        pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
+        viewPager.setAdapter(pagerAdapter);
+        //update database
+        getSupportLoaderManager().initLoader(LOADER_UPDATE_DATABASE_ID, null, this).forceLoad();
+    }
+
+    @Override
+    public void onFailure(Call<WeatherParsingModel> call, Throwable t) {
+
+    }
+
+    //subsidiary method get coordinates and used retrofit
+    private void useRetrofit() {
+        String baseURL = "http://api.openweathermap.org/data/2.5/";
+
+        weatherQuery += "forecast?"
+                + "lat="
+                + (String.valueOf(location.getLatitude()))
+                + ("&")
+                + ("lon=")
+                + String.valueOf(location.getLongitude())
+                + "&APPID=4c898f591f4e595efcdd5db855f26762";
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseURL)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+
+        WeatherAPI weatherAPI = retrofit.create(WeatherAPI.class);
+
+        Call<WeatherParsingModel> call =
+                weatherAPI.loadQuestions("android");
+
+        call.enqueue(this);
     }
 }

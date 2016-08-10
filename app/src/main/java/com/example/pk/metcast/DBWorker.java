@@ -12,10 +12,9 @@ import com.example.pk.metcast.models.WeatherInfoModel;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedHashSet;
 
-public class WorkWithDB {
+public class DBWorker {
 
     private final String MY_TAG = "myLog";
     public static final Uri METCAST_URI = Uri.parse("content://com.example.pk.metcast/weather");
