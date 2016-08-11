@@ -45,8 +45,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
     ArrayList<DayWeatherModel> list;
 
-    public static String weatherQuery;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -192,14 +190,6 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
     private void useRetrofit() {
         String baseURL = "http://api.openweathermap.org/data/2.5/";
 
-        weatherQuery += "forecast?"
-                + "lat="
-                + (String.valueOf(location.getLatitude()))
-                + ("&")
-                + ("lon=")
-                + String.valueOf(location.getLongitude())
-                + "&APPID=4c898f591f4e595efcdd5db855f26762";
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseURL)
                 .addConverterFactory(GsonConverterFactory.create())
@@ -208,7 +198,9 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         WeatherAPI weatherAPI = retrofit.create(WeatherAPI.class);
 
         Call<WeatherParsingModel> call =
-                weatherAPI.loadQuestions("android");
+                weatherAPI.loadQuestions(String.valueOf(location.getLatitude())
+                        , String.valueOf(location.getLongitude())
+                        , "4c898f591f4e595efcdd5db855f26762");
 
         call.enqueue(this);
     }
