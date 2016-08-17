@@ -5,9 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.TextView;
 
-import com.example.pk.metcast.R;
+import com.example.pk.metcast.ImageWorker;
 
 import java.util.ArrayList;
 
@@ -17,12 +16,15 @@ public class LvAdapter extends BaseAdapter {
     ArrayList<String> weathers;
     ArrayList<String> temps;
 
+    Context context;
+
     LayoutInflater layoutInflater;
 
     public LvAdapter(Context context, ArrayList<String> dates, ArrayList<String> weathers, ArrayList<String> temps) {
         this.dates = dates;
         this.weathers = weathers;
         this.temps = temps;
+        this.context = context;
         layoutInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
     }
 
@@ -48,11 +50,8 @@ public class LvAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        view = layoutInflater.inflate(R.layout.view_custom, viewGroup, false);
+        return new ImageWorker().makeView(i, layoutInflater, viewGroup
+                , dates, weathers, temps, context);
 
-        ((TextView) view.findViewById(R.id.rvDateText)).setText(dates.get(i));
-        ((TextView) view.findViewById(R.id.rvWeatherText)).setText(weathers.get(i));
-        ((TextView) view.findViewById(R.id.rvTempText)).setText(temps.get(i));
-        return view;
     }
 }

@@ -27,8 +27,6 @@ public class WeatherFragment extends Fragment {
     private ArrayList<String> fragmentWeather;
     private ArrayList<String> fragmentTemp;
 
-    private String fragmentDay;
-
     public static WeatherFragment newInstance(DayWeatherModel dayWeatherModel) {
 
         Bundle args = new Bundle();
@@ -57,10 +55,8 @@ public class WeatherFragment extends Fragment {
             fragmentDate.add(dayWeatherModel.getWeathers().get(i).getTime());
             fragmentWeather.add(dayWeatherModel.getWeathers().get(i).getWeather());
             fragmentTemp.add(String.valueOf(
-                    new DecimalFormat("#0.0").format(dayWeatherModel.getWeathers().get(i).getTemperature() - 273.15)));
+                    new DecimalFormat("#0").format(dayWeatherModel.getWeathers().get(i).getTemperature() - 273.15)));
         }
-
-        fragmentDay = dayWeatherModel.getDay();
     }
 
     @Override
@@ -69,20 +65,9 @@ public class WeatherFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_weatherfragment, container, false);
 
-        if (fragmentDay.equals("Tuesday") || fragmentDay.equals("Thursday") || fragmentDay.equals("Saturday")) {
-            ListView listView = (ListView) v.findViewById(R.id.fragmentListView);
-            listView.setAdapter(new LvAdapter(getContext(), fragmentDate, fragmentWeather, fragmentTemp));
-        } else {
-            RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.fragmentRecyclerView);
-            recyclerView.setHasFixedSize(true);
+        ListView listView = (ListView) v.findViewById(R.id.fragmentListView);
+        listView.setAdapter(new LvAdapter(getContext(), fragmentDate, fragmentWeather, fragmentTemp));
 
-            LinearLayoutManager llm = new LinearLayoutManager(getContext());
-            llm.setOrientation(LinearLayoutManager.VERTICAL);
-            recyclerView.setLayoutManager(llm);
-
-            RvAdapter rvAdapter = new RvAdapter(fragmentDate, fragmentWeather, fragmentTemp);
-            recyclerView.setAdapter(rvAdapter);
-        }
 
         return v;
     }
