@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
 import com.example.pk.metcast.ViewWorker;
+import com.example.pk.metcast.models.DayWeatherModel;
+import com.example.pk.metcast.models.WeatherInfoModel;
 
 import java.util.ArrayList;
 
@@ -35,11 +37,14 @@ public class LvAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-        ArrayList<String> list = new ArrayList<>();
-        list.add(dates.get(i));
-        list.add(weathers.get(i));
-        list.add(temps.get(i));
-        return list;
+        WeatherInfoModel weatherInfoModel = new WeatherInfoModel();
+
+        weatherInfoModel.setTime(dates.get(i));
+        weatherInfoModel.setWeather(weathers.get(i));
+        weatherInfoModel.setTemperature(Double.parseDouble(temps.get(i)));
+
+
+        return weatherInfoModel;
     }
 
     @Override
@@ -52,6 +57,5 @@ public class LvAdapter extends BaseAdapter {
 
         return new ViewWorker(context, dates.get(i), weathers.get(i), temps.get(i))
                 .makeView(layoutInflater, viewGroup);
-
     }
 }

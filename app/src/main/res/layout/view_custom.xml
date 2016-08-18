@@ -19,7 +19,6 @@
             android:textSize="18sp"
             android:layout_marginLeft="@dimen/date_horizontal_margin"
             android:layout_gravity="left"
-            android:fontFamily="sans-serif-smallcaps"
             android:textColor="@color/text_view">
         </TextView>
 
@@ -37,7 +36,6 @@
             android:id="@+id/time"
             android:layout_marginLeft="@dimen/time_horizontal_margin"
             android:textSize="18sp"
-            android:fontFamily="serif-monospace"
             android:layout_gravity="left"
             android:textColor="@color/text_view" />
 
@@ -65,7 +63,6 @@
             android:textSize="18sp"
             android:gravity="right"
             android:layout_gravity="center_horizontal"
-            android:fontFamily="casual"
             android:textColor="@color/text_view">
         </TextView>
     </LinearLayout>
@@ -93,7 +90,6 @@
             android:layout_height="wrap_content"
             android:textSize="18sp"
             android:layout_marginRight="@dimen/temperature_horizontal_margin"
-            android:fontFamily="sans-serif-condensed"
             android:textColor="@color/text_view"
             android:layout_gravity="right">
         </TextView>
