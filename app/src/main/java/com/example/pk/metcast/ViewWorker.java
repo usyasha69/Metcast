@@ -1,6 +1,7 @@
 package com.example.pk.metcast;
 
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,12 +32,37 @@ public class ViewWorker {
 
         view = layoutInflater.inflate(R.layout.view_custom, viewGroup, false);
 
-        //filling text view
-        ((TextView) view.findViewById(R.id.time)).setText(getTime(getFullTime(date)));
-        ((TextView) view.findViewById(R.id.time)).setText(getTime(getFullTime(date)));
-        ((TextView) view.findViewById(R.id.date)).setText(getFormatDate(date));
-        ((TextView) view.findViewById(R.id.weather)).setText(weather);
-        ((TextView) view.findViewById(R.id.temperature)).setText(String.format("%s°C", temperature));
+        //time text view
+        TextView timeTextView = (TextView) view.findViewById(R.id.time);
+        timeTextView.setText(getTime(getFullTime(date)));
+
+        Typeface timeFace = Typeface.createFromAsset(context.getAssets(),
+                "fonts/simple_round.ttf");
+        timeTextView.setTypeface(timeFace);
+
+        //date text view
+        TextView dateTextView = (TextView) view.findViewById(R.id.date);
+        dateTextView.setText(getFormatDate(date));
+
+        Typeface dateFace = Typeface.createFromAsset(context.getAssets(),
+                "fonts/simple_round.ttf");
+        dateTextView.setTypeface(dateFace);
+
+        //weather text view
+        TextView weatherTextView = (TextView) view.findViewById(R.id.weather);
+        weatherTextView.setText(weather);
+
+        Typeface weatherFace = Typeface.createFromAsset(context.getAssets(),
+                "fonts/simple_round.ttf");
+        weatherTextView.setTypeface(weatherFace);
+
+        //temperature text view
+        TextView temperatureTextView = (TextView) view.findViewById(R.id.temperature);
+        temperatureTextView.setText(String.format("%s°C", temperature));
+
+        Typeface temperatureFace = Typeface.createFromAsset(context.getAssets(),
+                "fonts/simple_round.ttf");
+        temperatureTextView.setTypeface(temperatureFace);
 
         //set weather images
         setWeatherImage();
