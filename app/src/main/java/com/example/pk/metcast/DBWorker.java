@@ -141,7 +141,10 @@ public class DBWorker {
 
     public boolean emptyCheckedDB(Context context) {
         Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
+
+        assert cursor != null;
         boolean b = cursor.moveToFirst();
+
         cursor.close();
         return b;
     }

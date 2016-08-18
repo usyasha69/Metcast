@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">Metcast</string>
-
-    <string name="weatherFragmentTv">WeatherFragment</string>
+    <string name="time_image">time_image</string>
+    <string name="weather_image">weather_image</string>
+    <string name="temperature_image">temperature_image</string>
 </resources>

@@ -6,7 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.example.pk.metcast.ImageWorker;
+import com.example.pk.metcast.ViewWorker;
 
 import java.util.ArrayList;
 
@@ -50,8 +50,8 @@ public class LvAdapter extends BaseAdapter {
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
 
-        return new ImageWorker().makeView(i, layoutInflater, viewGroup
-                , dates, weathers, temps, context);
+        return new ViewWorker(context, dates.get(i), weathers.get(i), temps.get(i))
+                .makeView(layoutInflater, viewGroup);
 
     }
 }

@@ -2,75 +2,102 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
-
+    android:orientation="horizontal"
+    android:baselineAligned="false">
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/layout_vertical_margin">
 
         <ImageView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:id="@+id/time_image"
-            android:src="@drawable/time_six"
-            android:layout_weight="1" />
+            android:layout_marginLeft="@dimen/time_image_horizontal_margin"
+            android:contentDescription="@string/time_image"
+            android:layout_gravity="left" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/time"
+            android:layout_marginLeft="@dimen/time_horizontal_margin"
+            android:textSize="18sp"
+            android:fontFamily="serif-monospace"
+            android:layout_gravity="left"
+            android:text="18:00"
+            android:textColor="@color/text_view" />
+
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_marginLeft="@dimen/date_horizontal_margin"
+            android:layout_gravity="left"
+            android:fontFamily="sans-serif-smallcaps"
+            android:textColor="@color/text_view"
+            android:text="August, 18">
+        </TextView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/layout_vertical_margin">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/weather_image"
-            android:src="@drawable/dt_clear_sky"
-            android:layout_weight="1" />
+            android:layout_gravity="center_horizontal"
+            android:contentDescription="@string/weather_image" />
 
-        <ImageView
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/weather"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/temp_image"
-            android:src="@drawable/temp_term"
-            android:layout_weight="1" />
-
+            android:textSize="18sp"
+            android:gravity="right"
+            android:layout_gravity="center_horizontal"
+            android:fontFamily="casual"
+            android:text="overcast clouds"
+            android:textColor="@color/text_view">
+        </TextView>
     </LinearLayout>
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/rvDateText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:textSize="15sp"
-            android:layout_weight="1">
-        </TextView>
-
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/rvWeatherText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:textSize="21sp"
-            android:layout_weight="1">
-        </TextView>
-
-        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/rvTempText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center_vertical"
-            android:layout_marginLeft="10dp"
-            android:textSize="15sp"
-            android:layout_weight="1">
-        </TextView>
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginTop="@dimen/layout_vertical_margin">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/deg_image"
-            android:src="@drawable/temp_c" />
+            android:id="@+id/temperature_image"
+            android:layout_marginRight="@dimen/temperature_image_horizontal_margin"
+            android:layout_gravity="right"
+            android:contentDescription="@string/temperature_image"
+            android:src="@drawable/temp_term" />
+
+        <TextView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/temperature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="18sp"
+            android:layout_gravity="right"
+            android:layout_marginRight="@dimen/temperature_horizontal_margin"
+            android:fontFamily="sans-serif-condensed"
+            android:text="18*C"
+            android:textColor="@color/text_view">
+        </TextView>
 
     </LinearLayout>
 

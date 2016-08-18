@@ -69,6 +69,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
         if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
             locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 1000 * 10, 10, this);
         }
+
         locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
@@ -201,6 +202,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
                 weatherAPI.loadQuestions(String.valueOf(location.getLatitude())
                         , String.valueOf(location.getLongitude())
                         , "4c898f591f4e595efcdd5db855f26762");
+
 
         call.enqueue(this);
     }
