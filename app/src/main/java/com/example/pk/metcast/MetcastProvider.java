@@ -14,7 +14,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 
-public class MetcastProvider extends ContentProvider {
+public class MetCastProvider extends ContentProvider {
     public static final int DATABASE_VERSION = 1;
     public static final String DATABASE_NAME = "metcastDB";
     public static final String TABLE_METCAST = "metcast";

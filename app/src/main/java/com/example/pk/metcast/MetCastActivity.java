@@ -32,7 +32,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends FragmentActivity implements ViewPager.OnPageChangeListener
+public class MetCastActivity extends FragmentActivity implements ViewPager.OnPageChangeListener
         , LoaderManager.LoaderCallbacks<Object>
         , Callback<WeatherParsingModel>, GoogleApiClient.ConnectionCallbacks
         , GoogleApiClient.OnConnectionFailedListener {
@@ -111,7 +111,7 @@ public class MainActivity extends FragmentActivity implements ViewPager.OnPageCh
         Loader mLoader = null;
         switch (id) {
             case LOADER_READ_FROM_DATABASE_ID:
-                mLoader = new CursorLoader(this, MetcastProvider.METCAST_CONTENT_URI
+                mLoader = new CursorLoader(this, MetCastProvider.METCAST_CONTENT_URI
                         , null, null, null, null);
                 break;
             case LOADER_INSERT_TO_DATABASE_ID:
