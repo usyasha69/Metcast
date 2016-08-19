@@ -37,7 +37,8 @@ public class DBWorker {
                 contentValues.put(MetCastProvider.KEY_DAY_OF_WEEK, list.get(i).getDay());
                 contentValues.put(MetCastProvider.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
                 contentValues.put(MetCastProvider.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
-                contentValues.put(MetCastProvider.KEY_TEMPERATURE, list.get(i).getWeathers().get(j).getTemperature());
+                contentValues.put(MetCastProvider.KEY_TEMPERATURE
+                        , list.get(i).getWeathers().get(j).getTemperature());
 
                 context.getContentResolver().insert(METCAST_URI, contentValues);
             }
@@ -101,7 +102,9 @@ public class DBWorker {
      * @param wimList    - array list with weather
      * @return array list with day weather models
      */
-    private ArrayList<DayWeatherModel> finalResult(ArrayList<String> daysOfWeek, ArrayList<WeatherInfoModel> wimList) {
+    private ArrayList<DayWeatherModel> finalResult(ArrayList<String> daysOfWeek
+            , ArrayList<WeatherInfoModel> wimList) {
+
         ArrayList<DayWeatherModel> finalList = new ArrayList<>();
 
         LinkedHashSet<String> set = new LinkedHashSet<>(daysOfWeek);
@@ -133,15 +136,21 @@ public class DBWorker {
         ContentValues contentValues = new ContentValues();
         int updateCount = 0;
 
-        if (context.getContentResolver().query(METCAST_URI, null, null, null, null, null).moveToFirst()) {
+        if (context.getContentResolver().query(METCAST_URI
+                , null, null, null, null, null).moveToFirst()) {
             for (int i = 0; i < list.size(); i++) {
                 for (int j = 0; j < list.get(i).getWeathers().size(); j++) {
-                    contentValues.put(MetCastProvider.KEY_DAY_OF_WEEK, list.get(i).getDay());
-                    contentValues.put(MetCastProvider.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
-                    contentValues.put(MetCastProvider.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
-                    contentValues.put(MetCastProvider.KEY_TEMPERATURE, list.get(i).getWeathers().get(j).getTemperature());
+                    contentValues.put(MetCastProvider.KEY_DAY_OF_WEEK
+                            , list.get(i).getDay());
+                    contentValues.put(MetCastProvider.KEY_DATE
+                            , list.get(i).getWeathers().get(j).getTime());
+                    contentValues.put(MetCastProvider.KEY_WEATHER
+                            , list.get(i).getWeathers().get(j).getWeather());
+                    contentValues.put(MetCastProvider.KEY_TEMPERATURE
+                            , list.get(i).getWeathers().get(j).getTemperature());
                     updateCount++;
-                    context.getContentResolver().update(METCAST_URI, contentValues, "_id = ?", new String[]{String.valueOf(updateCount)});
+                    context.getContentResolver().update(METCAST_URI
+                            , contentValues, "_id = ?", new String[]{String.valueOf(updateCount)});
                 }
             }
         }
