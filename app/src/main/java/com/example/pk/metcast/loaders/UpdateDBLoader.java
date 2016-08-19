@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class UpdateDBLoader extends AsyncTaskLoader<Integer> {
 
+    //array list with weather
     ArrayList<DayWeatherModel> list;
 
     public UpdateDBLoader(Context context, ArrayList<DayWeatherModel> list) {

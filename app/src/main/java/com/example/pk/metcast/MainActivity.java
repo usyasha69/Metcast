@@ -37,6 +37,7 @@ public class MainActivity extends FragmentActivity implements ViewPager.OnPageCh
         , Callback<WeatherParsingModel>, GoogleApiClient.ConnectionCallbacks
         , GoogleApiClient.OnConnectionFailedListener {
 
+    //view pager and pager adapter
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
 
@@ -46,7 +47,7 @@ public class MainActivity extends FragmentActivity implements ViewPager.OnPageCh
     private final int LOADER_UPDATE_DATABASE_ID = 3;
     private final int LOADER_CHECKED_EMPTY_DB_ID = 4;
 
-    //array list with day weather
+    //array list with day weather models
     ArrayList<DayWeatherModel> list;
 
     //location
@@ -110,7 +111,8 @@ public class MainActivity extends FragmentActivity implements ViewPager.OnPageCh
         Loader mLoader = null;
         switch (id) {
             case LOADER_READ_FROM_DATABASE_ID:
-                mLoader = new CursorLoader(this, MetcastProvider.METCAST_CONTENT_URI, null, null, null, null);
+                mLoader = new CursorLoader(this, MetcastProvider.METCAST_CONTENT_URI
+                        , null, null, null, null);
                 break;
             case LOADER_INSERT_TO_DATABASE_ID:
                 mLoader = new InsertToDBLoader(this, list);
@@ -139,13 +141,15 @@ public class MainActivity extends FragmentActivity implements ViewPager.OnPageCh
             case LOADER_UPDATE_DATABASE_ID:
                 //if database empty, insert
                 if ((int) data == 0) {
-                    getSupportLoaderManager().initLoader(LOADER_INSERT_TO_DATABASE_ID, null, this).forceLoad();
+                    getSupportLoaderManager().initLoader(LOADER_INSERT_TO_DATABASE_ID
+                            , null, this).forceLoad();
                 }
                 break;
             case LOADER_CHECKED_EMPTY_DB_ID:
                 //if database does'nt empty, reading from database
                 if (((boolean) data)) {
-                    getSupportLoaderManager().initLoader(LOADER_READ_FROM_DATABASE_ID, null, this).forceLoad();
+                    getSupportLoaderManager().initLoader(LOADER_READ_FROM_DATABASE_ID
+                            , null, this).forceLoad();
                 }
                 break;
         }

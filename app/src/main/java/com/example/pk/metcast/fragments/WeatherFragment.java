@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.pk.metcast.R;
-import com.example.pk.metcast.adapters.LvAdapter;
+import com.example.pk.metcast.adapters.ListViewAdapter;
 import com.example.pk.metcast.models.DayWeatherModel;
 
 import java.text.DecimalFormat;
@@ -18,8 +18,10 @@ import java.util.ArrayList;
 
 public class WeatherFragment extends Fragment {
 
+    //key for serializable
     private static final String WEATHER_KEY = "weather";
 
+    //array list with weather
     private ArrayList<String> fragmentDate;
     private ArrayList<String> fragmentWeather;
     private ArrayList<String> fragmentTemp;
@@ -41,7 +43,8 @@ public class WeatherFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        DayWeatherModel dayWeatherModel = (DayWeatherModel) getArguments().getSerializable(WEATHER_KEY);
+        DayWeatherModel dayWeatherModel = (DayWeatherModel) getArguments()
+                .getSerializable(WEATHER_KEY);
 
         fragmentDate = new ArrayList<>();
         fragmentWeather = new ArrayList<>();
@@ -52,18 +55,18 @@ public class WeatherFragment extends Fragment {
             fragmentDate.add(dayWeatherModel.getWeathers().get(i).getTime());
             fragmentWeather.add(dayWeatherModel.getWeathers().get(i).getWeather());
             fragmentTemp.add(String.valueOf(
-                    new DecimalFormat("#0").format(dayWeatherModel.getWeathers().get(i).getTemperature() - 273.15)));
+                    new DecimalFormat("#0").format
+                            (dayWeatherModel.getWeathers().get(i).getTemperature() - 273.15)));
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_weatherfragment, container, false);
 
         ListView listView = (ListView) v.findViewById(R.id.fragmentListView);
-        listView.setAdapter(new LvAdapter(getContext(), fragmentDate, fragmentWeather, fragmentTemp));
+        listView.setAdapter(new ListViewAdapter(getContext(), fragmentDate, fragmentWeather, fragmentTemp));
 
         return v;
     }

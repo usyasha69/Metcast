@@ -10,9 +10,17 @@ import java.util.GregorianCalendar;
 
 public class ConverterToWeather {
 
+    /**
+     * This method takes a weather
+     * parsing model and return
+     * array list with day weather models
+     *
+     * @param weatherParsingModel - weather parsing model
+     * @return array list with day weather model
+     */
     public ArrayList<DayWeatherModel> group(WeatherParsingModel weatherParsingModel) {
 
-        //WeatherInfoModel fields
+        //fields for weather info model
         String timeString;
         String weather;
         double temperature;
@@ -26,12 +34,13 @@ public class ConverterToWeather {
         int currentDayInt = currentDay();
         String currentDayStr = dayOfWeekToString(currentDayInt);
 
-        //filling the data from the WeatherParsingModel
+        //filling the txt date from the weather parsing model
         ArrayList<String> listDateTxt = new ArrayList<>();
         for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
             listDateTxt.add(weatherParsingModel.getList().get(i).getListDtTxt());
         }
 
+        //filling the weather from the weather parsing model
         ArrayList<String> listWeather = new ArrayList<>();
         for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
             for (int j = 0; j < weatherParsingModel.getList().get(i).getWeather().size(); j++) {
@@ -39,32 +48,39 @@ public class ConverterToWeather {
             }
         }
 
+        //filling the temperature from the weather parsing model
         ArrayList<Double> listTemp = new ArrayList<>();
         for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
             listTemp.add(weatherParsingModel.getList().get(i).getMain().getListMainTemp());
         }
 
+        //filling the unix date from the weather parsing model
         ArrayList<Long> listDt = new ArrayList<>();
         for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
             listDt.add(weatherParsingModel.getList().get(i).getListDt() * 1000);
         }
 
+        //result array list with day weather models
         ArrayList<DayWeatherModel> dayWeatherModelList = new ArrayList<>();
+
+        //support array list with weather info models
         ArrayList<WeatherInfoModel> supportWeatherInfoList = new ArrayList<>();
 
         //grouping days and weather
         for (int i = 0; i < listDateTxt.size(); i++) {
             WeatherInfoModel weatherInfoModel = new WeatherInfoModel();
 
-
+            //variables for weather info model
             timeString = listDateTxt.get(i);
             weather = listWeather.get(i);
             temperature = listTemp.get(i);
 
+            //get weather
             weatherInfoModel.setTime(timeString);
             weatherInfoModel.setWeather(weather);
             weatherInfoModel.setTemperature(temperature);
 
+            //get day in integer and string format
             timeLong = listDt.get(i);
             dayInt = dayFromUnixTime(timeLong);
             dayStr = dayOfWeekToString(dayInt);
@@ -76,10 +92,12 @@ public class ConverterToWeather {
                     ArrayList<WeatherInfoModel> weatherInfoList = new ArrayList<>();
                     DayWeatherModel dayWeatherModel = new DayWeatherModel();
 
+                    //filling weather info model list
                     for (int j = 0; j < supportWeatherInfoList.size(); j++) {
                         weatherInfoList.add(supportWeatherInfoList.get(j));
                     }
 
+                    //setting weather and day in result array list
                     dayWeatherModel.setWeathers(weatherInfoList);
                     dayWeatherModel.setDay(currentDayStr);
 
@@ -90,20 +108,24 @@ public class ConverterToWeather {
 
                 ArrayList<WeatherInfoModel> weatherInfoList = new ArrayList<>();
 
+                //filling support array list with weather info model
                 for (int j = 0; j < supportWeatherInfoList.size(); j++) {
                     weatherInfoList.add(supportWeatherInfoList.get(j));
                 }
 
                 DayWeatherModel dayWeatherModel = new DayWeatherModel();
 
+                //setting weather and day in result array list
                 dayWeatherModel.setWeathers(weatherInfoList);
                 dayWeatherModel.setDay(currentDayStr);
 
                 dayWeatherModelList.add(dayWeatherModel);
 
+                //replace current day
                 currentDayInt = dayInt;
                 currentDayStr = dayStr;
 
+                //clear support array list with weather info model
                 supportWeatherInfoList.clear();
             }
         }
@@ -111,7 +133,13 @@ public class ConverterToWeather {
         return dayWeatherModelList;
     }
 
-    //conversion unix time to day of week
+    /**
+     * This method conversion unix time
+     * to day of week
+     *
+     * @param time - date in unix format
+     * @return day of week in integer
+     */
     public int dayFromUnixTime(long time) {
 
         Calendar calendar = new GregorianCalendar();
@@ -120,7 +148,14 @@ public class ConverterToWeather {
         return calendar.get(Calendar.DAY_OF_WEEK);
     }
 
-    //conversion day of week to String
+    /**
+     * This method conversion day
+     * of week in integer to day
+     * of week in String
+     *
+     * @param day - day in integer format
+     * @return day of week in String
+     */
     public String dayOfWeekToString(int day) {
 
         String dayString = "";
@@ -147,12 +182,18 @@ public class ConverterToWeather {
             case 7:
                 dayString = "Saturday";
                 break;
-            default:break;
+            default:
+                break;
         }
         return dayString;
     }
 
-    //getting current day
+    /**
+     * This method getting
+     * current day
+     *
+     * @return number of current day
+     */
     public int currentDay() {
 
         Calendar calendar = new GregorianCalendar();

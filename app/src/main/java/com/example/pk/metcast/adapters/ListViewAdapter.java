@@ -12,7 +12,7 @@ import com.example.pk.metcast.models.WeatherInfoModel;
 
 import java.util.ArrayList;
 
-public class LvAdapter extends BaseAdapter {
+public class ListViewAdapter extends BaseAdapter {
 
     ArrayList<String> dates;
     ArrayList<String> weathers;
@@ -22,7 +22,7 @@ public class LvAdapter extends BaseAdapter {
 
     LayoutInflater layoutInflater;
 
-    public LvAdapter(Context context, ArrayList<String> dates, ArrayList<String> weathers, ArrayList<String> temps) {
+    public ListViewAdapter(Context context, ArrayList<String> dates, ArrayList<String> weathers, ArrayList<String> temps) {
         this.dates = dates;
         this.weathers = weathers;
         this.temps = temps;

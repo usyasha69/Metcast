@@ -16,10 +16,19 @@ import java.util.LinkedHashSet;
 
 public class DBWorker {
 
+    //Log tag
     private final String MY_TAG = "myLog";
+    //weather URI
     public static final Uri METCAST_URI = Uri.parse("content://com.example.pk.metcast/weather");
 
-    //storing data to the database
+    /**
+     * This method insert data
+     * to database
+     *
+     * @param context - context
+     * @param list    - array list with
+     *                day weather models
+     */
     public void insertToDB(Context context, ArrayList<DayWeatherModel> list) {
 
         ContentValues contentValues = new ContentValues();
@@ -52,7 +61,12 @@ public class DBWorker {
         cursor.close();
     }
 
-    //read data from database
+    /**
+     * This method reading data from database
+     *
+     * @param cursor - cursor with data
+     * @return array list with day weather models
+     */
     public ArrayList<DayWeatherModel> readDataFromBD(Cursor cursor) {
         ArrayList<String> daysOfWeek = new ArrayList<>();
         ArrayList<WeatherInfoModel> wimList = new ArrayList<>();
@@ -78,9 +92,18 @@ public class DBWorker {
         return finalResult(daysOfWeek, wimList);
     }
 
-    //subsidiary method
+    /**
+     * This method conversion data from
+     * array lists with day of week and
+     * weather to array list with
+     * day weather models
+     *
+     * @param daysOfWeek - array list with days of week
+     * @param wimList    - array list with weather
+     * @return array list with day weather models
+     */
     private ArrayList<DayWeatherModel> finalResult(ArrayList<String> daysOfWeek, ArrayList<WeatherInfoModel> wimList) {
-        ArrayList<DayWeatherModel> finalList  = new ArrayList<>();
+        ArrayList<DayWeatherModel> finalList = new ArrayList<>();
 
         LinkedHashSet<String> set = new LinkedHashSet<>(daysOfWeek);
 
@@ -100,7 +123,13 @@ public class DBWorker {
         return finalList;
     }
 
-    //Update database
+    /**
+     * This method update database
+     *
+     * @param context - context
+     * @param list    - array list with day weather models
+     * @return number of updates
+     */
     public int updateDB(Context context, ArrayList<DayWeatherModel> list) {
         ContentValues contentValues = new ContentValues();
         int updateCount = 0;
@@ -136,6 +165,14 @@ public class DBWorker {
         return updateCount;
     }
 
+    /**
+     * This method checked database
+     * is empty
+     *
+     * @param context - context
+     * @return return true (database empty)
+     * or false (database doesn't empty)
+     */
     public boolean emptyCheckedDB(Context context) {
         Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
 

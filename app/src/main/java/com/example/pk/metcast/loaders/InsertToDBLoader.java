@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 public class InsertToDBLoader extends AsyncTaskLoader<String> {
 
+    //array list with weather
     ArrayList<DayWeatherModel> list;
 
     public InsertToDBLoader(Context context, ArrayList<DayWeatherModel> list) {

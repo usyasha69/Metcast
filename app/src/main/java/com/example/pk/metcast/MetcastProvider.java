@@ -33,7 +33,8 @@ public class MetcastProvider extends ContentProvider {
     public static final String AUTHORITY = "com.example.pk.metcast";
     public static final String METCAST_PATH = "weather";
 
-    public static final Uri METCAST_CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/" + METCAST_PATH);
+    public static final Uri METCAST_CONTENT_URI = Uri.parse("content://" + AUTHORITY
+            + "/" + METCAST_PATH);
 
     public static final String METCAST_CONTENT_TYPE = "vnd.android.cursor.dir/vnd."
             + AUTHORITY + "." + METCAST_PATH;
@@ -92,25 +93,35 @@ public class MetcastProvider extends ContentProvider {
             throw new IllegalArgumentException("Wrong URI " + uri);
 
         sqLiteDatabase = dbHelper.getWritableDatabase();
+
         long rowID = sqLiteDatabase.insert(TABLE_METCAST, null, contentValues);
+
         Uri resultURI = ContentUris.withAppendedId(METCAST_CONTENT_URI, rowID);
+
         contentResolver.notifyChange(resultURI, null);
+
         return resultURI;
     }
 
     @Override
     public int delete(@NonNull Uri uri, String s, String[] strings) {
         sqLiteDatabase = dbHelper.getWritableDatabase();
+
         int cnt = sqLiteDatabase.delete(TABLE_METCAST, s, strings);
+
         contentResolver.notifyChange(uri, null);
+
         return cnt;
     }
 
     @Override
     public int update(@NonNull Uri uri, ContentValues contentValues, String s, String[] strings) {
         sqLiteDatabase = dbHelper.getWritableDatabase();
+
         int cnt = sqLiteDatabase.update(TABLE_METCAST, contentValues, s, strings);
+
         contentResolver.notifyChange(uri, null);
+
         return cnt;
     }
 
