@@ -2,9 +2,9 @@ package com.example.pk.metcast;
 
 import android.database.Cursor;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -19,6 +19,11 @@ import com.example.pk.metcast.loaders.InsertToDBLoader;
 import com.example.pk.metcast.loaders.UpdateDBLoader;
 import com.example.pk.metcast.models.DayWeatherModel;
 import com.example.pk.metcast.models.WeatherParsingModel;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+
+import java.util.ArrayList;
 
 import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
@@ -27,82 +32,60 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import java.util.ArrayList;
-
-public class MainActivity extends FragmentActivity implements LocationListener, ViewPager.OnPageChangeListener, LoaderManager.LoaderCallbacks<Object>, Callback<WeatherParsingModel> {
+public class MainActivity extends FragmentActivity implements ViewPager.OnPageChangeListener
+        , LoaderManager.LoaderCallbacks<Object>
+        , Callback<WeatherParsingModel>, GoogleApiClient.ConnectionCallbacks
+        , GoogleApiClient.OnConnectionFailedListener {
 
     private ViewPager viewPager;
-
-    private LocationManager locationManager;
     private PagerAdapter pagerAdapter;
 
-    private Location location;
-
+    //loaders constants
     private final int LOADER_READ_FROM_DATABASE_ID = 1;
     private final int LOADER_INSERT_TO_DATABASE_ID = 2;
     private final int LOADER_UPDATE_DATABASE_ID = 3;
     private final int LOADER_CHECKED_EMPTY_DB_ID = 4;
 
+    //array list with day weather
     ArrayList<DayWeatherModel> list;
 
+    //location
+    private Location location;
+    private GoogleApiClient googleApiClient;
+
+    //activity lifecycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
-        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
-
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.addOnPageChangeListener(this);
 
-        //checked, database empty?
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+
+        //checked, database empty or not
         getSupportLoaderManager().initLoader(LOADER_CHECKED_EMPTY_DB_ID, null, this).forceLoad();
     }
 
     @Override
-    protected void onResume() {
-        super.onResume();
-        if (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER
-                    , 1000 * 30, 50, this);
-        }
-        if (locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) {
-            locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER
-                    , 1000 * 30, 50, this);
-        }
-
-        locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+    protected void onStart() {
+        super.onStart();
+        googleApiClient.connect();
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        locationManager.removeUpdates(this);
-    }
-
-    //LocationListener implement methods
-    @Override
-    public void onLocationChanged(Location location) {
-        if (location != null) {
-            this.location = location;
-            useRetrofit();
-        }
-    }
 
     @Override
-    public void onStatusChanged(String s, int i, Bundle bundle) {
-
-    }
-
-    @Override
-    public void onProviderEnabled(String s) {
-        locationManager.getLastKnownLocation(s);
-    }
-
-    @Override
-    public void onProviderDisabled(String s) {
-
+    protected void onStop() {
+        super.onStop();
+        googleApiClient.disconnect();
     }
 
     //onPageChangeListener implements methods
@@ -121,11 +104,11 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
     }
 
-    //LoaderCallback methods
+    //LoaderCallback implements methods
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
         Loader mLoader = null;
-        switch (id){
+        switch (id) {
             case LOADER_READ_FROM_DATABASE_ID:
                 mLoader = new CursorLoader(this, MetcastProvider.METCAST_CONTENT_URI, null, null, null, null);
                 break;
@@ -163,7 +146,7 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
                 //if database does'nt empty, reading from database
                 if (((boolean) data)) {
                     getSupportLoaderManager().initLoader(LOADER_READ_FROM_DATABASE_ID, null, this).forceLoad();
-            }
+                }
                 break;
         }
     }
@@ -208,4 +191,26 @@ public class MainActivity extends FragmentActivity implements LocationListener, 
 
         call.enqueue(this);
     }
+
+    //google api client implements methods
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        location = LocationServices.FusedLocationApi
+                .getLastLocation(googleApiClient);
+
+        if (location != null) {
+            useRetrofit();
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
+
 }

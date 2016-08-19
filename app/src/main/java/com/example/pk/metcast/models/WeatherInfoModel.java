@@ -1,6 +1,8 @@
 package com.example.pk.metcast.models;
 
-public class WeatherInfoModel {
+import java.io.Serializable;
+
+public class WeatherInfoModel implements Serializable {
 
     private String time;
     private String weather;

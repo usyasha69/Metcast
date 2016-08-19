@@ -29,8 +29,7 @@ public class DBWorker {
                 contentValues.put(MetcastProvider.KEY_DAY_OF_WEEK, list.get(i).getDay());
                 contentValues.put(MetcastProvider.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
                 contentValues.put(MetcastProvider.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
-                contentValues.put(MetcastProvider.KEY_TEMPERATURE,
-                        new DecimalFormat("#0.0").format(list.get(i).getWeathers().get(j).getTemperature() - 273.15));
+                contentValues.put(MetcastProvider.KEY_TEMPERATURE, list.get(i).getWeathers().get(j).getTemperature());
 
                 context.getContentResolver().insert(METCAST_URI, contentValues);
             }
@@ -66,9 +65,8 @@ public class DBWorker {
                 WeatherInfoModel wim = new WeatherInfoModel();
                 wim.setTime(cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DATE)));
                 wim.setWeather(cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_WEATHER)));
-                wim.setTemperature(Double.parseDouble(cursor.getString(cursor.getColumnIndex(
-                        MetcastProvider.KEY_TEMPERATURE
-                ))) + 273.15);
+                wim.setTemperature((cursor.getDouble(cursor.getColumnIndex(
+                        MetcastProvider.KEY_TEMPERATURE))));
 
                 daysOfWeek.add(dayOfWeek);
                 wimList.add(wim);
@@ -113,8 +111,7 @@ public class DBWorker {
                     contentValues.put(MetcastProvider.KEY_DAY_OF_WEEK, list.get(i).getDay());
                     contentValues.put(MetcastProvider.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
                     contentValues.put(MetcastProvider.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
-                    contentValues.put(MetcastProvider.KEY_TEMPERATURE,
-                            new DecimalFormat("#0.0").format(list.get(i).getWeathers().get(j).getTemperature() - 273.15));
+                    contentValues.put(MetcastProvider.KEY_TEMPERATURE, list.get(i).getWeathers().get(j).getTemperature());
                     updateCount++;
                     context.getContentResolver().update(METCAST_URI, contentValues, "_id = ?", new String[]{String.valueOf(updateCount)});
                 }

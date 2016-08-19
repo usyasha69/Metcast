@@ -86,6 +86,8 @@ public class ConverterToWeather {
                     dayWeatherModelList.add(dayWeatherModel);
                 }
             } else {
+                supportWeatherInfoList.add(weatherInfoModel);
+
                 ArrayList<WeatherInfoModel> weatherInfoList = new ArrayList<>();
 
                 for (int j = 0; j < supportWeatherInfoList.size(); j++) {
@@ -103,7 +105,6 @@ public class ConverterToWeather {
                 currentDayStr = dayStr;
 
                 supportWeatherInfoList.clear();
-                supportWeatherInfoList.add(weatherInfoModel);
             }
         }
 
