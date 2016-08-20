@@ -34,10 +34,10 @@ public class DBWorker {
 
         for (int i = 0; i < list.size(); i++) {
             for (int j = 0; j < list.get(i).getWeathers().size(); j++) {
-                contentValues.put(MetCastProvider.KEY_DAY_OF_WEEK, list.get(i).getDay());
-                contentValues.put(MetCastProvider.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
-                contentValues.put(MetCastProvider.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
-                contentValues.put(MetCastProvider.KEY_TEMPERATURE
+                contentValues.put(MetcastProvider.KEY_DAY_OF_WEEK, list.get(i).getDay());
+                contentValues.put(MetcastProvider.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
+                contentValues.put(MetcastProvider.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
+                contentValues.put(MetcastProvider.KEY_TEMPERATURE
                         , list.get(i).getWeathers().get(j).getTemperature());
 
                 context.getContentResolver().insert(METCAST_URI, contentValues);
@@ -49,11 +49,11 @@ public class DBWorker {
         assert cursor != null;
         if (cursor.moveToFirst()) {
             do {
-                Log.d(MY_TAG, "ID: " + cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_ID))
-                        + " DAY_OF_WEEK: " + cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_DAY_OF_WEEK))
-                        + " DATE: " + cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_DATE))
-                        + " WEATHER: " + cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_WEATHER))
-                        + " TEMP: " + cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_TEMPERATURE)));
+                Log.d(MY_TAG, "ID: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_ID))
+                        + " DAY_OF_WEEK: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK))
+                        + " DATE: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DATE))
+                        + " WEATHER: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_WEATHER))
+                        + " TEMP: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_TEMPERATURE)));
             } while (cursor.moveToNext());
         } else {
             Log.d(MY_TAG, "0 rows");
@@ -74,13 +74,13 @@ public class DBWorker {
         //read data from cursor
         if (cursor.moveToFirst()) {
             do {
-                String dayOfWeek = cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_DAY_OF_WEEK));
+                String dayOfWeek = cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK));
 
                 WeatherInfoModel wim = new WeatherInfoModel();
-                wim.setTime(cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_DATE)));
-                wim.setWeather(cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_WEATHER)));
+                wim.setTime(cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DATE)));
+                wim.setWeather(cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_WEATHER)));
                 wim.setTemperature((cursor.getDouble(cursor.getColumnIndex(
-                        MetCastProvider.KEY_TEMPERATURE))));
+                        MetcastProvider.KEY_TEMPERATURE))));
 
                 daysOfWeek.add(dayOfWeek);
                 wimList.add(wim);
@@ -140,13 +140,13 @@ public class DBWorker {
                 , null, null, null, null, null).moveToFirst()) {
             for (int i = 0; i < list.size(); i++) {
                 for (int j = 0; j < list.get(i).getWeathers().size(); j++) {
-                    contentValues.put(MetCastProvider.KEY_DAY_OF_WEEK
+                    contentValues.put(MetcastProvider.KEY_DAY_OF_WEEK
                             , list.get(i).getDay());
-                    contentValues.put(MetCastProvider.KEY_DATE
+                    contentValues.put(MetcastProvider.KEY_DATE
                             , list.get(i).getWeathers().get(j).getTime());
-                    contentValues.put(MetCastProvider.KEY_WEATHER
+                    contentValues.put(MetcastProvider.KEY_WEATHER
                             , list.get(i).getWeathers().get(j).getWeather());
-                    contentValues.put(MetCastProvider.KEY_TEMPERATURE
+                    contentValues.put(MetcastProvider.KEY_TEMPERATURE
                             , list.get(i).getWeathers().get(j).getTemperature());
                     updateCount++;
                     context.getContentResolver().update(METCAST_URI
@@ -160,11 +160,11 @@ public class DBWorker {
         assert cursor != null;
         if (cursor.moveToFirst()) {
             do {
-                Log.d(MY_TAG, "ID: " + cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_ID))
-                        + " DAY_OF_WEEK: " + cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_DAY_OF_WEEK))
-                        + " DATE: " + cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_DATE))
-                        + " WEATHER: " + cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_WEATHER))
-                        + " TEMP: " + cursor.getString(cursor.getColumnIndex(MetCastProvider.KEY_TEMPERATURE)));
+                Log.d(MY_TAG, "ID: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_ID))
+                        + " DAY_OF_WEEK: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK))
+                        + " DATE: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DATE))
+                        + " WEATHER: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_WEATHER))
+                        + " TEMP: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_TEMPERATURE)));
             } while (cursor.moveToNext());
         } else {
             Log.d(MY_TAG, "0 rows");

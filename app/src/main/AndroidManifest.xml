@@ -14,7 +14,7 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MetCastActivity"
+        <activity android:name=".MetcastActivity"
             android:configChanges="keyboardHidden|orientation|screenSize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,7 +25,7 @@
         
         <provider
             android:authorities="com.example.pk.metcast"
-            android:name=".MetCastProvider">
+            android:name=".MetcastProvider">
 
         </provider>
         <meta-data
