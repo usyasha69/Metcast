@@ -25,7 +25,7 @@
         
         <provider
             android:authorities="com.example.pk.metcast"
-            android:name=".MetcastProvider">
+            android:name=".database.MetcastProvider">
 
         </provider>
         <meta-data

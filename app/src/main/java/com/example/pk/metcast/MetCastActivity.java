@@ -14,6 +14,8 @@ import android.support.v4.view.ViewPager;
 
 import com.crashlytics.android.Crashlytics;
 import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
+import com.example.pk.metcast.database.DBWorker;
+import com.example.pk.metcast.database.MetcastProvider;
 import com.example.pk.metcast.loaders.EmptyCheckDBLoader;
 import com.example.pk.metcast.loaders.InsertToDBLoader;
 import com.example.pk.metcast.loaders.UpdateDBLoader;
@@ -21,6 +23,8 @@ import com.example.pk.metcast.models.DayWeatherModel;
 import com.example.pk.metcast.models.WeatherParsingModel;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationListener;
+import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
@@ -32,10 +36,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MetCastActivity extends FragmentActivity implements ViewPager.OnPageChangeListener
+public class MetcastActivity extends FragmentActivity implements ViewPager.OnPageChangeListener
         , LoaderManager.LoaderCallbacks<Object>
         , Callback<WeatherParsingModel>, GoogleApiClient.ConnectionCallbacks
-        , GoogleApiClient.OnConnectionFailedListener {
+        , GoogleApiClient.OnConnectionFailedListener
+        , LocationListener {
 
     //view pager and pager adapter
     private ViewPager viewPager;
@@ -51,7 +56,7 @@ public class MetCastActivity extends FragmentActivity implements ViewPager.OnPag
     ArrayList<DayWeatherModel> list;
 
     //location
-    private Location location;
+    private Location mLocation;
     private GoogleApiClient googleApiClient;
 
     //activity lifecycle methods
@@ -61,16 +66,11 @@ public class MetCastActivity extends FragmentActivity implements ViewPager.OnPag
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
-        viewPager = (ViewPager) findViewById(R.id.viewPager);
-        viewPager.addOnPageChangeListener(this);
+        //create view pager
+        createViewPager();
 
-        if (googleApiClient == null) {
-            googleApiClient = new GoogleApiClient.Builder(this)
-                    .addConnectionCallbacks(this)
-                    .addOnConnectionFailedListener(this)
-                    .addApi(LocationServices.API)
-                    .build();
-        }
+        //create google api client
+        createGoogleApiClient();
 
         //checked, database empty or not
         getSupportLoaderManager().initLoader(LOADER_CHECKED_EMPTY_DB_ID, null, this).forceLoad();
@@ -105,13 +105,21 @@ public class MetCastActivity extends FragmentActivity implements ViewPager.OnPag
 
     }
 
+    /**
+     * This method create view pager
+     */
+    protected void createViewPager() {
+        viewPager = (ViewPager) findViewById(R.id.viewPager);
+        viewPager.addOnPageChangeListener(this);
+    }
+
     //LoaderCallback implements methods
     @Override
     public Loader<Object> onCreateLoader(int id, Bundle args) {
         Loader mLoader = null;
         switch (id) {
             case LOADER_READ_FROM_DATABASE_ID:
-                mLoader = new CursorLoader(this, MetCastProvider.METCAST_CONTENT_URI
+                mLoader = new CursorLoader(this, MetcastProvider.METCAST_CONTENT_URI
                         , null, null, null, null);
                 break;
             case LOADER_INSERT_TO_DATABASE_ID:
@@ -159,7 +167,7 @@ public class MetCastActivity extends FragmentActivity implements ViewPager.OnPag
     public void onLoaderReset(Loader<Object> loader) {
     }
 
-    //retrofit callback methods
+    //RetrofitCallback methods
     @Override
     public void onResponse(Call<WeatherParsingModel> call, Response<WeatherParsingModel> response) {
         WeatherParsingModel weatherParsingModel = response.body();
@@ -176,7 +184,10 @@ public class MetCastActivity extends FragmentActivity implements ViewPager.OnPag
 
     }
 
-    //subsidiary method get coordinates and used retrofit
+    /**
+     * This method get coordinates and
+     * use retrofit
+     */
     private void useRetrofit() {
         String baseURL = "http://api.openweathermap.org/data/2.5/";
 
@@ -188,23 +199,23 @@ public class MetCastActivity extends FragmentActivity implements ViewPager.OnPag
         WeatherAPI weatherAPI = retrofit.create(WeatherAPI.class);
 
         Call<WeatherParsingModel> call =
-                weatherAPI.loadQuestions(String.valueOf(location.getLatitude())
-                        , String.valueOf(location.getLongitude())
+                weatherAPI.loadQuestions(String.valueOf(mLocation.getLatitude())
+                        , String.valueOf(mLocation.getLongitude())
                         , "4c898f591f4e595efcdd5db855f26762");
-
 
         call.enqueue(this);
     }
 
-    //google api client implements methods
+    //GoogleApiClient implements methods
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        location = LocationServices.FusedLocationApi
-                .getLastLocation(googleApiClient);
+        //create location request
+        createLocationRequest();
 
-        if (location != null) {
-            useRetrofit();
-        }
+        //mLocation = LocationServices.FusedLocationApi
+                //.getLastLocation(googleApiClient);
+
+
     }
 
     @Override
@@ -212,9 +223,51 @@ public class MetCastActivity extends FragmentActivity implements ViewPager.OnPag
 
     }
 
+    /**
+     * This method create
+     * google api client
+     */
+    protected void createGoogleApiClient() {
+        if (googleApiClient == null) {
+            googleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
+    }
+
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
 
     }
 
+    /**
+     * This method create location
+     * request and set the interval of
+     * getting gps coordinates.
+     */
+    protected void createLocationRequest() {
+        LocationRequest locationRequest = new LocationRequest();
+
+        //location update times
+        final int LOCATION_INTERVAL_UPDATE_TIME = 10 * 1000;
+        final int LOCATION_FAST_INTERVAL_UPDATE_TIME = 5 * 1000;
+        final int LOCATION_UPDATE_SMALLEST_DISPLACEMENT = 3;
+
+        locationRequest.setInterval(LOCATION_INTERVAL_UPDATE_TIME);
+        locationRequest.setSmallestDisplacement(LOCATION_UPDATE_SMALLEST_DISPLACEMENT);
+        locationRequest.setFastestInterval(LOCATION_FAST_INTERVAL_UPDATE_TIME);
+        locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                googleApiClient, locationRequest, this);
+    }
+
+    //LocationListener implement method
+    @Override
+    public void onLocationChanged(Location location) {
+        mLocation = location;
+        useRetrofit();
+    }
 }

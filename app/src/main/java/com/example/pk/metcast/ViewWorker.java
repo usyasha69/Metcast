@@ -1,13 +1,13 @@
 package com.example.pk.metcast;
 
 import android.content.Context;
-import android.graphics.Typeface;
 import android.support.v4.content.ContextCompat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
+
+import com.example.pk.metcast.custom_views.CustomTextView;
 
 
 public class ViewWorker {
@@ -32,33 +32,18 @@ public class ViewWorker {
 
         view = layoutInflater.inflate(R.layout.view_custom, viewGroup, false);
 
-        //typeface
-        Typeface face = Typeface.createFromAsset(context.getAssets(),
-                "simple_round.ttf");
 
         //time text view
-        TextView timeTextView = (TextView) view.findViewById(R.id.time);
-
-        timeTextView.setText(getTime(getFullTime(date)));
-        timeTextView.setTypeface(face);
+        ((CustomTextView) view.findViewById(R.id.time)).setText(getTime(getFullTime(date)));
 
         //date text view
-        TextView dateTextView = (TextView) view.findViewById(R.id.date);
-
-        dateTextView.setText(getFormatDate(date));
-        dateTextView.setTypeface(face);
+        ((CustomTextView) view.findViewById(R.id.date)).setText(getFormatDate(date));
 
         //weather text view
-        TextView weatherTextView = (TextView) view.findViewById(R.id.weather);
-
-        weatherTextView.setText(weather);
-        weatherTextView.setTypeface(face);
+        ((CustomTextView) view.findViewById(R.id.weather)).setText(weather);
 
         //temperature text view
-        TextView temperatureTextView = (TextView) view.findViewById(R.id.temperature);
-
-        temperatureTextView.setText(String.format("%s°C", temperature));
-        temperatureTextView.setTypeface(face);
+        ((CustomTextView) view.findViewById(R.id.temperature)).setText(String.format("%s°C", temperature));
 
         //set weather images
         setWeatherImage();

@@ -11,12 +11,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/viewPager"
         android:background="@color/background_pager">
-        <android.support.v4.view.PagerTitleStrip
+        <android.support.v4.view.PagerTabStrip
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/pagerTitleStrip"
-            android:background="@color/background_strip">
-
-        </android.support.v4.view.PagerTitleStrip>
+            android:background="@color/background_tab"
+            style="@style/PagerTabStrip">
+        </android.support.v4.view.PagerTabStrip>
     </android.support.v4.view.ViewPager>
 </LinearLayout>

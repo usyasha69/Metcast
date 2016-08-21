@@ -1,4 +1,4 @@
-package com.example.pk.metcast;
+package com.example.pk.metcast.database;
 
 import android.content.ContentProvider;
 import android.content.ContentResolver;

@@ -1,4 +1,4 @@
-package com.example.pk.metcast;
+package com.example.pk.metcast.database;
 
 
 import android.content.ContentValues;
@@ -30,19 +30,29 @@ public class DBWorker {
      */
     public void insertToDB(Context context, ArrayList<DayWeatherModel> list) {
 
-        ContentValues contentValues = new ContentValues();
+        ArrayList<ContentValues> cvList = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
             for (int j = 0; j < list.get(i).getWeathers().size(); j++) {
+                ContentValues contentValues = new ContentValues();
+
                 contentValues.put(MetcastProvider.KEY_DAY_OF_WEEK, list.get(i).getDay());
                 contentValues.put(MetcastProvider.KEY_DATE, list.get(i).getWeathers().get(j).getTime());
                 contentValues.put(MetcastProvider.KEY_WEATHER, list.get(i).getWeathers().get(j).getWeather());
                 contentValues.put(MetcastProvider.KEY_TEMPERATURE
                         , list.get(i).getWeathers().get(j).getTemperature());
 
-                context.getContentResolver().insert(METCAST_URI, contentValues);
+                cvList.add(contentValues);
             }
         }
+
+        ContentValues[] cvArray = new ContentValues[cvList.size()];
+
+        for (int i = 0;  i < cvList.size();  i++) {
+            cvArray[i] = cvList.get(i);
+        }
+
+        context.getContentResolver().bulkInsert(METCAST_URI, cvArray);
 
         Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null);
 

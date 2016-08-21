@@ -3,8 +3,8 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="background_strip">#bfa1f4</color>
-    <color name="background_pager">#e9e1ff</color>
-    <color name="text_view1">#2c6bbe</color>
+    <color name="background_tab">#c19cff</color>
+    <color name="background_pager">#f1eaff</color>
     <color name="text_view">#3774c4</color>
+    <color name="pager_tab_strip_text">#000000</color>
 </resources>
