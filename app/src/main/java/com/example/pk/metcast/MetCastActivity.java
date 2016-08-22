@@ -56,8 +56,9 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
     ArrayList<DayWeatherModel> list;
 
     //location
-    private Location mLocation;
+    private Location currentLocation;
     private GoogleApiClient googleApiClient;
+    private LocationRequest locationRequest;
 
     //activity lifecycle methods
     @Override
@@ -82,6 +83,19 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
         googleApiClient.connect();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (googleApiClient.isConnected()) {
+            startLocationUpdates();
+        }
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        stopLocationUpdates();
+    }
 
     @Override
     protected void onStop() {
@@ -106,7 +120,7 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
     }
 
     /**
-     * This method create view pager
+     * This method create view pager.
      */
     protected void createViewPager() {
         viewPager = (ViewPager) findViewById(R.id.viewPager);
@@ -186,7 +200,7 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
 
     /**
      * This method get coordinates and
-     * use retrofit
+     * use retrofit.
      */
     private void useRetrofit() {
         String baseURL = "http://api.openweathermap.org/data/2.5/";
@@ -199,8 +213,8 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
         WeatherAPI weatherAPI = retrofit.create(WeatherAPI.class);
 
         Call<WeatherParsingModel> call =
-                weatherAPI.loadQuestions(String.valueOf(mLocation.getLatitude())
-                        , String.valueOf(mLocation.getLongitude())
+                weatherAPI.loadQuestions(String.valueOf(currentLocation.getLatitude())
+                        , String.valueOf(currentLocation.getLongitude())
                         , "4c898f591f4e595efcdd5db855f26762");
 
         call.enqueue(this);
@@ -212,10 +226,8 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
         //create location request
         createLocationRequest();
 
-        //mLocation = LocationServices.FusedLocationApi
-                //.getLastLocation(googleApiClient);
-
-
+        //start location updates
+        startLocationUpdates();
     }
 
     @Override
@@ -225,7 +237,7 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
 
     /**
      * This method create
-     * google api client
+     * google api client.
      */
     protected void createGoogleApiClient() {
         if (googleApiClient == null) {
@@ -248,26 +260,41 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
      * getting gps coordinates.
      */
     protected void createLocationRequest() {
-        LocationRequest locationRequest = new LocationRequest();
+        locationRequest = new LocationRequest();
 
         //location update times
         final int LOCATION_INTERVAL_UPDATE_TIME = 10 * 1000;
-        final int LOCATION_FAST_INTERVAL_UPDATE_TIME = 5 * 1000;
-        final int LOCATION_UPDATE_SMALLEST_DISPLACEMENT = 3;
+        final int LOCATION_FAST_INTERVAL_UPDATE_TIME = 15 * 1000;
+        final int LOCATION_UPDATE_SMALLEST_DISPLACEMENT = 20;
 
         locationRequest.setInterval(LOCATION_INTERVAL_UPDATE_TIME);
         locationRequest.setSmallestDisplacement(LOCATION_UPDATE_SMALLEST_DISPLACEMENT);
         locationRequest.setFastestInterval(LOCATION_FAST_INTERVAL_UPDATE_TIME);
         locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-
-        LocationServices.FusedLocationApi.requestLocationUpdates(
-                googleApiClient, locationRequest, this);
     }
 
     //LocationListener implement method
     @Override
     public void onLocationChanged(Location location) {
-        mLocation = location;
+        currentLocation = location;
         useRetrofit();
+    }
+
+    /**
+     * This method stating location
+     * updates.
+     */
+    protected void startLocationUpdates() {
+        LocationServices.FusedLocationApi.requestLocationUpdates(
+                googleApiClient, locationRequest, this);
+    }
+
+    /**
+     * This method stopped location
+     * updates.
+     */
+    protected void stopLocationUpdates() {
+        LocationServices.FusedLocationApi.removeLocationUpdates(
+                googleApiClient, this);
     }
 }
