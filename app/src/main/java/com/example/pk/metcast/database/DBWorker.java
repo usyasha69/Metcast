@@ -29,7 +29,6 @@ public class DBWorker {
      *                day weather models
      */
     public void insertToDB(Context context, ArrayList<DayWeatherModel> list) {
-
         ArrayList<ContentValues> cvList = new ArrayList<>();
 
         for (int i = 0; i < list.size(); i++) {
@@ -59,7 +58,7 @@ public class DBWorker {
         assert cursor != null;
         if (cursor.moveToFirst()) {
             do {
-                Log.d(MY_TAG, "ID: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_ID))
+                Log.d(MY_TAG, "ID: " + "Insert: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_ID))
                         + " DAY_OF_WEEK: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK))
                         + " DATE: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DATE))
                         + " WEATHER: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_WEATHER))
@@ -163,6 +162,8 @@ public class DBWorker {
                             , contentValues, "_id = ?", new String[]{String.valueOf(updateCount)});
                 }
             }
+        } else {
+            Log.d(MY_TAG, "0 rows");
         }
 
         Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
@@ -170,7 +171,7 @@ public class DBWorker {
         assert cursor != null;
         if (cursor.moveToFirst()) {
             do {
-                Log.d(MY_TAG, "ID: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_ID))
+                Log.d(MY_TAG, "ID: " + "Update: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_ID))
                         + " DAY_OF_WEEK: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DAY_OF_WEEK))
                         + " DATE: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_DATE))
                         + " WEATHER: " + cursor.getString(cursor.getColumnIndex(MetcastProvider.KEY_WEATHER))
@@ -188,8 +189,8 @@ public class DBWorker {
      * is empty
      *
      * @param context - context
-     * @return return true (database empty)
-     * or false (database doesn't empty)
+     * @return return false (database empty)
+     * or true (database doesn't empty)
      */
     public boolean emptyCheckedDB(Context context) {
         Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);

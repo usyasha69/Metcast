@@ -106,7 +106,7 @@ public class ViewWorker {
                             , R.drawable.nt_snow_light_snow));
                 }
                 break;
-            case "clear sky":
+            case "sky is clear":
                 if (timeOfDayCondition) {
                     weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_clear_sky));
@@ -160,6 +160,14 @@ public class ViewWorker {
                             , R.drawable.nt_heavy_intensity_rain));
                 }
                 break;
+            case "clear sky":
+                if (timeOfDayCondition) {
+                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                            , R.drawable.dt_clear_sky));
+                } else {
+                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                            , R.drawable.nt_clear_sky));
+                }
         }
     }
 

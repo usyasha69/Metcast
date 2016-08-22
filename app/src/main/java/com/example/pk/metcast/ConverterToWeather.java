@@ -34,30 +34,39 @@ public class ConverterToWeather {
         int currentDayInt = currentDay();
         String currentDayStr = dayOfWeekToString(currentDayInt);
 
-        //filling the txt date from the weather parsing model
+        //array lists with weather
         ArrayList<String> listDateTxt = new ArrayList<>();
-        for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
-            listDateTxt.add(weatherParsingModel.getList().get(i).getListDtTxt());
-        }
-
-        //filling the weather from the weather parsing model
         ArrayList<String> listWeather = new ArrayList<>();
-        for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
-            for (int j = 0; j < weatherParsingModel.getList().get(i).getWeather().size(); j++) {
-                listWeather.add(weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherDescription());
-            }
-        }
-
-        //filling the temperature from the weather parsing model
         ArrayList<Double> listTemp = new ArrayList<>();
-        for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
-            listTemp.add(weatherParsingModel.getList().get(i).getMain().getListMainTemp());
-        }
-
-        //filling the unix date from the weather parsing model
         ArrayList<Long> listDt = new ArrayList<>();
-        for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
-            listDt.add(weatherParsingModel.getList().get(i).getListDt() * 1000);
+
+        try {
+            //filling the txt date from the weather parsing model
+            for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
+                listDateTxt.add(weatherParsingModel.getList().get(i).getListDtTxt());
+            }
+
+            //filling the weather from the weather parsing model
+
+            for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
+                for (int j = 0; j < weatherParsingModel.getList().get(i).getWeather().size(); j++) {
+                    listWeather.add(weatherParsingModel.getList().get(i).getWeather().get(j).getListWeatherDescription());
+                }
+            }
+
+            //filling the temperature from the weather parsing model
+
+            for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
+                listTemp.add(weatherParsingModel.getList().get(i).getMain().getListMainTemp());
+            }
+
+            //filling the unix date from the weather parsing model
+
+            for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
+                listDt.add(weatherParsingModel.getList().get(i).getListDt() * 1000);
+            }
+        } catch (NullPointerException e) {
+            e.printStackTrace();
         }
 
         //result array list with day weather models

@@ -3,4 +3,6 @@
     <string name="time_image">time_image</string>
     <string name="weather_image">weather_image</string>
     <string name="temperature_image">temperature_image</string>
+    <string name="progress_dialog_reading">Reading weather…</string>
+    <string name="progress_dialog_updating">Updating weather…</string>
 </resources>
