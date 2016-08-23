@@ -1,5 +1,6 @@
 package com.example.pk.metcast;
 
+import android.app.ProgressDialog;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Gravity;
 
 import com.crashlytics.android.Crashlytics;
 import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
@@ -53,12 +55,16 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
     private final int LOADER_CHECKED_EMPTY_DB_ID = 4;
 
     //array list with day weather models
-    ArrayList<DayWeatherModel> list;
+    ArrayList<DayWeatherModel> readingDBList;
+    ArrayList<DayWeatherModel> updateWeatherList;
 
     //location
     private Location currentLocation;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
+
+    //progress dialog
+    private ProgressDialog progressDialog;
 
     //activity lifecycle methods
     @Override
@@ -67,14 +73,17 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
+        //create progress dialog
+        createProgressDialog();
+
         //create view pager
         createViewPager();
 
-        //create google api client
-        createGoogleApiClient();
-
         //checked, database empty or not
         getSupportLoaderManager().initLoader(LOADER_CHECKED_EMPTY_DB_ID, null, this).forceLoad();
+
+        //create google api client
+        createGoogleApiClient();
     }
 
     @Override
@@ -101,6 +110,18 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
     protected void onStop() {
         super.onStop();
         googleApiClient.disconnect();
+    }
+
+    protected void createProgressDialog() {
+        progressDialog = new ProgressDialog(this);
+
+        progressDialog.setIndeterminate(false);
+        progressDialog.setCancelable(false);
+        progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        progressDialog.getWindow().setGravity(Gravity.CENTER);
+        progressDialog.setMessage(getString(R.string.progress_dialog_reading));
+
+        progressDialog.show();
     }
 
     //onPageChangeListener implements methods
@@ -137,10 +158,10 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
                         , null, null, null, null);
                 break;
             case LOADER_INSERT_TO_DATABASE_ID:
-                mLoader = new InsertToDBLoader(this, list);
+                mLoader = new InsertToDBLoader(this, updateWeatherList);
                 break;
             case LOADER_UPDATE_DATABASE_ID:
-                mLoader = new UpdateDBLoader(this, list);
+                mLoader = new UpdateDBLoader(this, updateWeatherList);
                 break;
             case LOADER_CHECKED_EMPTY_DB_ID:
                 mLoader = new EmptyCheckDBLoader(this);
@@ -154,15 +175,18 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
         switch (loader.getId()) {
             case LOADER_READ_FROM_DATABASE_ID:
                 //read from database
-                list = new DBWorker().readDataFromBD((Cursor) data);
-                pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
+                readingDBList = new DBWorker().readDataFromBD((Cursor) data);
+                pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager()
+                        , readingDBList);
                 viewPager.setAdapter(pagerAdapter);
+
+                progressDialog.dismiss();
                 break;
             case LOADER_INSERT_TO_DATABASE_ID:
                 break;
             case LOADER_UPDATE_DATABASE_ID:
                 //if database empty, insert
-                if ((int) data == 0) {
+                if (!new DBWorker().emptyCheckedDB(this)) {
                     getSupportLoaderManager().initLoader(LOADER_INSERT_TO_DATABASE_ID
                             , null, this).forceLoad();
                 }
@@ -185,10 +209,14 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
     @Override
     public void onResponse(Call<WeatherParsingModel> call, Response<WeatherParsingModel> response) {
         WeatherParsingModel weatherParsingModel = response.body();
-        list = new ConverterToWeather().group(weatherParsingModel);
+        updateWeatherList = new ConverterToWeather().group(weatherParsingModel);
 
-        pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager(), list);
+        pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager()
+                , updateWeatherList);
         viewPager.setAdapter(pagerAdapter);
+
+        progressDialog.dismiss();
+
         //update database
         getSupportLoaderManager().initLoader(LOADER_UPDATE_DATABASE_ID, null, this).forceLoad();
     }
@@ -276,6 +304,9 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
     //LocationListener implement method
     @Override
     public void onLocationChanged(Location location) {
+        progressDialog.setMessage(getString(R.string.progress_dialog_updating));
+        progressDialog.show();
+
         currentLocation = location;
         useRetrofit();
     }
