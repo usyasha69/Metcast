@@ -5,4 +5,9 @@
     <string name="temperature_image">temperature_image</string>
     <string name="progress_dialog_reading">Reading weather…</string>
     <string name="progress_dialog_updating">Updating weather…</string>
+    <string name="gps_menu">Gps menu</string>
+    <string name="action_settings">Action settings</string>
+    <string name="update_weather">Update weather</string>
+    <string name="toast_gps_on">Please, enable GPS</string>
+    <string name="exit">Exit</string>
 </resources>

@@ -1,9 +1,11 @@
 package com.example.pk.metcast;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentActivity;
@@ -12,7 +14,12 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
@@ -38,7 +45,7 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MetcastActivity extends FragmentActivity implements ViewPager.OnPageChangeListener
+public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPageChangeListener
         , LoaderManager.LoaderCallbacks<Object>
         , Callback<WeatherParsingModel>, GoogleApiClient.ConnectionCallbacks
         , GoogleApiClient.OnConnectionFailedListener
@@ -72,6 +79,9 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
         super.onCreate(savedInstanceState);
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         //create progress dialog
         createProgressDialog();
@@ -327,5 +337,32 @@ public class MetcastActivity extends FragmentActivity implements ViewPager.OnPag
     protected void stopLocationUpdates() {
         LocationServices.FusedLocationApi.removeLocationUpdates(
                 googleApiClient, this);
+    }
+
+    //implements methods with configuration toolbar
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_metcast, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.gps_menu:
+                startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));
+                break;
+            case R.id.update_weather:
+                if (currentLocation != null) {
+                    progressDialog.show();
+                    useRetrofit();
+                } else {
+                    Toast.makeText(this, getString(R.string.toast_gps_on), Toast.LENGTH_SHORT).show();
+                }
+                break;
+            case R.id.exit:
+                finish();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
