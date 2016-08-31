@@ -227,12 +227,21 @@ public class ViewWorker {
         ImageView termImage = (ImageView) view.findViewById(R.id.temperature_image);
 
         int intTemperature = Integer.parseInt(temperature);
-        if (intTemperature < 12) {
+        if (intTemperature < 0) {
             termImage.setImageDrawable(ContextCompat.getDrawable(context
-                    , R.drawable.temp_term_cold));
-        } else {
+                    , R.drawable.temp_term__10));
+        }
+        if (intTemperature >= 0 && intTemperature < 15){
             termImage.setImageDrawable(ContextCompat.getDrawable(context
-                    , R.drawable.temp_term_hot));
+                    , R.drawable.temp_term_0));
+        }
+        if (intTemperature >= 15 && intTemperature < 25) {
+            termImage.setImageDrawable(ContextCompat.getDrawable(context
+                    , R.drawable.temp_term_15));
+        }
+        if (intTemperature >= 25) {
+            termImage.setImageDrawable(ContextCompat.getDrawable(context
+                    , R.drawable.temp_term_25));
         }
     }
 
