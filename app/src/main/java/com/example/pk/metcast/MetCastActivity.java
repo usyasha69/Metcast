@@ -73,6 +73,8 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
     //progress dialog
     private ProgressDialog progressDialog;
 
+
+
     //activity lifecycle methods
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,16 +85,13 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        //create progress dialog
-        createProgressDialog();
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        //create view pager
+        createProgressDialog();
         createViewPager();
 
-        //checked, database empty or not
         getSupportLoaderManager().initLoader(LOADER_CHECKED_EMPTY_DB_ID, null, this).forceLoad();
 
-        //create google api client
         createGoogleApiClient();
     }
 
@@ -362,6 +361,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
                 break;
             case R.id.exit:
                 finish();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

@@ -3,9 +3,9 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="background_tab">#c19cff</color>
-    <color name="background_pager">#f1eaff</color>
+    <color name="background_tab">#337ddc</color>
+    <color name="background_pager">#ffffff</color>
     <color name="text_view">#3774c4</color>
-    <color name="pager_tab_strip_text">#000000</color>
-    <color name="app_name">#f1eaff</color>
+    <color name="pager_tab_strip_text">#ffffff</color>
+    <color name="app_name">#ffffff</color>
 </resources>

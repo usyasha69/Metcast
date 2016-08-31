@@ -51,6 +51,9 @@ public class ViewWorker {
         //set time images
         setTimeImage();
 
+        //set term image
+        setTermImage();
+
         return view;
     }
 
@@ -76,7 +79,7 @@ public class ViewWorker {
                             , R.drawable.dt_few_broken_scattered_clouds));
                 } else {
                     weatherImage.setImageDrawable(ContextCompat.getDrawable(context
-                            , R.drawable.nt_few_broken_scarreted_clouds));
+                            , R.drawable.nt_few_broken_scattered_clouds));
                 }
                 break;
             case "broken clouds":
@@ -85,25 +88,25 @@ public class ViewWorker {
                             , R.drawable.dt_few_broken_scattered_clouds));
                 } else {
                     weatherImage.setImageDrawable(ContextCompat.getDrawable(context
-                            , R.drawable.nt_few_broken_scarreted_clouds));
+                            , R.drawable.nt_few_broken_scattered_clouds));
                 }
                 break;
             case "light snow":
                 if (timeOfDayCondition) {
                     weatherImage.setImageDrawable(ContextCompat.getDrawable(context
-                            , R.drawable.dt_snow_light_snow));
+                            , R.drawable.dt_light_snow));
                 } else {
                     weatherImage.setImageDrawable(ContextCompat.getDrawable(context
-                            , R.drawable.nt_snow_light_snow));
+                            , R.drawable.nt_light_snow));
                 }
                 break;
             case "snow":
                 if (timeOfDayCondition) {
                     weatherImage.setImageDrawable(ContextCompat.getDrawable(context
-                            , R.drawable.dt_snow_light_snow));
+                            , R.drawable.dt_snow));
                 } else {
                     weatherImage.setImageDrawable(ContextCompat.getDrawable(context
-                            , R.drawable.nt_snow_light_snow));
+                            , R.drawable.nt_snow));
                 }
                 break;
             case "sky is clear":
@@ -130,7 +133,7 @@ public class ViewWorker {
                             , R.drawable.dt_few_broken_scattered_clouds));
                 } else {
                     weatherImage.setImageDrawable(ContextCompat.getDrawable(context
-                            , R.drawable.nt_few_broken_scarreted_clouds));
+                            , R.drawable.nt_few_broken_scattered_clouds));
                 }
                 break;
             case "overcast clouds":
@@ -213,6 +216,23 @@ public class ViewWorker {
                 timeImage.setImageDrawable(ContextCompat.getDrawable(context
                         , R.drawable.time_nine));
                 break;
+        }
+    }
+
+    /**
+     * This method calculate temperature and
+     * set the thermometer icon
+     */
+    private void setTermImage() {
+        ImageView termImage = (ImageView) view.findViewById(R.id.temperature_image);
+
+        int intTemperature = Integer.parseInt(temperature);
+        if (intTemperature < 12) {
+            termImage.setImageDrawable(ContextCompat.getDrawable(context
+                    , R.drawable.temp_term_cold));
+        } else {
+            termImage.setImageDrawable(ContextCompat.getDrawable(context
+                    , R.drawable.temp_term_hot));
         }
     }
 

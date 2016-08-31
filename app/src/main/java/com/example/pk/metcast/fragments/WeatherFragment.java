@@ -63,7 +63,7 @@ public class WeatherFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_weatherfragment, container, false);
+        View v = inflater.inflate(R.layout.fragment_weather, container, false);
 
         ListView listView = (ListView) v.findViewById(R.id.fragmentListView);
         listView.setAdapter(new ListViewAdapter(getContext(), fragmentDate, fragmentWeather, fragmentTemp));

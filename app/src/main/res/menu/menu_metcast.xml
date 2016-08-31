@@ -5,7 +5,7 @@
     tools:context=".MetcastActivity">
 
     <item android:id="@+id/gps_menu"
-        android:icon="@android:drawable/ic_menu_mylocation"
+        android:icon="@drawable/gps"
         android:title="@string/gps_menu"
         android:orderInCategory="1"
         app:showAsAction="ifRoom">
@@ -20,7 +20,8 @@
 
     <item android:id="@+id/exit"
         android:title="@string/exit"
+        android:icon="@drawable/exit"
         android:orderInCategory="100"
-        app:showAsAction="never">
+        app:showAsAction="ifRoom">
     </item>
 </menu>
