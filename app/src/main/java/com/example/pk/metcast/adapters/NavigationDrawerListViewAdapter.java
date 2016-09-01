@@ -48,7 +48,7 @@ public class NavigationDrawerListViewAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         view = layoutInflater.inflate(R.layout.view_custom_navigation_drawer, viewGroup, false);
 
-        ((TextView) view.findViewById(R.id.day)).setText(String.format("%s weather", days.get(i)));
+        ((TextView) view.findViewById(R.id.day)).setText(days.get(i));
 
         setDaysImage(view, i);
 

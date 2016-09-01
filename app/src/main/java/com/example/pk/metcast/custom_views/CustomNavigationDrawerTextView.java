@@ -26,7 +26,7 @@ public class CustomNavigationDrawerTextView extends TextView {
      * This method set custom font.
      */
     public void init() {
-        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "bree_serif_regular.ttf");
+        Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "mf_july_sky.ttf");
         setTypeface(tf);
     }
 }

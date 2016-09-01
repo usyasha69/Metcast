@@ -10,6 +10,7 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
@@ -23,6 +24,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -63,27 +66,27 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
     private final int LOADER_UPDATE_DATABASE_ID = 3;
     private final int LOADER_CHECKED_EMPTY_DB_ID = 4;
 
-    //view pager and pager adapter
+    //View Pager and Pager Adapter
     private ViewPager viewPager;
     private PagerAdapter pagerAdapter;
 
-    //array list with day weather models
+    //Array List with day weather models
     ArrayList<DayWeatherModel> weatherList;
 
-    //location
+    //for location
     private Location currentLocation;
     private GoogleApiClient googleApiClient;
     private LocationRequest locationRequest;
 
-    //progress dialog
+    //Progress Dialog
     private ProgressDialog progressDialog;
 
-    //navigation_background drawer
+    //Navigation drawer
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private ActionBarDrawerToggle actionBarDrawerToggle;
 
-    //toolbar
+    //Toolbar
     private Toolbar toolbar;
 
     /**
@@ -99,7 +102,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
 
     /**
      * This method set current page in ViewPager and
-     * close navigation_background drawer.
+     * close navigation background drawer.
      *
      * @param position - current item in ListView
      */
@@ -116,23 +119,14 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
-        //create progress dialog
         createProgressDialog();
-
-        //create toolbar
         createToolbar();
-
-        //navigation_background drawer
         configureNavigationDrawer();
-
-        //create View Pager
         createViewPager();
+        createGoogleApiClient();
 
         //checked is db empty
         getSupportLoaderManager().initLoader(LOADER_CHECKED_EMPTY_DB_ID, null, this).forceLoad();
-
-        //create Google Api Client
-        createGoogleApiClient();
     }
 
     @Override
@@ -195,8 +189,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
     }
 
     /**
-     * This method create and configure navigation_background
-     * drawer.
+     * This method create and configure navigation drawer.
      */
     protected void configureNavigationDrawer() {
         drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -204,7 +197,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         drawerList = (ListView) findViewById(R.id.left_drawer);
         drawerList.setOnItemClickListener(new DrawerItemClickListener());
 
-        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar
                 , R.string.drawer_open, R.string.drawer_closed) {
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -217,8 +210,6 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
             }
         };
 
-        actionBarDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
-
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
         if (getSupportActionBar() != null) {
@@ -229,7 +220,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
 
     /**
      * This method initialize days array and
-     * filling List View in navigation_background drawer
+     * filling List View in navigation drawer
      * data.
      */
     private void fillDrawerData() {
@@ -300,7 +291,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
                         , weatherList);
                 viewPager.setAdapter(pagerAdapter);
 
-                //fill List View in navigation_background Drawer data
+                //filling List View in Navigation Drawer data
                 fillDrawerData();
 
                 progressDialog.dismiss();
@@ -315,11 +306,24 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
                 }
                 break;
             case LOADER_CHECKED_EMPTY_DB_ID:
-                progressDialog.show();
                 //if database does'nt empty, reading from database
                 if (((boolean) data)) {
+                    progressDialog.show();
                     getSupportLoaderManager().initLoader(LOADER_READ_FROM_DATABASE_ID
                             , null, this).forceLoad();
+                } else {
+                    Toast toast = Toast.makeText(this, R.string.toast_enable_gps
+                            , Toast.LENGTH_LONG);
+
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+
+                    LinearLayout toastContainer = (LinearLayout) toast.getView();
+                    ImageView imageView = new ImageView(getApplicationContext());
+                    imageView.setImageDrawable(ContextCompat.getDrawable(this, R.drawable.ic_my_location_white_48dp));
+                    toastContainer.addView(imageView, 0);
+
+                    toast.setView(toastContainer);
+                    toast.show();
                 }
                 break;
         }
@@ -339,7 +343,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
                 , weatherList);
         viewPager.setAdapter(pagerAdapter);
 
-        //fill List View in navigation_background Drawer data
+        //fill List View in Navigation Drawer data
         fillDrawerData();
 
         progressDialog.dismiss();
@@ -378,10 +382,8 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
     //GoogleApiClient implements methods
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        //create location request
-        createLocationRequest();
 
-        //start location updates
+        createLocationRequest();
         startLocationUpdates();
     }
 
@@ -418,9 +420,9 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         locationRequest = new LocationRequest();
 
         //location update times
-        final int LOCATION_INTERVAL_UPDATE_TIME = 10 * 1000;
-        final int LOCATION_FAST_INTERVAL_UPDATE_TIME = 15 * 1000;
-        final int LOCATION_UPDATE_SMALLEST_DISPLACEMENT = 20;
+        final int LOCATION_INTERVAL_UPDATE_TIME = 40 * 1000;
+        final int LOCATION_FAST_INTERVAL_UPDATE_TIME = 35 * 1000;
+        final int LOCATION_UPDATE_SMALLEST_DISPLACEMENT = 100;
 
         locationRequest.setInterval(LOCATION_INTERVAL_UPDATE_TIME);
         locationRequest.setSmallestDisplacement(LOCATION_UPDATE_SMALLEST_DISPLACEMENT);
@@ -465,7 +467,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if  (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+        if (actionBarDrawerToggle.onOptionsItemSelected(item)) {
             return true;
         }
 
@@ -478,7 +480,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
                     progressDialog.show();
                     useRetrofit();
                 } else {
-                    Toast.makeText(this, getString(R.string.toast_gps_on), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, getString(R.string.toast_enable_gps), Toast.LENGTH_SHORT).show();
                 }
                 break;
             case R.id.exit:
