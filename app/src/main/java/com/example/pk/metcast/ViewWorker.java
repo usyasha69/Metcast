@@ -12,10 +12,10 @@ import com.example.pk.metcast.custom_views.CustomViewPagerTextView;
 
 public class ViewWorker {
 
-    Context context;
-    String date;
-    String weather;
-    String temperature;
+    private Context context;
+    private String date;
+    private String weather;
+    private String temperature;
 
     View view;
 
@@ -229,7 +229,7 @@ public class ViewWorker {
         int intTemperature = Integer.parseInt(temperature);
         if (intTemperature < 0) {
             termImage.setImageDrawable(ContextCompat.getDrawable(context
-                    , R.drawable.temp_term__10));
+                    , R.drawable.temp_term_minus_10));
         }
         if (intTemperature >= 0 && intTemperature < 15){
             termImage.setImageDrawable(ContextCompat.getDrawable(context

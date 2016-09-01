@@ -8,11 +8,18 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="windowNoTitle">true</item>
         <item name="windowActionBar">false</item>
+        <item name="drawerArrowStyle">@style/DrawerArrowStyle</item>
+    </style>
+
+    <style name="DrawerArrowStyle" parent="Base.Widget.AppCompat.DrawerArrowToggle">
+        <item name="color">@android:color/white</item>
     </style>
 
     <style name="PagerTabStrip">
         <item name="android:textSize">20sp</item>
         <item name="android:textColor">@color/pager_tab_strip_text</item>
     </style>
+
+
 
 </resources>

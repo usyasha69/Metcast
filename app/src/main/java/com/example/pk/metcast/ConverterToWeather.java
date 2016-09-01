@@ -4,8 +4,10 @@ import com.example.pk.metcast.models.DayWeatherModel;
 import com.example.pk.metcast.models.WeatherInfoModel;
 import com.example.pk.metcast.models.WeatherParsingModel;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 
 public class ConverterToWeather {
@@ -42,8 +44,9 @@ public class ConverterToWeather {
 
         try {
             //filling the txt date from the weather parsing model
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
-                listDateTxt.add(weatherParsingModel.getList().get(i).getListDtTxt());
+                listDateTxt.add(sdf.format(new Date(weatherParsingModel.getList().get(i).getListDt() * 1000)));
             }
 
             //filling the weather from the weather parsing model

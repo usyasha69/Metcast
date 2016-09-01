@@ -217,12 +217,13 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
             }
         };
 
+        actionBarDrawerToggle.setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+
         drawerLayout.addDrawerListener(actionBarDrawerToggle);
 
         if (getSupportActionBar() != null) {
             getSupportActionBar().setDisplayHomeAsUpEnabled(true);
             getSupportActionBar().setHomeButtonEnabled(true);
-            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
         }
     }
 
@@ -294,6 +295,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
             case LOADER_READ_FROM_DATABASE_ID:
                 //read from database
                 weatherList = new DBWorker().readDataFromBD((Cursor) data);
+
                 pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager()
                         , weatherList);
                 viewPager.setAdapter(pagerAdapter);

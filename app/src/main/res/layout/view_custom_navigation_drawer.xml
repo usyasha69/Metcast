@@ -20,7 +20,7 @@
         <com.example.pk.metcast.custom_views.CustomNavigationDrawerTextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="21sp"
+            android:textSize="22sp"
             android:id="@+id/day"
             android:textColor="@color/day_text"
             android:layout_marginLeft="@dimen/day_horizontal_margin" />
