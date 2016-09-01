@@ -14,13 +14,13 @@ import java.util.ArrayList;
 
 public class ViewPagerListViewAdapter extends BaseAdapter {
 
-    ArrayList<String> dates;
-    ArrayList<String> weathers;
-    ArrayList<String> temps;
+    private ArrayList<String> dates;
+    private ArrayList<String> weathers;
+    private ArrayList<String> temps;
 
-    Context context;
+    private Context context;
 
-    LayoutInflater layoutInflater;
+    private LayoutInflater layoutInflater;
 
     public ViewPagerListViewAdapter(Context context, ArrayList<String> dates, ArrayList<String> weathers, ArrayList<String> temps) {
         this.dates = dates;

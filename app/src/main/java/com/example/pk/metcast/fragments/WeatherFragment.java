@@ -21,7 +21,7 @@ public class WeatherFragment extends Fragment {
     //key for serializable
     private static final String WEATHER_KEY = "weather";
 
-    //array list with weather
+    //Array Lists with weather
     private ArrayList<String> fragmentDate;
     private ArrayList<String> fragmentWeather;
     private ArrayList<String> fragmentTemp;

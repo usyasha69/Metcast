@@ -15,7 +15,7 @@ public class ConverterToWeather {
     /**
      * This method takes a weather
      * parsing model and return
-     * array list with day weather models
+     * array list with day weather models.
      *
      * @param weatherParsingModel - weather parsing model
      * @return array list with day weather model
@@ -44,9 +44,8 @@ public class ConverterToWeather {
 
         try {
             //filling the txt date from the weather parsing model
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (int i = 0; i < weatherParsingModel.getList().size(); i++) {
-                listDateTxt.add(sdf.format(new Date(weatherParsingModel.getList().get(i).getListDt() * 1000)));
+                listDateTxt.add(weatherParsingModel.getList().get(i).getListDtTxt());
             }
 
             //filling the weather from the weather parsing model
@@ -147,7 +146,7 @@ public class ConverterToWeather {
 
     /**
      * This method conversion unix time
-     * to day of week
+     * to day of week.
      *
      * @param time - date in unix format
      * @return day of week in integer
@@ -163,7 +162,7 @@ public class ConverterToWeather {
     /**
      * This method conversion day
      * of week in integer to day
-     * of week in String
+     * of week in String.
      *
      * @param day - day in integer format
      * @return day of week in String
@@ -202,7 +201,7 @@ public class ConverterToWeather {
 
     /**
      * This method getting
-     * current day
+     * current day.
      *
      * @return number of current day
      */

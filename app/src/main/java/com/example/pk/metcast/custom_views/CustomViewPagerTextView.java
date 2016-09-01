@@ -23,7 +23,7 @@ public class CustomViewPagerTextView extends TextView{
     }
 
     /**
-     * This method set custom font
+     * This method set custom font.
      */
     public void init() {
         Typeface tf = Typeface.createFromAsset(getContext().getAssets(), "simple_round.ttf");

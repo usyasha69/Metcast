@@ -16,11 +16,11 @@ import java.util.ArrayList;
 
 public class NavigationDrawerListViewAdapter extends BaseAdapter {
 
-    ArrayList<String> days;
+    private ArrayList<String> days;
 
-    Context context;
+    private Context context;
 
-    LayoutInflater layoutInflater;
+    private LayoutInflater layoutInflater;
 
     public NavigationDrawerListViewAdapter(Context context, ArrayList<String> days) {
         this.days = days;
@@ -50,6 +50,18 @@ public class NavigationDrawerListViewAdapter extends BaseAdapter {
 
         ((TextView) view.findViewById(R.id.day)).setText(String.format("%s weather", days.get(i)));
 
+        setDaysImage(view, i);
+
+        return view;
+    }
+
+    /**
+     * This method set days images.
+     *
+     * @param view - view
+     * @param i    - position in Array List
+     */
+    private void setDaysImage(View view, int i) {
         ImageView dayImage = (ImageView) view.findViewById(R.id.day_image);
 
         switch (days.get(i)) {
@@ -82,7 +94,5 @@ public class NavigationDrawerListViewAdapter extends BaseAdapter {
                         , R.drawable.sunday));
                 break;
         }
-
-        return view;
     }
 }

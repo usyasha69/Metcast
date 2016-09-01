@@ -22,7 +22,7 @@ public class DBWorker {
 
     /**
      * This method insert data
-     * to database
+     * to database.
      *
      * @param context - context
      * @param list    - array list with
@@ -71,7 +71,7 @@ public class DBWorker {
     }
 
     /**
-     * This method reading data from database
+     * This method reading data from database.
      *
      * @param cursor - cursor with data
      * @return array list with day weather models
@@ -105,7 +105,7 @@ public class DBWorker {
      * This method conversion data from
      * array lists with day of week and
      * weather to array list with
-     * day weather models
+     * day weather models.
      *
      * @param daysOfWeek - array list with days of week
      * @param wimList    - array list with weather
@@ -135,7 +135,7 @@ public class DBWorker {
     }
 
     /**
-     * This method update database
+     * This method update database.
      *
      * @param context - context
      * @param list    - array list with day weather models
@@ -231,7 +231,7 @@ public class DBWorker {
 
     /**
      * This method checked database
-     * is empty
+     * is empty.
      *
      * @param context - context
      * @return return false (database empty)

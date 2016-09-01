@@ -17,7 +17,7 @@ public class ViewWorker {
     private String weather;
     private String temperature;
 
-    View view;
+    private View view;
 
     public ViewWorker(Context context, String date, String weather, String temperature) {
         this.context = context;
@@ -26,7 +26,13 @@ public class ViewWorker {
         this.temperature = temperature;
     }
 
-
+    /**
+     * This method make View for View Pager.
+     *
+     * @param layoutInflater - layout inflater
+     * @param viewGroup - view group
+     * @return View
+     */
     public View makeView(LayoutInflater layoutInflater
             , ViewGroup viewGroup) {
 
@@ -221,7 +227,7 @@ public class ViewWorker {
 
     /**
      * This method calculate temperature and
-     * set the thermometer icon
+     * set the thermometer icon.
      */
     private void setTermImage() {
         ImageView termImage = (ImageView) view.findViewById(R.id.temperature_image);
@@ -231,7 +237,7 @@ public class ViewWorker {
             termImage.setImageDrawable(ContextCompat.getDrawable(context
                     , R.drawable.temp_term_minus_10));
         }
-        if (intTemperature >= 0 && intTemperature < 15){
+        if (intTemperature >= 0 && intTemperature < 15) {
             termImage.setImageDrawable(ContextCompat.getDrawable(context
                     , R.drawable.temp_term_0));
         }
@@ -247,7 +253,7 @@ public class ViewWorker {
 
     /**
      * This method format the
-     * date
+     * date.
      *
      * @param date - text date
      * @return format date
@@ -309,7 +315,7 @@ public class ViewWorker {
 
     /**
      * This method calculate and
-     * return full time
+     * return full time.
      *
      * @param date full date
      * @return full time
@@ -322,7 +328,7 @@ public class ViewWorker {
 
     /**
      * This method calculate and
-     * return hour
+     * return hour.
      *
      * @param time - full time
      * @return hour
@@ -339,7 +345,7 @@ public class ViewWorker {
 
     /**
      * This method calculate and
-     * return time
+     * return time.
      *
      * @param fullTime - full time
      * @return time
