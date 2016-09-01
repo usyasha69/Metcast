@@ -42,9 +42,7 @@
            android:layout_height="match_parent"
            android:layout_gravity="start"
            android:choiceMode="singleChoice"
-           android:divider="@android:color/transparent"
-           android:dividerHeight="0dp"
-           android:background="@color/background_pager"/>
+           android:background="@drawable/navigation_background"/>
    </android.support.v4.widget.DrawerLayout>
 
 </LinearLayout>

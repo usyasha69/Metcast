@@ -78,7 +78,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
     //progress dialog
     private ProgressDialog progressDialog;
 
-    //navigation drawer
+    //navigation_background drawer
     private DrawerLayout drawerLayout;
     private ListView drawerList;
     private ActionBarDrawerToggle actionBarDrawerToggle;
@@ -99,7 +99,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
 
     /**
      * This method set current page in ViewPager and
-     * close navigation drawer.
+     * close navigation_background drawer.
      *
      * @param position - current item in ListView
      */
@@ -122,7 +122,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         //create toolbar
         createToolbar();
 
-        //navigation drawer
+        //navigation_background drawer
         configureNavigationDrawer();
 
         //create View Pager
@@ -195,7 +195,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
     }
 
     /**
-     * This method create and configure navigation
+     * This method create and configure navigation_background
      * drawer.
      */
     protected void configureNavigationDrawer() {
@@ -228,7 +228,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
 
     /**
      * This method initialize days array and
-     * filling List View in navigation drawer
+     * filling List View in navigation_background drawer
      * data.
      */
     private void fillDrawerData() {
@@ -298,7 +298,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
                         , weatherList);
                 viewPager.setAdapter(pagerAdapter);
 
-                //fill List View in navigation Drawer data
+                //fill List View in navigation_background Drawer data
                 fillDrawerData();
 
                 progressDialog.dismiss();
@@ -337,7 +337,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
                 , weatherList);
         viewPager.setAdapter(pagerAdapter);
 
-        //fill List View in navigation Drawer data
+        //fill List View in navigation_background Drawer data
         fillDrawerData();
 
         progressDialog.dismiss();

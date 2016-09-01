@@ -47,7 +47,7 @@ public class DBWorker {
 
         ContentValues[] cvArray = new ContentValues[cvList.size()];
 
-        for (int i = 0;  i < cvList.size();  i++) {
+        for (int i = 0; i < cvList.size(); i++) {
             cvArray[i] = cvList.get(i);
         }
 
@@ -145,6 +145,8 @@ public class DBWorker {
         ContentValues contentValues = new ContentValues();
         int updateCount = 0;
 
+        int extraCount = getExtraData(context);
+
         if (context.getContentResolver().query(METCAST_URI
                 , null, null, null, null, null).moveToFirst()) {
             for (int i = 0; i < list.size(); i++) {
@@ -166,6 +168,10 @@ public class DBWorker {
             Log.d(MY_TAG, "0 rows");
         }
 
+        if (extraCount > updateCount) {
+            deleteExtraData(context, updateCount, extraCount);
+        }
+
         Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
 
         assert cursor != null;
@@ -182,6 +188,45 @@ public class DBWorker {
         }
         cursor.close();
         return updateCount;
+    }
+
+    /**
+     * This method count all data in database.
+     *
+     * @param context - context
+     * @return - number of records in database
+     */
+    private int getExtraData(Context context) {
+        int extraCount = 0;
+
+        Cursor cursor = context.getContentResolver().query(METCAST_URI, null, null, null, null, null);
+
+        assert cursor != null;
+        if (cursor.moveToFirst()) {
+            do {
+                extraCount++;
+            } while (cursor.moveToNext());
+        } else {
+            Log.d(MY_TAG, "0 rows");
+        }
+
+        cursor.close();
+
+        return extraCount;
+    }
+
+    /**
+     * This method delete extra data in database.
+     *
+     * @param context     - context
+     * @param updateCount - data
+     * @param extraCount  - extra data
+     */
+    private void deleteExtraData(Context context, int updateCount, int extraCount) {
+        for (int i = (updateCount + 1); i <= extraCount; i++) {
+            context.getContentResolver().delete(METCAST_URI
+                    , "_id = ?", new String[]{String.valueOf(i)});
+        }
     }
 
     /**
