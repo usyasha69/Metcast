@@ -8,19 +8,9 @@
     <string name="gps_menu">Gps menu</string>
     <string name="action_settings">Action settings</string>
     <string name="update_weather">Update weather</string>
-    <string name="toast_gps_on">Please, enable GPS</string>
     <string name="exit">Exit</string>
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_closed">Close drawer</string>
     <string name="day_image">day image</string>
-
-    <string-array name="title">
-        <item>Title 1</item>
-        <item>Title 2</item>
-        <item>Title 3</item>
-        <item>Title 4</item>
-        <item>Title 5</item>
-        <item>Title 6</item>
-        <item>Title 7</item>
-    </string-array>
+    <string name="toast_enable_gps">Please, enable GPS</string>
 </resources>

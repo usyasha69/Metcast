@@ -7,9 +7,9 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/navigation_drawer_text_view_margin"
-        android:layout_marginBottom="@dimen/navigation_drawer_text_view_margin"
-        android:layout_marginLeft="@dimen/navigation_drawer_text_view_margin">
+        android:layout_marginTop="@dimen/navigation_drawer_list_view_top_margin"
+        android:layout_marginBottom="@dimen/navigation_drawer_list_view_bottom_margin"
+        android:layout_marginLeft="@dimen/navigation_drawer_list_view_left_margin">
 
         <ImageView
             android:layout_width="24dp"
@@ -23,7 +23,7 @@
             android:textSize="22sp"
             android:id="@+id/day"
             android:textColor="@color/day_text"
-            android:layout_marginLeft="@dimen/day_horizontal_margin" />
+            android:layout_marginLeft="@dimen/navigation_drawer_day_left_margin" />
     </LinearLayout>
 
 </LinearLayout>

@@ -9,9 +9,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:layout_marginTop="@dimen/view_pager_layout_top_margin"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/layout_vertical_margin">
+        android:layout_marginBottom="@dimen/view_pager_layout_bottom_margin">
 
         <com.example.pk.metcast.custom_views.CustomViewPagerTextView xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/date"
@@ -19,15 +19,15 @@
             android:layout_height="wrap_content"
             android:textSize="15sp"
             android:layout_gravity="left"
-            android:textColor="@color/text_view"
-            android:layout_marginLeft="@dimen/date_horizontal_margin">
+            android:textColor="@color/date_text_view"
+            android:layout_marginLeft="@dimen/date_left_margin">
         </com.example.pk.metcast.custom_views.CustomViewPagerTextView>
 
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/time_image"
-            android:layout_marginLeft="@dimen/time_image_horizontal_margin"
+            android:layout_marginLeft="@dimen/time_image_left_margin"
             android:contentDescription="@string/time_image"
             android:layout_gravity="left" />
 
@@ -35,10 +35,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/time"
-            android:layout_marginLeft="@dimen/time_horizontal_margin"
+            android:layout_marginLeft="@dimen/time_left_margin"
             android:textSize="18sp"
             android:layout_gravity="left"
-            android:textColor="@color/text_view" />
+            android:textColor="@color/time_text_view" />
 
     </LinearLayout>
 
@@ -47,9 +47,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:layout_marginTop="@dimen/view_pager_layout_top_margin"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/layout_vertical_margin">
+        android:layout_marginBottom="@dimen/view_pager_layout_bottom_margin">
 
         <ImageView
             android:layout_width="48dp"
@@ -65,7 +65,7 @@
             android:textSize="18sp"
             android:gravity="right"
             android:layout_gravity="center_horizontal"
-            android:textColor="@color/text_view">
+            android:textColor="@color/weather_text_view">
         </com.example.pk.metcast.custom_views.CustomViewPagerTextView>
     </LinearLayout>
 
@@ -74,15 +74,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:layout_marginTop="@dimen/layout_vertical_margin"
+        android:layout_marginTop="@dimen/view_pager_layout_top_margin"
         android:layout_gravity="bottom"
-        android:layout_marginBottom="@dimen/layout_vertical_margin">
+        android:layout_marginBottom="@dimen/view_pager_layout_bottom_margin">
 
         <ImageView
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:id="@+id/temperature_image"
-            android:layout_marginRight="@dimen/temperature_image_horizontal_margin"
+            android:layout_marginRight="@dimen/temperature_image_right_margin"
             android:layout_gravity="right"
             android:contentDescription="@string/temperature_image" />
 
@@ -91,8 +91,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="18sp"
-            android:layout_marginRight="@dimen/temperature_horizontal_margin"
-            android:textColor="@color/text_view"
+            android:layout_marginRight="@dimen/temperature_right_margin"
+            android:textColor="@color/temperature_text_view"
             android:layout_gravity="right">
         </com.example.pk.metcast.custom_views.CustomViewPagerTextView>
 

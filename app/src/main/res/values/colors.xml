@@ -3,9 +3,13 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="background_tab">#018df1</color>
-    <color name="background_pager">#ffffff</color>
-    <color name="text_view">#3774c4</color>
+    <color name="background_pager_tab_strip">#018df1</color>
+    <color name="background_toolbar">#018df1</color>
+    <color name="background_view_pager">#ffffff</color>
+    <color name="date_text_view">#3774c4</color>
+    <color name="time_text_view">#3774c4</color>
+    <color name="weather_text_view">#3774c4</color>
+    <color name="temperature_text_view">#3774c4</color>
     <color name="pager_tab_strip_text">#ffffff</color>
     <color name="app_name">#ffffff</color>
     <color name="day_text">#000000</color>
