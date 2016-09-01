@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 
 import com.example.pk.metcast.R;
-import com.example.pk.metcast.adapters.ListViewAdapter;
+import com.example.pk.metcast.adapters.ViewPagerListViewAdapter;
 import com.example.pk.metcast.models.DayWeatherModel;
 
 import java.text.DecimalFormat;
@@ -66,7 +66,7 @@ public class WeatherFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_weather, container, false);
 
         ListView listView = (ListView) v.findViewById(R.id.fragmentListView);
-        listView.setAdapter(new ListViewAdapter(getContext(), fragmentDate, fragmentWeather, fragmentTemp));
+        listView.setAdapter(new ViewPagerListViewAdapter(getContext(), fragmentDate, fragmentWeather, fragmentTemp));
 
         return v;
     }

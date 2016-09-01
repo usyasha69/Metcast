@@ -12,6 +12,7 @@
     <string name="exit">Exit</string>
     <string name="drawer_open">Open drawer</string>
     <string name="drawer_closed">Close drawer</string>
+    <string name="day_image">day image</string>
 
     <string-array name="title">
         <item>Title 1</item>

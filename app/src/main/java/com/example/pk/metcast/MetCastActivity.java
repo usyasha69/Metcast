@@ -2,27 +2,33 @@ package com.example.pk.metcast;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
 import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
+import com.example.pk.metcast.adapters.NavigationDrawerListViewAdapter;
 import com.example.pk.metcast.database.DBWorker;
 import com.example.pk.metcast.database.MetcastProvider;
 import com.example.pk.metcast.loaders.EmptyCheckDBLoader;
@@ -51,19 +57,18 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         , GoogleApiClient.OnConnectionFailedListener
         , LocationListener {
 
-    //view pager and pager adapter
-    private ViewPager viewPager;
-    private PagerAdapter pagerAdapter;
-
     //loaders constants
     private final int LOADER_READ_FROM_DATABASE_ID = 1;
     private final int LOADER_INSERT_TO_DATABASE_ID = 2;
     private final int LOADER_UPDATE_DATABASE_ID = 3;
     private final int LOADER_CHECKED_EMPTY_DB_ID = 4;
 
+    //view pager and pager adapter
+    private ViewPager viewPager;
+    private PagerAdapter pagerAdapter;
+
     //array list with day weather models
-    ArrayList<DayWeatherModel> readingDBList;
-    ArrayList<DayWeatherModel> updateWeatherList;
+    ArrayList<DayWeatherModel> weatherList;
 
     //location
     private Location currentLocation;
@@ -73,7 +78,36 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
     //progress dialog
     private ProgressDialog progressDialog;
 
+    //navigation drawer
+    private DrawerLayout drawerLayout;
+    private ListView drawerList;
+    private ActionBarDrawerToggle actionBarDrawerToggle;
 
+    //toolbar
+    private Toolbar toolbar;
+
+    /**
+     * Private inserted class implements ListView.OnItemClickListener
+     * and machining, pressing on element in Navigation Drawer List View.
+     */
+    private class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+            selectItem(i);
+        }
+    }
+
+    /**
+     * This method set current page in ViewPager and
+     * close navigation drawer.
+     *
+     * @param position - current item in ListView
+     */
+    private void selectItem(int position) {
+        drawerList.setItemChecked(position, true);
+        viewPager.setCurrentItem(position, true);
+        drawerLayout.closeDrawer(drawerList);
+    }
 
     //activity lifecycle methods
     @Override
@@ -82,16 +116,22 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        //create progress dialog
         createProgressDialog();
+
+        //create toolbar
+        createToolbar();
+
+        //navigation drawer
+        configureNavigationDrawer();
+
+        //create View Pager
         createViewPager();
 
+        //checked is db empty
         getSupportLoaderManager().initLoader(LOADER_CHECKED_EMPTY_DB_ID, null, this).forceLoad();
 
+        //create Google Api Client
         createGoogleApiClient();
     }
 
@@ -121,6 +161,29 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         googleApiClient.disconnect();
     }
 
+    @Override
+    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        actionBarDrawerToggle.syncState();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        actionBarDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    /**
+     * This method create toolbar.
+     */
+    protected void createToolbar() {
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+    }
+
+    /**
+     * This method create and configure progress dialog.
+     */
     protected void createProgressDialog() {
         progressDialog = new ProgressDialog(this);
 
@@ -129,8 +192,54 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.getWindow().setGravity(Gravity.CENTER);
         progressDialog.setMessage(getString(R.string.progress_dialog_reading));
+    }
 
-        progressDialog.show();
+    /**
+     * This method create and configure navigation
+     * drawer.
+     */
+    protected void configureNavigationDrawer() {
+        drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+
+        drawerList = (ListView) findViewById(R.id.left_drawer);
+        drawerList.setOnItemClickListener(new DrawerItemClickListener());
+
+        actionBarDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,toolbar
+                , R.string.drawer_open, R.string.drawer_closed) {
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+            }
+        };
+
+        drawerLayout.addDrawerListener(actionBarDrawerToggle);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+            getSupportActionBar().setHomeButtonEnabled(true);
+            getSupportActionBar().setHomeAsUpIndicator(R.drawable.ic_menu_white_24dp);
+        }
+    }
+
+    /**
+     * This method initialize days array and
+     * filling List View in navigation drawer
+     * data.
+     */
+    private void fillDrawerData() {
+        ArrayList<String> days = new ArrayList<>();
+
+        for (int i = 0; i < weatherList.size(); i++) {
+            days.add(weatherList.get(i).getDay());
+        }
+
+        drawerList.setAdapter(new NavigationDrawerListViewAdapter(
+                this, days));
     }
 
     //onPageChangeListener implements methods
@@ -167,10 +276,10 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
                         , null, null, null, null);
                 break;
             case LOADER_INSERT_TO_DATABASE_ID:
-                mLoader = new InsertToDBLoader(this, updateWeatherList);
+                mLoader = new InsertToDBLoader(this, weatherList);
                 break;
             case LOADER_UPDATE_DATABASE_ID:
-                mLoader = new UpdateDBLoader(this, updateWeatherList);
+                mLoader = new UpdateDBLoader(this, weatherList);
                 break;
             case LOADER_CHECKED_EMPTY_DB_ID:
                 mLoader = new EmptyCheckDBLoader(this);
@@ -184,10 +293,13 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         switch (loader.getId()) {
             case LOADER_READ_FROM_DATABASE_ID:
                 //read from database
-                readingDBList = new DBWorker().readDataFromBD((Cursor) data);
+                weatherList = new DBWorker().readDataFromBD((Cursor) data);
                 pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager()
-                        , readingDBList);
+                        , weatherList);
                 viewPager.setAdapter(pagerAdapter);
+
+                //fill List View in navigation Drawer data
+                fillDrawerData();
 
                 progressDialog.dismiss();
                 break;
@@ -201,6 +313,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
                 }
                 break;
             case LOADER_CHECKED_EMPTY_DB_ID:
+                progressDialog.show();
                 //if database does'nt empty, reading from database
                 if (((boolean) data)) {
                     getSupportLoaderManager().initLoader(LOADER_READ_FROM_DATABASE_ID
@@ -218,11 +331,14 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
     @Override
     public void onResponse(Call<WeatherParsingModel> call, Response<WeatherParsingModel> response) {
         WeatherParsingModel weatherParsingModel = response.body();
-        updateWeatherList = new ConverterToWeather().group(weatherParsingModel);
+        weatherList = new ConverterToWeather().group(weatherParsingModel);
 
         pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager()
-                , updateWeatherList);
+                , weatherList);
         viewPager.setAdapter(pagerAdapter);
+
+        //fill List View in navigation Drawer data
+        fillDrawerData();
 
         progressDialog.dismiss();
 
@@ -347,6 +463,10 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        if  (actionBarDrawerToggle.onOptionsItemSelected(item)) {
+            return true;
+        }
+
         switch (item.getItemId()) {
             case R.id.gps_menu:
                 startActivity(new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS));

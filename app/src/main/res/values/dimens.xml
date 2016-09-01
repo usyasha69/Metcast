@@ -9,4 +9,6 @@
     <dimen name="date_horizontal_margin">18dp</dimen>
     <dimen name="temperature_image_horizontal_margin">25dp</dimen>
     <dimen name="temperature_horizontal_margin">30dp</dimen>
+    <dimen name="day_horizontal_margin">5dp</dimen>
+    <dimen name="navigation_drawer_text_view_margin">12dp</dimen>
 </resources>

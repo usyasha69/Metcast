@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
-import com.example.pk.metcast.custom_views.CustomTextView;
+import com.example.pk.metcast.custom_views.CustomViewPagerTextView;
 
 
 public class ViewWorker {
@@ -30,20 +30,20 @@ public class ViewWorker {
     public View makeView(LayoutInflater layoutInflater
             , ViewGroup viewGroup) {
 
-        view = layoutInflater.inflate(R.layout.view_custom, viewGroup, false);
+        view = layoutInflater.inflate(R.layout.view_custom_view_pager, viewGroup, false);
 
 
         //time text view
-        ((CustomTextView) view.findViewById(R.id.time)).setText(getTime(getFullTime(date)));
+        ((CustomViewPagerTextView) view.findViewById(R.id.time)).setText(getTime(getFullTime(date)));
 
         //date text view
-        ((CustomTextView) view.findViewById(R.id.date)).setText(getFormatDate(date));
+        ((CustomViewPagerTextView) view.findViewById(R.id.date)).setText(getFormatDate(date));
 
         //weather text view
-        ((CustomTextView) view.findViewById(R.id.weather)).setText(weather);
+        ((CustomViewPagerTextView) view.findViewById(R.id.weather)).setText(weather);
 
         //temperature text view
-        ((CustomTextView) view.findViewById(R.id.temperature)).setText(String.format("%s°C", temperature));
+        ((CustomViewPagerTextView) view.findViewById(R.id.temperature)).setText(String.format("%s°C", temperature));
 
         //set weather images
         setWeatherImage();

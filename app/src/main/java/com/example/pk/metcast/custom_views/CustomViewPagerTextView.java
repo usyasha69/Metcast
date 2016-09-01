@@ -6,18 +6,18 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 
-public class CustomTextView extends TextView{
-    public CustomTextView(Context context) {
+public class CustomViewPagerTextView extends TextView{
+    public CustomViewPagerTextView(Context context) {
         super(context);
         init();
     }
 
-    public CustomTextView(Context context, AttributeSet attrs) {
+    public CustomViewPagerTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
     }
 
-    public CustomTextView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public CustomViewPagerTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init();
     }

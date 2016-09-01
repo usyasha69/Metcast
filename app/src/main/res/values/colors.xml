@@ -8,4 +8,5 @@
     <color name="text_view">#3774c4</color>
     <color name="pager_tab_strip_text">#ffffff</color>
     <color name="app_name">#ffffff</color>
+    <color name="day_text">#1e1e1e</color>
 </resources>

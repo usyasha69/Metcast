@@ -12,7 +12,7 @@ import com.example.pk.metcast.models.WeatherInfoModel;
 
 import java.util.ArrayList;
 
-public class ListViewAdapter extends BaseAdapter {
+public class ViewPagerListViewAdapter extends BaseAdapter {
 
     ArrayList<String> dates;
     ArrayList<String> weathers;
@@ -22,7 +22,7 @@ public class ListViewAdapter extends BaseAdapter {
 
     LayoutInflater layoutInflater;
 
-    public ListViewAdapter(Context context, ArrayList<String> dates, ArrayList<String> weathers, ArrayList<String> temps) {
+    public ViewPagerListViewAdapter(Context context, ArrayList<String> dates, ArrayList<String> weathers, ArrayList<String> temps) {
         this.dates = dates;
         this.weathers = weathers;
         this.temps = temps;
