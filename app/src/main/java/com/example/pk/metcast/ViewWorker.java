@@ -241,11 +241,11 @@ public class ViewWorker {
             termImage.setImageDrawable(ContextCompat.getDrawable(context
                     , R.drawable.temp_term_0));
         }
-        if (intTemperature >= 15 && intTemperature < 25) {
+        if (intTemperature >= 15 && intTemperature < 30) {
             termImage.setImageDrawable(ContextCompat.getDrawable(context
                     , R.drawable.temp_term_15));
         }
-        if (intTemperature >= 25) {
+        if (intTemperature >= 30) {
             termImage.setImageDrawable(ContextCompat.getDrawable(context
                     , R.drawable.temp_term_25));
         }
