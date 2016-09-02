@@ -5,6 +5,8 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.location.Location;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -182,7 +184,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         progressDialog = new ProgressDialog(this);
 
         progressDialog.setIndeterminate(false);
-        progressDialog.setCancelable(false);
+        progressDialog.setCancelable(true);
         progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         progressDialog.getWindow().setGravity(Gravity.CENTER);
         progressDialog.setMessage(getString(R.string.progress_dialog_reading));
@@ -379,6 +381,20 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         call.enqueue(this);
     }
 
+    /**
+     * This method checked internet connection.
+     *
+     * @return - is connected
+     */
+    private boolean isOnline() {
+        ConnectivityManager connectivityManager =
+                (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+
+        NetworkInfo networkInfo = connectivityManager.getActiveNetworkInfo();
+
+        return networkInfo != null && networkInfo.isConnected();
+    }
+
     //GoogleApiClient implements methods
     @Override
     public void onConnected(@Nullable Bundle bundle) {
@@ -434,10 +450,15 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
     @Override
     public void onLocationChanged(Location location) {
         progressDialog.setMessage(getString(R.string.progress_dialog_updating));
-        progressDialog.show();
 
         currentLocation = location;
-        useRetrofit();
+        if (isOnline()) {
+            progressDialog.show();
+            useRetrofit();
+        } else {
+            Toast.makeText(this, R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     /**
@@ -477,8 +498,13 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
                 break;
             case R.id.update_weather:
                 if (currentLocation != null) {
-                    progressDialog.show();
-                    useRetrofit();
+                    if (isOnline()) {
+                        progressDialog.setMessage(getString(R.string.progress_dialog_updating));
+                        progressDialog.show();
+                        useRetrofit();
+                    } else {
+                        Toast.makeText(this, R.string.no_internet_connection, Toast.LENGTH_SHORT).show();
+                    }
                 } else {
                     Toast.makeText(this, getString(R.string.toast_enable_gps), Toast.LENGTH_SHORT).show();
                 }
