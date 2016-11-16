@@ -13,6 +13,8 @@ import com.example.pk.metcast.R;
 
 import java.util.ArrayList;
 
+import butterknife.BindView;
+
 
 public class NavigationDrawerListViewAdapter extends BaseAdapter {
 
@@ -35,7 +37,6 @@ public class NavigationDrawerListViewAdapter extends BaseAdapter {
 
     @Override
     public Object getItem(int i) {
-
         return days.get(i);
     }
 

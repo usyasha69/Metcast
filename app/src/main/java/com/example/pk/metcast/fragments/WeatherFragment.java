@@ -4,13 +4,14 @@ package com.example.pk.metcast.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 
 import com.example.pk.metcast.R;
-import com.example.pk.metcast.adapters.ViewPagerListViewAdapter;
+import com.example.pk.metcast.adapters.ViewPagerRecyclerViewAdapter;
 import com.example.pk.metcast.models.DayWeatherModel;
 
 import java.text.DecimalFormat;
@@ -65,8 +66,9 @@ public class WeatherFragment extends Fragment {
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_weather, container, false);
 
-        ListView listView = (ListView) v.findViewById(R.id.fragmentListView);
-        listView.setAdapter(new ViewPagerListViewAdapter(getContext(), fragmentDate, fragmentWeather, fragmentTemp));
+        RecyclerView recyclerView = (RecyclerView) v.findViewById(R.id.fragmentRecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        recyclerView.setAdapter(new ViewPagerRecyclerViewAdapter(fragmentDate, fragmentWeather, fragmentTemp, getContext()));
 
         return v;
     }

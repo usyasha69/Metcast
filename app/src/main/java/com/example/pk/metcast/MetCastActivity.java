@@ -32,7 +32,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.crashlytics.android.Crashlytics;
-import com.example.pk.metcast.adapters.MyFragmentStatePagerAdapter;
+import com.example.pk.metcast.adapters.MetcastFragmentStatePagerAdapter;
 import com.example.pk.metcast.adapters.NavigationDrawerListViewAdapter;
 import com.example.pk.metcast.database.DBWorker;
 import com.example.pk.metcast.database.MetcastProvider;
@@ -289,7 +289,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
                 //read from database
                 weatherList = new DBWorker().readDataFromBD((Cursor) data);
 
-                pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager()
+                pagerAdapter = new MetcastFragmentStatePagerAdapter(getSupportFragmentManager()
                         , weatherList);
                 viewPager.setAdapter(pagerAdapter);
 
@@ -341,7 +341,7 @@ public class MetcastActivity extends AppCompatActivity implements ViewPager.OnPa
         WeatherParsingModel weatherParsingModel = response.body();
         weatherList = new ConverterToWeather().group(weatherParsingModel);
 
-        pagerAdapter = new MyFragmentStatePagerAdapter(getSupportFragmentManager()
+        pagerAdapter = new MetcastFragmentStatePagerAdapter(getSupportFragmentManager()
                 , weatherList);
         viewPager.setAdapter(pagerAdapter);
 

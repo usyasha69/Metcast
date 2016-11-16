@@ -1,4 +1,4 @@
-package com.example.pk.metcast;
+package com.example.pk.metcast.adapters;
 
 import android.content.Context;
 import android.support.v4.content.ContextCompat;
@@ -7,6 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 
+import com.example.pk.metcast.R;
+import com.example.pk.metcast.adapters.ViewPagerRecyclerViewAdapter;
 import com.example.pk.metcast.custom_views.CustomViewPagerTextView;
 
 
@@ -17,39 +19,29 @@ public class ViewWorker {
     private String weather;
     private String temperature;
 
-    private View view;
+    private ViewPagerRecyclerViewAdapter.ViewHolder viewHolder;
 
-    public ViewWorker(Context context, String date, String weather, String temperature) {
+    public ViewWorker(Context context, String date, String weather, String temperature,
+                      ViewPagerRecyclerViewAdapter.ViewHolder viewHolder) {
         this.context = context;
         this.date = date;
         this.weather = weather;
         this.temperature = temperature;
+        this.viewHolder = viewHolder;
     }
 
-    /**
-     * This method make View for View Pager.
-     *
-     * @param layoutInflater - layout inflater
-     * @param viewGroup - view group
-     * @return View
-     */
-    public View makeView(LayoutInflater layoutInflater
-            , ViewGroup viewGroup) {
-
-        view = layoutInflater.inflate(R.layout.view_custom_view_pager, viewGroup, false);
-
-
+    public void makeView() {
         //time text view
-        ((CustomViewPagerTextView) view.findViewById(R.id.time)).setText(getTime(getFullTime(date)));
+        viewHolder.time.setText(getTime(getFullTime(date)));
 
         //date text view
-        ((CustomViewPagerTextView) view.findViewById(R.id.date)).setText(getFormatDate(date));
+        viewHolder.date.setText(getFormatDate(date));
 
         //weather text view
-        ((CustomViewPagerTextView) view.findViewById(R.id.weather)).setText(weather);
+        viewHolder.weather.setText(weather);
 
         //temperature text view
-        ((CustomViewPagerTextView) view.findViewById(R.id.temperature)).setText(String.format("%s°C", temperature));
+        viewHolder.temperature.setText(String.format("%s°C", temperature));
 
         //set weather images
         setWeatherImage();
@@ -59,8 +51,6 @@ public class ViewWorker {
 
         //set term image
         setTermImage();
-
-        return view;
     }
 
     /**
@@ -72,8 +62,6 @@ public class ViewWorker {
         //get time in hours
         int hours = getHour(getFullTime(date));
 
-        ImageView weatherImage = (ImageView) view.findViewById(R.id.weather_image);
-
         //condition for set weather image
         boolean timeOfDayCondition = hours > 3 && hours < 21;
 
@@ -81,102 +69,127 @@ public class ViewWorker {
         switch (weather) {
             case "few clouds":
                 if (timeOfDayCondition) {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_few_broken_scattered_clouds));
                 } else {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.nt_few_broken_scattered_clouds));
                 }
                 break;
             case "broken clouds":
                 if (timeOfDayCondition) {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_few_broken_scattered_clouds));
                 } else {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.nt_few_broken_scattered_clouds));
                 }
                 break;
             case "light snow":
                 if (timeOfDayCondition) {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_light_snow));
                 } else {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.nt_light_snow));
                 }
                 break;
             case "snow":
                 if (timeOfDayCondition) {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_snow));
                 } else {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.nt_snow));
                 }
                 break;
             case "sky is clear":
                 if (timeOfDayCondition) {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_clear_sky));
                 } else {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.nt_clear_sky));
                 }
                 break;
             case "light rain":
                 if (timeOfDayCondition) {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_light_rain));
                 } else {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.nt_light_rain));
                 }
                 break;
             case "scattered clouds":
                 if (timeOfDayCondition) {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_few_broken_scattered_clouds));
                 } else {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.nt_few_broken_scattered_clouds));
                 }
                 break;
             case "overcast clouds":
                 if (timeOfDayCondition) {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_overcast_clouds));
                 } else {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.nt_overcast_clouds));
                 }
                 break;
             case "moderate rain":
                 if (timeOfDayCondition) {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_moderate_rain));
                 } else {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.nt_moderate_rain));
                 }
                 break;
             case "heavy intensity rain":
                 if (timeOfDayCondition) {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_heavy_intensity_rain));
                 } else {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.nt_heavy_intensity_rain));
                 }
                 break;
             case "clear sky":
                 if (timeOfDayCondition) {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.dt_clear_sky));
                 } else {
-                    weatherImage.setImageDrawable(ContextCompat.getDrawable(context
+                    viewHolder.weatherImage.setImageDrawable(ContextCompat.getDrawable(context
                             , R.drawable.nt_clear_sky));
                 }
+        }
+    }
+
+    /**
+     * This method calculate temperature and
+     * set the thermometer icon.
+     */
+    private void setTermImage() {
+
+        int intTemperature = Integer.parseInt(temperature);
+        if (intTemperature < 0) {
+            viewHolder.termImage.setImageDrawable(ContextCompat.getDrawable(context
+                    , R.drawable.temp_term_minus_10));
+        }
+        if (intTemperature >= 0 && intTemperature < 15) {
+            viewHolder.termImage.setImageDrawable(ContextCompat.getDrawable(context
+                    , R.drawable.temp_term_0));
+        }
+        if (intTemperature >= 15 && intTemperature < 30) {
+            viewHolder.termImage.setImageDrawable(ContextCompat.getDrawable(context
+                    , R.drawable.temp_term_15));
+        }
+        if (intTemperature >= 30) {
+            viewHolder.termImage.setImageDrawable(ContextCompat.getDrawable(context
+                    , R.drawable.temp_term_25));
         }
     }
 
@@ -186,70 +199,45 @@ public class ViewWorker {
      * images.
      */
     private void setTimeImage() {
-        ImageView timeImage = (ImageView) view.findViewById(R.id.time_image);
 
         //set time images
         switch (getFullTime(date)) {
             case "00:00:00":
-                timeImage.setImageDrawable(ContextCompat.getDrawable(context
+                viewHolder.timeImage.setImageDrawable(ContextCompat.getDrawable(context
                         , R.drawable.time_twelve));
                 break;
             case "03:00:00":
-                timeImage.setImageDrawable(ContextCompat.getDrawable(context
+                viewHolder.timeImage.setImageDrawable(ContextCompat.getDrawable(context
                         , R.drawable.time_three));
                 break;
             case "06:00:00":
-                timeImage.setImageDrawable(ContextCompat.getDrawable(context
+                viewHolder.timeImage.setImageDrawable(ContextCompat.getDrawable(context
                         , R.drawable.time_six));
                 break;
             case "09:00:00":
-                timeImage.setImageDrawable(ContextCompat.getDrawable(context
+                viewHolder.timeImage.setImageDrawable(ContextCompat.getDrawable(context
                         , R.drawable.time_nine));
                 break;
             case "12:00:00":
-                timeImage.setImageDrawable(ContextCompat.getDrawable(context
+                viewHolder.timeImage.setImageDrawable(ContextCompat.getDrawable(context
                         , R.drawable.time_twelve));
                 break;
             case "15:00:00":
-                timeImage.setImageDrawable(ContextCompat.getDrawable(context
+                viewHolder.timeImage.setImageDrawable(ContextCompat.getDrawable(context
                         , R.drawable.time_three));
                 break;
             case "18:00:00":
-                timeImage.setImageDrawable(ContextCompat.getDrawable(context
+                viewHolder.timeImage.setImageDrawable(ContextCompat.getDrawable(context
                         , R.drawable.time_six));
                 break;
             case "21:00:00":
-                timeImage.setImageDrawable(ContextCompat.getDrawable(context
+                viewHolder.timeImage.setImageDrawable(ContextCompat.getDrawable(context
                         , R.drawable.time_nine));
                 break;
         }
     }
 
-    /**
-     * This method calculate temperature and
-     * set the thermometer icon.
-     */
-    private void setTermImage() {
-        ImageView termImage = (ImageView) view.findViewById(R.id.temperature_image);
 
-        int intTemperature = Integer.parseInt(temperature);
-        if (intTemperature < 0) {
-            termImage.setImageDrawable(ContextCompat.getDrawable(context
-                    , R.drawable.temp_term_minus_10));
-        }
-        if (intTemperature >= 0 && intTemperature < 15) {
-            termImage.setImageDrawable(ContextCompat.getDrawable(context
-                    , R.drawable.temp_term_0));
-        }
-        if (intTemperature >= 15 && intTemperature < 30) {
-            termImage.setImageDrawable(ContextCompat.getDrawable(context
-                    , R.drawable.temp_term_15));
-        }
-        if (intTemperature >= 30) {
-            termImage.setImageDrawable(ContextCompat.getDrawable(context
-                    , R.drawable.temp_term_25));
-        }
-    }
 
     /**
      * This method format the

@@ -6,10 +6,12 @@
     tools:context=".fragments.WeatherFragment"
     android:id="@+id/fragmentOne">
 
-    <ListView
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/fragmentListView">
-    </ListView>
+        android:id="@+id/fragmentRecyclerView"
+        tools:listitem="@layout/view_custom_view_pager"
+        android:scrollbars="vertical">
+    </android.support.v7.widget.RecyclerView>
 
 </LinearLayout>

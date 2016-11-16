@@ -10,11 +10,11 @@ import com.example.pk.metcast.fragments.WeatherFragment;
 import java.util.ArrayList;
 
 
-public class MyFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
+public class MetcastFragmentStatePagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<DayWeatherModel> list;
 
-    public MyFragmentStatePagerAdapter(FragmentManager fm, ArrayList<DayWeatherModel> list) {
+    public MetcastFragmentStatePagerAdapter(FragmentManager fm, ArrayList<DayWeatherModel> list) {
         super(fm);
         this.list = list;
     }
